@@ -23,6 +23,15 @@ export interface DistrictConfig {
   defaultCc: string
   signatureImage?: string
   headerType?: 'image' | 'vector'
+  
+  // Calendar & Academic Defaults
+  defaultBoardMeetingDate?: string
+  defaultSchoolYear?: string
+  defaultRetirementCelebrationText?: string
+
+  // Directory & Scale Presets
+  districtLocations?: string[]
+  certifiedLanes?: string[]
 }
 
 export interface CertifiedFields {

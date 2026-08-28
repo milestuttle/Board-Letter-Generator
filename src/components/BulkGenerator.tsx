@@ -29,9 +29,9 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
   onSaveBatchAsDrafts,
 }) => {
   const [activeType, setActiveType] = useState<LetterType>('certified')
-  const [boardMeetingDate] = useState('August 24, 2026')
-  const [letterDate] = useState('August 24, 2026')
-  const [schoolYear] = useState('2026-2027')
+  const [boardMeetingDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
+  const [letterDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
+  const [schoolYear] = useState(config.defaultSchoolYear || '2026-2027')
   
   const [batchLetters, setBatchLetters] = useState<LetterData[]>(() => {
     const saved = localStorage.getItem('ccs_batch_letters')

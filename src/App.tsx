@@ -97,7 +97,7 @@ export function App() {
 
   // Reset to clean letter of type
   const handleResetType = (type: LetterType) => {
-    const newL = DEFAULT_NEW_LETTER(type)
+    const newL = DEFAULT_NEW_LETTER(type, config)
     setActiveLetter(newL)
     showToast(`Switched to ${type.toUpperCase()} letter format`)
   }

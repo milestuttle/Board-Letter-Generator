@@ -24,6 +24,41 @@ export const DEFAULT_DISTRICT_CONFIG: DistrictConfig = {
   defaultSignerTitle: 'Director of Human Resources',
   defaultTypistInitials: '/ks',
   defaultCc: 'Cc: personnel file',
+  
+  // Calendar & Academic Defaults
+  defaultBoardMeetingDate: 'August 24, 2026',
+  defaultSchoolYear: '2026-2027',
+  defaultRetirementCelebrationText:
+    'We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event.',
+
+  // District Facility Directory
+  districtLocations: [
+    'Cañon City High School',
+    'Cañon City Middle School',
+    'Harrison Elementary School',
+    'Lincoln School of Science and Technology',
+    'McKinley Elementary School',
+    'Washington Elementary School',
+    'Canon City Online Academy',
+    'Special Education / Student Services',
+    'Transportation & Operations Center',
+    'District Administration Office',
+    'District-wide',
+  ],
+
+  // Certified Salary Scale Lanes
+  certifiedLanes: [
+    'BA',
+    'BA+12',
+    'BA+24',
+    'BA+36',
+    'MA',
+    'MA+12',
+    'MA+24',
+    'MA+36',
+    'MA+48',
+    'Doc/PhD',
+  ],
 }
 
 export const SAMPLE_PRESETS: TemplatePreset[] = [
@@ -259,7 +294,17 @@ export const SAMPLE_PRESETS: TemplatePreset[] = [
   },
 ]
 
-export const DEFAULT_NEW_LETTER = (type: LetterData['type'] = 'certified'): LetterData => {
+export const DEFAULT_NEW_LETTER = (
+  type: LetterData['type'] = 'certified',
+  config?: DistrictConfig
+): LetterData => {
+  const currentSchoolYear = config?.defaultSchoolYear || '2026-2027'
+  const currentBoardMeetingDate = config?.defaultBoardMeetingDate || new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+
   const base: LetterData = {
     id: 'letter-' + Date.now(),
     type,
@@ -268,12 +313,8 @@ export const DEFAULT_NEW_LETTER = (type: LetterData['type'] = 'certified'): Lett
       day: 'numeric',
       year: 'numeric',
     }),
-    boardMeetingDate: new Date().toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    }),
-    schoolYear: '2026-2027',
+    boardMeetingDate: currentBoardMeetingDate,
+    schoolYear: currentSchoolYear,
     recipientFirstName: '',
     recipientLastName: '',
     streetAddress: '',
@@ -282,10 +323,10 @@ export const DEFAULT_NEW_LETTER = (type: LetterData['type'] = 'certified'): Lett
     zip: '81212',
     positionTitle: '',
     location: '',
-    signerName: 'Jamie Davis',
-    signerTitle: 'Director of Human Resources',
-    typistInitials: '/ks',
-    ccLine: 'Cc: personnel file',
+    signerName: config?.defaultSignerName || 'Jamie Davis',
+    signerTitle: config?.defaultSignerTitle || 'Director of Human Resources',
+    typistInitials: config?.defaultTypistInitials || '/ks',
+    ccLine: config?.defaultCc || 'Cc: personnel file',
     signatureType: 'authentic',
   }
 
@@ -327,9 +368,10 @@ export const DEFAULT_NEW_LETTER = (type: LetterData['type'] = 'certified'): Lett
       location: '',
       effectiveDate: '',
       includeRemainderOfYear: false,
-      remainderYearText: 'for the remainder of the 2026-2027 School Year.',
+      remainderYearText: `for the remainder of the ${currentSchoolYear} School Year.`,
       yearsOfService: '',
       celebrationText:
+        config?.defaultRetirementCelebrationText ||
         'We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event.',
     }
   }
