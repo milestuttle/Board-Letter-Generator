@@ -11,12 +11,11 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config }) => {
   // Use the official scanned/extracted letterhead image dropped by the user by default
   if (config.headerType !== 'vector') {
     return (
-      <div className="district-letterhead w-full mb-3.5 select-none block">
+      <div className="district-letterhead w-full mb-4 select-none block">
         <img
           src={letterheadImg}
           alt="Cañon City Schools Official Letterhead"
-          className="w-full h-auto object-contain block district-letterhead-img"
-          style={{ maxHeight: '1.25in' }}
+          className="w-full h-auto block district-letterhead-img"
         />
       </div>
     )
