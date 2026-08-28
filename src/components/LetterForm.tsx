@@ -430,7 +430,14 @@ export const LetterForm: React.FC<LetterFormProps> = ({
                   <input
                     type="text"
                     value={letter.certified?.baseSalary || ''}
-                    onChange={(e) => updateCertified('baseSalary', e.target.value)}
+                    onChange={(e) => {
+                      const raw = e.target.value
+                      if (!raw) {
+                        updateCertified('baseSalary', '')
+                        return
+                      }
+                      updateCertified('baseSalary', formatCertifiedSalary(raw))
+                    }}
                     onBlur={(e) => {
                       if (e.target.value) {
                         updateCertified('baseSalary', formatCertifiedSalary(e.target.value))

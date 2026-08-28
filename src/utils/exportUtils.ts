@@ -3,6 +3,7 @@ import jsPDF from 'jspdf'
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx'
 import { saveAs } from 'file-saver'
 import type { LetterData, DistrictConfig } from '../types/letter'
+import { formatCertifiedSalary, formatClassifiedWage } from './formatUtils'
 
 /**
  * Generate high quality PDF file from letter preview DOM element
@@ -172,7 +173,7 @@ export const exportToDocx = async (
           }),
           new TextRun({ text: `• Lane: ${letter.certified?.lane}\n`, bold: true, size: 22 }),
           new TextRun({ text: `• Step: ${letter.certified?.step}\n`, bold: true, size: 22 }),
-          new TextRun({ text: `• Base Salary: ${letter.certified?.baseSalary}\n`, bold: true, size: 22 }),
+          new TextRun({ text: `• Base Salary: ${formatCertifiedSalary(letter.certified?.baseSalary)}\n`, bold: true, size: 22 }),
           new TextRun({ text: `• Start Date: ${letter.certified?.startDate}`, bold: true, size: 22 }),
         ],
         spacing: { after: 200 },
@@ -213,7 +214,7 @@ export const exportToDocx = async (
           new TextRun({ text: `• Classification: ${letter.classified?.classification}\n`, bold: true, size: 22 }),
           new TextRun({ text: `• Level: ${letter.classified?.level}\n`, bold: true, size: 22 }),
           new TextRun({
-            text: `• Base Wage: ${letter.classified?.baseWage} ${letter.classified?.stipendText || ''}\n`,
+            text: `• Base Wage: ${formatClassifiedWage(letter.classified?.baseWage)} ${letter.classified?.stipendText || ''}\n`,
             bold: true,
             size: 22,
           }),
@@ -358,7 +359,7 @@ We are excited to welcome you to our team and look forward to the contributions 
 Your initial placement on the certified salary schedule is as follows:
 • Lane: ${letter.certified?.lane}
 • Step: ${letter.certified?.step}
-• Base Salary: ${letter.certified?.baseSalary}
+• Base Salary: ${formatCertifiedSalary(letter.certified?.baseSalary)}
 • Start Date: ${letter.certified?.startDate}
 
 If you have any questions or need additional information, please don't hesitate to contact our Human Resources Department at ${config.hrEmail} or ${config.hrPhone}.
@@ -374,7 +375,7 @@ We are excited to welcome you to our team and look forward to the contributions 
 Your initial placement on the classified salary schedule is as follows:
 • Classification: ${letter.classified?.classification}
 • Level: ${letter.classified?.level}
-• Base Wage: ${letter.classified?.baseWage}${letter.classified?.stipendText ? ' ' + letter.classified.stipendText : ''}
+• Base Wage: ${formatClassifiedWage(letter.classified?.baseWage)}${letter.classified?.stipendText ? ' ' + letter.classified.stipendText : ''}
 • Start Date: ${letter.classified?.startDate}
 
 If you have any questions or need additional information, please don't hesitate to contact our Human Resources Department at ${config.hrEmail} or ${config.hrPhone}.

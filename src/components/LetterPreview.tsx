@@ -2,6 +2,7 @@ import { forwardRef } from 'react'
 import type { DistrictConfig, LetterData } from '../types/letter'
 import { DistrictHeader } from './DistrictHeader'
 import { Signature } from './Signature'
+import { formatCertifiedSalary, formatClassifiedWage } from '../utils/formatUtils'
 
 interface LetterPreviewProps {
   letter: LetterData
@@ -99,7 +100,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                   </li>
                   <li>
                     <strong className="font-semibold">Base Salary:</strong>{' '}
-                    {letter.certified?.baseSalary || '[Base Salary]'}
+                    {formatCertifiedSalary(letter.certified?.baseSalary) || '[Base Salary]'}
                   </li>
                   <li>
                     <strong className="font-semibold">Start Date:</strong>{' '}
@@ -164,7 +165,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                   </li>
                   <li>
                     <strong className="font-semibold">Base Wage:</strong>{' '}
-                    {letter.classified?.baseWage || '[Base Wage]'}
+                    {formatClassifiedWage(letter.classified?.baseWage) || '[Base Wage]'}
                     {letter.classified?.stipendText ? ` (${letter.classified.stipendText})` : ''}
                   </li>
                   <li>
