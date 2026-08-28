@@ -83,7 +83,7 @@ export const SAMPLE_PRESETS: TemplatePreset[] = [
       certified: {
         lane: 'MA+48',
         step: '23',
-        baseSalary: '$21,031.50',
+        baseSalary: '$21,032',
         startDate: 'September 1, 2026',
         isPartTime: true,
         fteText: 'Part-time',

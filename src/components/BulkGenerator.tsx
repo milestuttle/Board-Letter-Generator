@@ -14,6 +14,7 @@ import {
   FileText,
   Bookmark,
 } from 'lucide-react'
+import { formatCertifiedSalary, formatClassifiedWage } from '../utils/formatUtils'
 
 interface BulkGeneratorProps {
   config: DistrictConfig
@@ -67,7 +68,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           certified: {
             lane: 'MA+48',
             step: '23',
-            baseSalary: '$21,031.50',
+            baseSalary: '$21,032',
             startDate: 'September 1, 2026',
           },
         },
@@ -88,7 +89,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           certified: {
             lane: 'BA+24',
             step: '5',
-            baseSalary: '$51,800.00',
+            baseSalary: '$51,800',
             startDate: 'August 18, 2026',
           },
         },
@@ -109,7 +110,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           certified: {
             lane: 'MA+36',
             step: '8',
-            baseSalary: '$58,450.00',
+            baseSalary: '$58,450',
             startDate: 'August 18, 2026',
           },
         },
@@ -299,14 +300,14 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           item.certified = {
             lane: getVal('lane') || 'BA',
             step: getVal('step') || '1',
-            baseSalary: getVal('salary') || '$45,000.00',
+            baseSalary: formatCertifiedSalary(getVal('salary') || '$45,000'),
             startDate: getVal('start') || 'August 20, 2026',
           }
         } else if (activeType === 'classified') {
           item.classified = {
             classification: getVal('class') || 'P5',
             level: getVal('level') || 'A',
-            baseWage: getVal('wage') || '$18.00',
+            baseWage: formatClassifiedWage(getVal('wage') || '$18.00'),
             stipendText: getVal('stipend') || '',
             startDate: getVal('start') || 'August 20, 2026',
           }
@@ -347,7 +348,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
 
     if (activeType === 'certified') {
       csvHeader = 'FirstName,LastName,StreetAddress,City,State,Zip,Position,Location,Lane,Step,Salary,StartDate'
-      csvRow = 'Stacy,Andrews,"1431 Lombard Street",Cañon City,CO,81212,"Part-time Lead Counselor",District-wide,MA+48,23,"$21,031.50","September 1, 2026"'
+      csvRow = 'Stacy,Andrews,"1431 Lombard Street",Cañon City,CO,81212,"Part-time Lead Counselor",District-wide,MA+48,23,"$21,032","September 1, 2026"'
     } else if (activeType === 'classified') {
       csvHeader = 'FirstName,LastName,StreetAddress,City,State,Zip,Position,Location,Classification,Level,BaseWage,Stipend,StartDate'
       csvRow = 'Sharla,McGuire,"804 Harding Avenue",Cañon City,CO,81212,"School Health Technician","Cañon City High School",P6,E,"$19.67","","August 20, 2026"'

@@ -18,6 +18,7 @@ import {
   Calendar,
   FileSignature,
 } from 'lucide-react'
+import { formatCertifiedSalary, formatClassifiedWage } from '../utils/formatUtils'
 
 interface LetterFormProps {
   letter: LetterData
@@ -430,9 +431,17 @@ export const LetterForm: React.FC<LetterFormProps> = ({
                     type="text"
                     value={letter.certified?.baseSalary || ''}
                     onChange={(e) => updateCertified('baseSalary', e.target.value)}
-                    placeholder="e.g. $21,031.50"
+                    onBlur={(e) => {
+                      if (e.target.value) {
+                        updateCertified('baseSalary', formatCertifiedSalary(e.target.value))
+                      }
+                    }}
+                    placeholder="e.g. $52,400"
                     className="w-full px-3 py-2 text-sm rounded-lg bg-white border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition font-medium"
                   />
+                  <span className="text-[10px] text-blue-700/80 mt-0.5 block">
+                    Auto-formats as $X,XXX (no cents)
+                  </span>
                 </div>
 
                 <div>
@@ -541,9 +550,17 @@ export const LetterForm: React.FC<LetterFormProps> = ({
                   type="text"
                   value={letter.classified?.baseWage || ''}
                   onChange={(e) => updateClassified('baseWage', e.target.value)}
+                  onBlur={(e) => {
+                    if (e.target.value) {
+                      updateClassified('baseWage', formatClassifiedWage(e.target.value))
+                    }
+                  }}
                   placeholder="e.g. $19.67"
                   className="w-full px-3 py-2 text-sm rounded-lg bg-white border border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition font-medium"
                 />
+                <span className="text-[10px] text-emerald-700/80 mt-0.5 block">
+                  Auto-formats as $XX.XX (dollars & cents)
+                </span>
               </div>
 
               <div>
