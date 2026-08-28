@@ -20,7 +20,7 @@ export const exportToPdf = async (
   const baseName = fileName.replace(/\.pdf$/i, '').replace(/[^a-zA-Z0-9_\-\s]/g, '_').trim()
   const finalFileName = `${baseName || 'board_letter'}.pdf`
 
-  // Render to canvas via browser's native engine
+  // Render to canvas via browser's native engine at high resolution
   const canvas = await toCanvas(element, {
     pixelRatio: 2,
     backgroundColor: '#ffffff',
@@ -30,6 +30,10 @@ export const exportToPdf = async (
       transform: 'none',
       margin: '0',
       boxShadow: 'none',
+      width: '8.5in',
+      height: '11in',
+      maxHeight: '11in',
+      overflow: 'hidden',
     },
   })
 
@@ -38,12 +42,13 @@ export const exportToPdf = async (
     orientation: 'portrait',
     unit: 'pt',
     format: 'letter',
+    compress: true,
   })
 
   const pdfWidth = pdf.internal.pageSize.getWidth()
   const pdfHeight = pdf.internal.pageSize.getHeight()
 
-  // Add canvas directly to PDF (avoiding intermediate dataURL serialization)
+  // Add canvas directly to PDF (exact single page fit)
   pdf.addImage(canvas, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
 
   // Save natively using jsPDF's built-in file downloader

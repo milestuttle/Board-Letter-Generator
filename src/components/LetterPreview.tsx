@@ -24,26 +24,28 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         className="letter-sheet bg-white text-gray-900 mx-auto shadow-2xl relative select-text origin-top print:shadow-none print:m-0 print:border-none"
         style={{
           width: '8.5in',
-          minHeight: '11in',
-          padding: '0.65in 0.75in 0.65in 0.75in',
+          height: '11in',
+          maxHeight: '11in',
+          padding: '0.45in 0.75in 0.4in 0.75in',
           boxSizing: 'border-box',
           fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
-          fontSize: '11pt',
-          lineHeight: '1.42',
+          fontSize: '10.5pt',
+          lineHeight: '1.38',
           transform: scale !== 1 ? `scale(${scale})` : undefined,
           transformOrigin: 'top center',
+          overflow: 'hidden',
         }}
       >
         {/* District Official Header */}
         <DistrictHeader config={config} />
 
         {/* Letter Date */}
-        <div className="mb-5 text-[11pt] text-gray-900 font-medium">
+        <div className="mb-3.5 text-[10.5pt] text-gray-900 font-medium">
           {letter.letterDate || 'August 24, 2026'}
         </div>
 
         {/* Recipient Address Block */}
-        <div className="mb-5 text-[11pt] text-gray-900 leading-tight space-y-0.5">
+        <div className="mb-3.5 text-[10.5pt] text-gray-900 leading-tight space-y-0.5">
           <div className="font-semibold text-gray-950">
             {letter.recipientFirstName} {letter.recipientLastName}
           </div>
@@ -58,15 +60,15 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         </div>
 
         {/* Salutation */}
-        <div className="mb-4 text-[11pt] font-normal">{salutation}</div>
+        <div className="mb-2.5 text-[10.5pt] font-normal">{salutation}</div>
 
         {/* Dynamic Letter Body Content Based on Type */}
-        <div className="space-y-3.5 text-[10.8pt] text-gray-900 text-justify leading-[1.42]">
+        <div className="space-y-2.5 text-[10.2pt] text-gray-900 text-justify leading-[1.38]">
           {/* ================= CERTIFIED ================= */}
           {letter.type === 'certified' && (
             <>
               <p>
-                On behalf of Canon City Schools, we are pleased to inform you that the Board of
+                On behalf of Cañon City Schools, we are pleased to inform you that the Board of
                 Education at its regular meeting on{' '}
                 <span className="font-medium">{letter.boardMeetingDate}</span> has officially
                 approved your employment in a new role as a{' '}
@@ -82,11 +84,11 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                 be issued through your online employee portal.
               </p>
 
-              <div className="pt-1 pb-1">
-                <p className="font-normal mb-1.5">
+              <div className="pt-0.5 pb-0.5">
+                <p className="font-normal mb-1">
                   Your initial placement on the certified salary schedule is as follows:
                 </p>
-                <ul className="list-disc pl-8 space-y-1 text-[10.8pt]">
+                <ul className="list-disc pl-7 space-y-0.5 text-[10.2pt]">
                   <li>
                     <strong className="font-semibold">Lane:</strong>{' '}
                     {letter.certified?.lane || '[Lane]'}
@@ -119,17 +121,10 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
               </p>
 
               <p>
-                Again, congratulations, and welcome to Cañon City Schools! We look forward to
-                working with you. The District’s mission is,{' '}
-                <span className="italic">{config.missionStatement}</span> and you were selected
-                because we believe you have the passion, skills, and dedication to help bring that
-                vision to life.
-              </p>
-
-              <p>
-                We are confident that your contributions will make a meaningful impact on our
-                students and community. Welcome aboard. We're excited to have you as part of our
-                team!
+                Again, congratulations and welcome to Cañon City Schools! The District’s mission is,{' '}
+                <span className="italic">{config.missionStatement}</span> and we are confident your
+                passion, skills, and dedication will make a meaningful impact on our students and community.
+                Welcome aboard!
               </p>
             </>
           )}
@@ -138,7 +133,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
           {letter.type === 'classified' && (
             <>
               <p>
-                On behalf of Canon City Schools, we are pleased to inform you that the Board of
+                On behalf of Cañon City Schools, we are pleased to inform you that the Board of
                 Education at its regular meeting on{' '}
                 <span className="font-medium">{letter.boardMeetingDate}</span> has officially
                 approved your employment as a{' '}
@@ -154,11 +149,11 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                 be issued at a later date through our online employee portal.
               </p>
 
-              <div className="pt-1 pb-1">
-                <p className="font-normal mb-1.5">
+              <div className="pt-0.5 pb-0.5">
+                <p className="font-normal mb-1">
                   Your initial placement on the classified salary schedule is as follows:
                 </p>
-                <ul className="list-disc pl-8 space-y-1 text-[10.8pt]">
+                <ul className="list-disc pl-7 space-y-0.5 text-[10.2pt]">
                   <li>
                     <strong className="font-semibold">Classification:</strong>{' '}
                     {letter.classified?.classification || '[Classification]'}
@@ -170,7 +165,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                   <li>
                     <strong className="font-semibold">Base Wage:</strong>{' '}
                     {letter.classified?.baseWage || '[Base Wage]'}
-                    {letter.classified?.stipendText ? ` ${letter.classified.stipendText}` : ''}
+                    {letter.classified?.stipendText ? ` (${letter.classified.stipendText})` : ''}
                   </li>
                   <li>
                     <strong className="font-semibold">Start Date:</strong>{' '}
@@ -192,24 +187,17 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
               </p>
 
               <p>
-                Again, congratulations and welcome to Cañon City Schools! We look forward to
-                working with you. The District’s mission is,{' '}
-                <span className="italic">{config.missionStatement}</span> and you were selected
-                because we believe you have the passion, skills, and dedication to help bring that
-                vision to life.
-              </p>
-
-              <p>
-                We are confident that your contributions will make a meaningful impact on our
-                students and community. Welcome aboard. We're excited to have you as part of our
-                team!
+                Again, congratulations and welcome to Cañon City Schools! The District’s mission is,{' '}
+                <span className="italic">{config.missionStatement}</span> and we are confident your
+                passion, skills, and dedication will make a meaningful impact on our students and community.
+                Welcome aboard!
               </p>
             </>
           )}
 
           {/* ================= TRANSFER ================= */}
           {letter.type === 'transfer' && (
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3.5 pt-1">
               <p>
                 The Board of Education, at its regular meeting on{' '}
                 <span className="font-medium">{letter.boardMeetingDate}</span>, took action to
@@ -225,7 +213,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                 for the <span className="font-medium">{letter.schoolYear}</span> School Year.
               </p>
 
-              <p className="pt-2">
+              <p className="pt-1">
                 Congratulations on your previous success and good luck in this position!
               </p>
             </div>
@@ -233,7 +221,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
 
           {/* ================= RESIGNATION ================= */}
           {letter.type === 'resignation' && (
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3.5 pt-1">
               <p>
                 The Board of Education, at its regular meeting on{' '}
                 <span className="font-medium">{letter.boardMeetingDate}</span>, officially took
@@ -257,7 +245,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
                   'Thank you for your dedicated service and commitment to the students, staff, and families of Cañon City Schools. We wish you the very best in all of your future personal and professional endeavors.'}
               </p>
 
-              <p className="text-[10.5pt]">
+              <p className="text-[10pt]">
                 If you have any questions regarding end-of-service documentation or benefits
                 transitions, please contact our Human Resources Department at {config.hrEmail} or{' '}
                 {config.hrPhone}.
@@ -267,7 +255,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
 
           {/* ================= RETIREMENT ================= */}
           {letter.type === 'retirement' && (
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3.5 pt-1">
               <p>
                 The Board of Education, at their regular meeting on{' '}
                 <span className="font-medium">{letter.boardMeetingDate}</span>, approved your
@@ -314,7 +302,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         </div>
 
         {/* Sign-off Block */}
-        <div className="mt-7 text-[11pt] leading-tight space-y-1 font-serif text-gray-950">
+        <div className="mt-4 text-[10.5pt] leading-tight space-y-0.5 font-serif text-gray-950">
           <div>Sincerely,</div>
 
           <div className="py-0.5">
@@ -328,13 +316,13 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
           <div className="font-semibold text-gray-950">
             {letter.signerName || config.defaultSignerName}
           </div>
-          <div className="text-gray-800 text-[10.5pt]">
+          <div className="text-gray-800 text-[10pt]">
             {letter.signerTitle || config.defaultSignerTitle}
           </div>
-          <div className="text-gray-800 text-[10.5pt]">Cañon City Schools</div>
+          <div className="text-gray-800 text-[10pt]">Cañon City Schools</div>
 
           {/* Footer Initials & Cc */}
-          <div className="pt-3 text-[10pt] text-gray-700 space-y-0.5">
+          <div className="pt-2 text-[9.5pt] text-gray-700 space-y-0.5">
             <div>{letter.typistInitials || config.defaultTypistInitials}</div>
             <div>{letter.ccLine || config.defaultCc}</div>
           </div>

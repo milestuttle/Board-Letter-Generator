@@ -19,7 +19,7 @@ export const Signature: React.FC<SignatureProps> = ({
       <img
         src={customSignatureData}
         alt={`Signature of ${signerName}`}
-        className={`h-14 w-auto object-contain ${className}`}
+        className={`h-12 w-auto object-contain ${className}`}
       />
     )
   }
@@ -27,7 +27,7 @@ export const Signature: React.FC<SignatureProps> = ({
   if (signatureType === 'typed') {
     return (
       <div
-        className={`font-['Dancing_Script'] text-3xl font-bold text-gray-900 tracking-wide py-1 select-none ${className}`}
+        className={`font-['Dancing_Script'] text-2xl font-bold text-gray-900 tracking-wide py-0.5 select-none ${className}`}
       >
         {signerName}
       </div>
@@ -36,11 +36,11 @@ export const Signature: React.FC<SignatureProps> = ({
 
   // Authentic signature image from images folder
   return (
-    <div className={`relative inline-block py-1 ${className}`}>
+    <div className={`relative inline-block py-0.5 ${className}`}>
       <img
         src={jamieSigImg}
         alt={`Signature of ${signerName}`}
-        className="h-16 w-auto object-contain max-w-[240px] block"
+        className="h-13 w-auto object-contain max-w-[210px] block"
       />
     </div>
   )

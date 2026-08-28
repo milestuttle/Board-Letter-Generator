@@ -11,12 +11,12 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config }) => {
   // Use the official scanned/extracted letterhead image dropped by the user by default
   if (config.headerType !== 'vector') {
     return (
-      <div className="district-letterhead w-full mb-6 select-none block">
+      <div className="district-letterhead w-full mb-3.5 select-none block">
         <img
           src={letterheadImg}
           alt="Cañon City Schools Official Letterhead"
           className="w-full h-auto object-contain block district-letterhead-img"
-          style={{ maxHeight: '1.45in' }}
+          style={{ maxHeight: '1.25in' }}
         />
       </div>
     )
@@ -24,7 +24,7 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config }) => {
 
   // Fallback: Dynamic HTML/Vector Header
   return (
-    <header className="w-full text-black font-sans pb-3 border-b-2 border-gray-800/80 mb-6">
+    <header className="w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 mb-3.5">
       <div className="grid grid-cols-[115px_1fr_195px] items-start gap-3">
         {/* Left: District Seal Logo */}
         <div className="flex justify-start items-center pt-1">

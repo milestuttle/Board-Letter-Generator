@@ -15,46 +15,61 @@
 /* Print specific styles for exact 8.5 x 11 in portrait letterhead */
 @media print {
   @page {
-    size: letter portrait;
-    margin: 0mm;
+    size: 8.5in 11in;
+    margin: 0 !important;
   }
 
   html, body {
     width: 8.5in !important;
     height: 11in !important;
+    max-height: 11in !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Hide only app navigation/controls */
+  /* Hide app navigation/controls */
   .print\:hidden,
   #app-top-nav {
     display: none !important;
   }
 
-  /* Ensure letterhead image prints at full fidelity */
+  /* Ensure letterhead image and signatures print at full fidelity */
   .district-letterhead,
-  .district-letterhead img {
-    display: block !important;
-    visibility: visible !important;
-    max-width: 100% !important;
+  .district-letterhead img,
+  img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Show print target */
+  /* Target exact single-page print fit */
   .letter-sheet {
     box-shadow: none !important;
     margin: 0 !important;
-    padding: 0.65in 0.75in 0.65in 0.75in !important;
+    padding: 0.45in 0.75in 0.4in 0.75in !important;
     width: 8.5in !important;
-    min-height: 11in !important;
+    height: 11in !important;
+    max-height: 11in !important;
     transform: none !important;
     page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .page-break-after-always {
     page-break-after: always !important;
     break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 11in !important;
+    max-height: 11in !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 }
