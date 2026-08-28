@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import type { LetterData, LetterType, DistrictConfig } from '../types/letter'
 import { LetterPreview } from './LetterPreview'
 import {
@@ -12,27 +12,38 @@ import {
   Download,
   CheckCircle,
   FileText,
+  Bookmark,
 } from 'lucide-react'
 
 interface BulkGeneratorProps {
   config: DistrictConfig
   onClose: () => void
-  onLoadSingle: (letter: LetterData) => void
+  onLoadSingle: (letter: LetterData, allBatch?: LetterData[]) => void
+  onSaveBatchAsDrafts?: (letters: LetterData[]) => void
 }
 
 export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
   config,
   onClose,
   onLoadSingle,
+  onSaveBatchAsDrafts,
 }) => {
   const [activeType, setActiveType] = useState<LetterType>('certified')
   const [boardMeetingDate] = useState('August 24, 2026')
   const [letterDate] = useState('August 24, 2026')
   const [schoolYear] = useState('2026-2027')
   
-  const [batchLetters, setBatchLetters] = useState<LetterData[]>([])
+  const [batchLetters, setBatchLetters] = useState<LetterData[]>(() => {
+    const saved = localStorage.getItem('ccs_batch_letters')
+    return saved ? JSON.parse(saved) : []
+  })
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Persist batch letters so closing/reopening or editing single retains batch roster
+  useEffect(() => {
+    localStorage.setItem('ccs_batch_letters', JSON.stringify(batchLetters))
+  }, [batchLetters])
 
   // Pre-fill sample batch
   const handleLoadSampleBatch = (type: LetterType) => {
@@ -386,14 +397,30 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
 
           <div className="flex items-center gap-2">
             {batchLetters.length > 0 && (
-              <button
-                type="button"
-                onClick={handleBatchPrint}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
-              >
-                <Printer className="w-4 h-4" />
-                Print All {batchLetters.length} Letters
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onSaveBatchAsDrafts) {
+                      onSaveBatchAsDrafts(batchLetters)
+                    }
+                  }}
+                  className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                  title="Save all batch letters to your Drafts list"
+                >
+                  <Bookmark className="w-4 h-4 text-amber-600" />
+                  Save All as Drafts ({batchLetters.length})
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleBatchPrint}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print All {batchLetters.length} Letters
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -473,31 +500,48 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Batch Recipients ({batchLetters.length})
               </span>
-              <button
-                type="button"
-                onClick={() => {
-                  const newRec: LetterData = {
-                    id: `batch-${Date.now()}`,
-                    type: activeType,
-                    letterDate,
-                    boardMeetingDate,
-                    schoolYear,
-                    recipientFirstName: 'New',
-                    recipientLastName: 'Employee',
-                    streetAddress: '101 Main St',
-                    city: 'Cañon City',
-                    state: 'CO',
-                    zip: '81212',
-                    positionTitle: 'Position Title',
-                    location: 'Cañon City High School',
-                  }
-                  setBatchLetters([...batchLetters, newRec])
-                  setSelectedIndex(batchLetters.length)
-                }}
-                className="text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1 cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" /> Add Staff
-              </button>
+              <div className="flex items-center gap-2">
+                {batchLetters.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm('Clear current batch roster? (Saved drafts will not be affected)')) {
+                        setBatchLetters([])
+                        localStorage.removeItem('ccs_batch_letters')
+                      }
+                    }}
+                    className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                    title="Clear batch list"
+                  >
+                    Clear
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newRec: LetterData = {
+                      id: `batch-${Date.now()}`,
+                      type: activeType,
+                      letterDate,
+                      boardMeetingDate,
+                      schoolYear,
+                      recipientFirstName: 'New',
+                      recipientLastName: 'Employee',
+                      streetAddress: '101 Main St',
+                      city: 'Cañon City',
+                      state: 'CO',
+                      zip: '81212',
+                      positionTitle: 'Position Title',
+                      location: 'Cañon City High School',
+                    }
+                    setBatchLetters([...batchLetters, newRec])
+                    setSelectedIndex(batchLetters.length)
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add Staff
+                </button>
+              </div>
             </div>
 
             {batchLetters.length === 0 ? (
@@ -528,16 +572,16 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                         {item.positionTitle} &bull; {item.location}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation()
-                          onLoadSingle(item)
+                          onLoadSingle(item, batchLetters)
                           onClose()
                         }}
-                        title="Edit as single in main generator"
-                        className="text-slate-400 hover:text-blue-600 p-1"
+                        title="Edit as single in main generator (saves all batch to drafts)"
+                        className="text-slate-400 hover:text-blue-600 p-1.5 rounded-lg hover:bg-blue-50 transition"
                       >
                         <FileText className="w-4 h-4" />
                       </button>
@@ -552,7 +596,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           }
                         }}
                         title="Remove from batch"
-                        className="text-slate-400 hover:text-red-600 p-1"
+                        className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

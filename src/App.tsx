@@ -110,13 +110,37 @@ export function App() {
       updated = savedLetters.map((l) => (l.id === activeLetter.id ? activeLetter : l))
     } else {
       updated = [
-        { ...activeLetter, updatedAt: new Date().toLocaleTimeString() },
+        { ...activeLetter, updatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
         ...savedLetters,
       ]
     }
     setSavedLetters(updated)
     confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } })
     showToast('Letter saved to Drafts!')
+  }
+
+  // Save multiple batch letters to drafts
+  const handleSaveBatchToDrafts = (letters: LetterData[], notify = true) => {
+    if (!letters || letters.length === 0) return
+
+    setSavedLetters((prev) => {
+      const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      const existingIds = new Set(prev.map((l) => l.id))
+      const updatedExisting = prev.map((l) => {
+        const matching = letters.find((item) => item.id === l.id)
+        return matching ? { ...matching, updatedAt: nowStr } : l
+      })
+      const newLetters = letters
+        .filter((item) => !existingIds.has(item.id))
+        .map((item) => ({ ...item, updatedAt: nowStr }))
+
+      return [...newLetters, ...updatedExisting]
+    })
+
+    if (notify) {
+      confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } })
+      showToast(`Saved all ${letters.length} letters to Drafts!`)
+    }
   }
 
   // Actions
@@ -429,18 +453,34 @@ export function App() {
               <History className="w-4 h-4 text-blue-600" />
               Saved Drafts ({savedLetters.length})
             </h3>
-            <button
-              onClick={() => setShowHistoryDrawer(false)}
-              className="text-xs text-slate-400 hover:text-slate-700 font-semibold"
-            >
-              Close
-            </button>
+            <div className="flex items-center gap-2">
+              {savedLetters.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (confirm('Clear all saved drafts?')) {
+                      setSavedLetters([])
+                      showToast('Drafts cleared')
+                    }
+                  }}
+                  className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                >
+                  Clear All
+                </button>
+              )}
+              <button
+                onClick={() => setShowHistoryDrawer(false)}
+                className="text-xs text-slate-400 hover:text-slate-700 font-semibold cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
 
           {savedLetters.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 p-4">
               <Bookmark className="w-10 h-10 text-slate-300 stroke-1 mb-2" />
-              <p className="text-xs">No saved drafts yet. Click &ldquo;Save Draft&rdquo; in the top bar.</p>
+              <p className="text-xs">No saved drafts yet. Click &ldquo;Save Draft&rdquo; or batch save in Bulk Mode.</p>
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto space-y-2 pr-1">
@@ -450,7 +490,7 @@ export function App() {
                   onClick={() => {
                     setActiveLetter(draft)
                     setShowHistoryDrawer(false)
-                    showToast(`Loaded draft for ${draft.recipientFirstName}`)
+                    showToast(`Loaded draft for ${draft.recipientFirstName} ${draft.recipientLastName}`)
                   }}
                   className="p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 transition cursor-pointer"
                 >
@@ -472,7 +512,8 @@ export function App() {
                         e.stopPropagation()
                         setSavedLetters(savedLetters.filter((l) => l.id !== draft.id))
                       }}
-                      className="hover:text-red-600"
+                      className="hover:text-red-600 cursor-pointer"
+                      title="Delete draft"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -489,9 +530,15 @@ export function App() {
         <BulkGenerator
           config={config}
           onClose={() => setShowBulkModal(false)}
-          onLoadSingle={(letter) => {
+          onSaveBatchAsDrafts={handleSaveBatchToDrafts}
+          onLoadSingle={(letter, allBatch) => {
             setActiveLetter(letter)
-            showToast(`Loaded ${letter.recipientFirstName} ${letter.recipientLastName}`)
+            if (allBatch && allBatch.length > 1) {
+              handleSaveBatchToDrafts(allBatch, false)
+              showToast(`Loaded ${letter.recipientFirstName} ${letter.recipientLastName} & saved ${allBatch.length} batch letters to Drafts!`)
+            } else {
+              showToast(`Loaded ${letter.recipientFirstName} ${letter.recipientLastName}`)
+            }
           }}
         />
       )}
