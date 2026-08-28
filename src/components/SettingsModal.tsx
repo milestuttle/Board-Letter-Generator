@@ -6,7 +6,6 @@ import {
   Plus,
   Trash2,
   Save,
-  RotateCcw,
   Building2,
   Users,
   ShieldCheck,
@@ -106,12 +105,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       ...formData,
       certifiedLanes: currentLanes.filter((_, i) => i !== index),
     })
-  }
-
-  const handleReset = () => {
-    if (confirm('Reset district settings to default Canon City Schools configuration?')) {
-      setFormData({ ...DEFAULT_DISTRICT_CONFIG })
-    }
   }
 
   const handleSave = () => {
@@ -653,31 +646,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
           <button
             type="button"
-            onClick={handleReset}
-            className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition cursor-pointer"
+            onClick={onClose}
+            className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> Reset to Defaults
+            Cancel
           </button>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
-            >
-              <Save className="w-3.5 h-3.5" /> Save Configuration
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <Save className="w-3.5 h-3.5" /> Save Configuration
+          </button>
         </div>
       </div>
     </div>
