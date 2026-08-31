@@ -1,0 +1,47 @@
+[DISTRICT LETTERHEAD]
+
+OFFER & TOTAL COMPENSATION STATEMENT
+
+Date: [Date]
+Employee Name: [Employee Name]
+Position Title: [Position Title]
+Job Classification: [Licensed / 9-Month Classified / 12-Month Classified]
+
+Dear [Employee Name],
+
+Welcome to [District Name]! We are excited to offer you the position of [Position Title]. Beyond your base salary, the district invests heavily in your health, retirement, and time off. This statement highlights the total value of your complete compensation package.
+
+1. DIRECT CASH COMPENSATION
+• Base Annual Salary / Baseline Hourly Rate:                $[Base Pay]
+• Stipends (Hard-to-Fill / Center-Based, if applicable):     $[Stipend]
+------------------------------------------------------------------
+TOTAL DIRECT CASH PAY:                                     $[Direct Pay Total]
+
+2. DISTRICT-PAID INSURANCE BENEFITS
+• Health Insurance Contribution ($651.20/month):           $7,814.40
+• Dental Insurance Contribution ($5.00/month):            $60.00
+• Basic Life Insurance Premium ($20,000 Coverage Policy):  $[Life Premium]
+------------------------------------------------------------------
+TOTAL INSURANCE CONTRIBUTIONS:                             $[Insurance Total]
+
+3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS
+• Employer PERA Retirement Contribution (21.40%):          $[Direct Pay * 0.214]
+• Employer Medicare Contribution (1.45%):                 $[Direct Pay * 0.0145]
+------------------------------------------------------------------
+TOTAL RETIREMENT & STATUTORY CONTRIBUTIONS:                $[Statutory Total]
+
+4. PAID TIME OFF & HOLIDAYS ALLOCATION
+• Allocated Annual Paid Leave Days:                         [11 / 12 / 25] Days
+• Paid District Holidays:                                  [0 / 11] Days
+• Additional Protected Leaves:                             Up to 5 Bereavement Days & 5 Professional Days
+
+==================================================================
+ESTIMATED TOTAL ANNUAL INVESTMENT:                         $[GRAND TOTAL]
+==================================================================
+
+*Note: Overtime, elective extra-duty stipends (e.g., coaching), and variable sub coverage pay are not included in initial hire statements but add further to earned annual pay.*
+
+Sincerely,
+
+[HR Administrator Name]
+[District Name] Human Resources

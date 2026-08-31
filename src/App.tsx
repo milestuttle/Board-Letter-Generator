@@ -12,9 +12,17 @@ import {
 } from './utils/sampleData'
 import { LetterForm } from './components/LetterForm'
 import { LetterPreview } from './components/LetterPreview'
+import { TotalCompPreview } from './components/TotalCompPreview'
+import { TotalCompForm } from './components/TotalCompForm'
 import { BulkGenerator } from './components/BulkGenerator'
 import { SettingsModal } from './components/SettingsModal'
-import { exportToPdf, exportToDocx, copyLetterText } from './utils/exportUtils'
+import {
+  exportToPdf,
+  exportToDocx,
+  copyLetterText,
+  exportTotalCompToDocx,
+  copyTotalCompText,
+} from './utils/exportUtils'
 import {
   Printer,
   FileDown,
@@ -32,6 +40,7 @@ import {
   Bookmark,
   History,
   Trash2,
+  Calculator,
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
@@ -47,6 +56,9 @@ export function App() {
     const saved = localStorage.getItem('ccs_active_letter')
     return saved ? JSON.parse(saved) : SAMPLE_PRESETS[0].letter
   })
+
+  // Active Document Tab ('board_letter' | 'total_comp')
+  const [activeDocumentTab, setActiveDocumentTab] = useState<'board_letter' | 'total_comp'>('board_letter')
 
   // Saved Drafts & History
   const [savedLetters, setSavedLetters] = useState<LetterData[]>(() => {
@@ -151,9 +163,11 @@ export function App() {
   const handleExportPdf = async () => {
     try {
       setIsExporting(true)
-      const cleanLast = (activeLetter.recipientLastName || 'Board').trim().replace(/\s+/g, '_')
-      const filename = `${cleanLast}_${activeLetter.type}_Letter.pdf`
-      await exportToPdf('letter-preview-sheet', filename)
+      const cleanLast = (activeLetter.recipientLastName || 'Employee').trim().replace(/\s+/g, '_')
+      const targetId = activeDocumentTab === 'total_comp' ? 'total-comp-sheet' : 'letter-preview-sheet'
+      const docType = activeDocumentTab === 'total_comp' ? 'Total_Comp_Statement' : `${activeLetter.type}_Letter`
+      const filename = `${cleanLast}_${docType}.pdf`
+      await exportToPdf(targetId, filename)
       showToast('PDF downloaded successfully!')
     } catch (err) {
       console.error('PDF export error:', err)
@@ -166,9 +180,16 @@ export function App() {
   const handleExportDocx = async () => {
     try {
       setIsExporting(true)
-      const filename = `${activeLetter.recipientLastName || 'Board'}_${activeLetter.type}_Letter.docx`
-      await exportToDocx(activeLetter, config, filename)
-      showToast('Word document (.docx) downloaded!')
+      const cleanLast = (activeLetter.recipientLastName || 'Employee').trim().replace(/\s+/g, '_')
+      if (activeDocumentTab === 'total_comp') {
+        const filename = `${cleanLast}_Total_Compensation_Statement.docx`
+        await exportTotalCompToDocx(activeLetter, config, filename)
+        showToast('Total Compensation Word (.docx) downloaded!')
+      } else {
+        const filename = `${cleanLast}_${activeLetter.type}_Letter.docx`
+        await exportToDocx(activeLetter, config, filename)
+        showToast('Board Letter Word (.docx) downloaded!')
+      }
     } catch (err) {
       console.error(err)
       showToast('Error exporting Word document')
@@ -178,9 +199,15 @@ export function App() {
   }
 
   const handleCopyText = async () => {
-    await copyLetterText(activeLetter, config)
-    showToast('Formatted letter text copied to clipboard!')
+    if (activeDocumentTab === 'total_comp') {
+      await copyTotalCompText(activeLetter, config)
+      showToast('Total Compensation Statement text copied!')
+    } else {
+      await copyLetterText(activeLetter, config)
+      showToast('Formatted letter text copied to clipboard!')
+    }
   }
+
 
   return (
     <div className="min-h-screen bg-slate-100/90 text-slate-800 flex flex-col font-sans selection:bg-blue-500 selection:text-white">
@@ -303,11 +330,35 @@ export function App() {
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6 print:p-0 print:m-0 print:block">
         {/* Left Column: Interactive Form Controls */}
         <div className="xl:col-span-6 space-y-6 print:hidden">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
-              Letter Information & Configuration
-            </h2>
+          {/* Header & Mode Switcher */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setActiveDocumentTab('board_letter')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  activeDocumentTab === 'board_letter'
+                    ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Board Letter Editor
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveDocumentTab('total_comp')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  activeDocumentTab === 'total_comp'
+                    ? 'bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5" />
+                Total Comp Editor
+              </button>
+            </div>
+
             <button
               type="button"
               onClick={() => handleResetType(activeLetter.type)}
@@ -317,30 +368,58 @@ export function App() {
             </button>
           </div>
 
-          <LetterForm
-            letter={activeLetter}
-            onChange={setActiveLetter}
-            presets={SAMPLE_PRESETS}
-            onSelectPreset={handleSelectPreset}
-            onResetType={handleResetType}
-            config={config}
-          />
+          {activeDocumentTab === 'board_letter' ? (
+            <LetterForm
+              letter={activeLetter}
+              onChange={setActiveLetter}
+              presets={SAMPLE_PRESETS}
+              onSelectPreset={handleSelectPreset}
+              onResetType={handleResetType}
+              config={config}
+            />
+          ) : (
+            <TotalCompForm
+              letter={activeLetter}
+              onChange={setActiveLetter}
+              config={config}
+            />
+          )}
         </div>
 
         {/* Right Column: High-Fidelity Paper Preview */}
         <div className="xl:col-span-6 flex flex-col items-center print:block print:w-full">
           {/* Zoom & View Toolbar */}
-          <div className="w-full flex items-center justify-between bg-white px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-xs mb-4 print:hidden">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Live Document Preview
-              </span>
-              <span className="text-[11px] px-2 py-0.5 bg-slate-100 text-slate-600 font-medium rounded-md">
-                8.5&quot; &times; 11&quot; US Letter
-              </span>
+          <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-xs mb-4 print:hidden">
+            {/* Document Switcher Tabs */}
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setActiveDocumentTab('board_letter')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  activeDocumentTab === 'board_letter'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Board Letter
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveDocumentTab('total_comp')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  activeDocumentTab === 'total_comp'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5" />
+                Total Compensation Statement
+              </button>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            {/* Zoom Controls */}
+            <div className="flex items-center justify-end gap-1.5">
               <button
                 type="button"
                 onClick={() => setZoomScale((z) => Math.max(0.6, Number((z - 0.05).toFixed(2))))}
@@ -381,12 +460,21 @@ export function App() {
 
           {/* Letter Canvas Container */}
           <div className="w-full flex justify-center overflow-x-auto p-2 bg-slate-200/70 rounded-3xl border border-slate-300 shadow-inner print:p-0 print:bg-white print:border-none print:shadow-none">
-            <LetterPreview
-              ref={letterRef}
-              letter={activeLetter}
-              config={config}
-              scale={zoomScale}
-            />
+            {activeDocumentTab === 'board_letter' ? (
+              <LetterPreview
+                ref={letterRef}
+                letter={activeLetter}
+                config={config}
+                scale={zoomScale}
+              />
+            ) : (
+              <TotalCompPreview
+                ref={letterRef}
+                letter={activeLetter}
+                config={config}
+                scale={zoomScale}
+              />
+            )}
           </div>
         </div>
       </main>
@@ -397,11 +485,33 @@ export function App() {
           {/* Top Review Bar */}
           <div className="max-w-5xl w-full mx-auto bg-slate-900 text-white px-5 py-3 rounded-2xl border border-slate-800 flex items-center justify-between shadow-2xl mb-4">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
-                Full-Screen Document Review
-              </span>
+              <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700">
+                <button
+                  type="button"
+                  onClick={() => setActiveDocumentTab('board_letter')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    activeDocumentTab === 'board_letter'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Board Letter
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveDocumentTab('total_comp')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    activeDocumentTab === 'total_comp'
+                      ? 'bg-indigo-600 text-white'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Total Comp Statement
+                </button>
+              </div>
+
               <span className="text-xs text-slate-400 hidden sm:inline">
-                {activeLetter.recipientFirstName} {activeLetter.recipientLastName} ({activeLetter.type.toUpperCase()})
+                {activeLetter.recipientFirstName} {activeLetter.recipientLastName}
               </span>
             </div>
 
@@ -435,11 +545,19 @@ export function App() {
           {/* Full-Screen Scrollable Document Sheet */}
           <div className="flex-1 overflow-y-auto overflow-x-auto flex justify-center items-start pb-8">
             <div className="transform origin-top scale-100 shadow-2xl rounded-sm">
-              <LetterPreview
-                letter={activeLetter}
-                config={config}
-                scale={1}
-              />
+              {activeDocumentTab === 'board_letter' ? (
+                <LetterPreview
+                  letter={activeLetter}
+                  config={config}
+                  scale={1}
+                />
+              ) : (
+                <TotalCompPreview
+                  letter={activeLetter}
+                  config={config}
+                  scale={1}
+                />
+              )}
             </div>
           </div>
         </div>

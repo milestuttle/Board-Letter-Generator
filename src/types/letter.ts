@@ -79,6 +79,32 @@ export interface RetirementFields {
   celebrationText?: string // e.g. "We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event."
 }
 
+export type JobClassificationType = 'Licensed' | '9-Month Classified' | '12-Month Classified'
+
+export interface TotalCompFields {
+  jobClassification?: JobClassificationType
+  baseAnnualSalary?: string // e.g. "$52,400.00"
+  stipendAmount?: string // e.g. "$2,000.00" or "$0.00"
+  stipendDescription?: string // e.g. "Hard-to-Fill / Center-Based"
+  
+  // Custom Benefit Overrides (optional, defaults provided by totalCompUtils)
+  healthMonthlyRate?: number // default 651.20 ($7,814.40 annual)
+  dentalMonthlyRate?: number // default 5.00 ($60.00 annual)
+  lifeInsurancePremiumAnnual?: number // default 28.80 ($20k policy)
+  peraRate?: number // default 0.2140 (21.40%)
+  medicareRate?: number // default 0.0145 (1.45%)
+
+  paidLeaveDays?: number // default 11 (Licensed/9-Mo), 25 (12-Mo)
+  paidHolidaysDays?: number // default 0 (Licensed/9-Mo), 11 (12-Mo)
+  additionalLeavesText?: string // "Up to 5 Bereavement Days & 5 Professional Days"
+
+  // Hourly schedule helper for classified
+  isHourly?: boolean
+  hourlyRate?: string
+  hoursPerDay?: number // default 8
+  daysPerYear?: number // default 176 (9-month) or 260 (12-month)
+}
+
 export interface LetterData {
   id: string
   type: LetterType
@@ -105,6 +131,7 @@ export interface LetterData {
   transfer?: TransferFields
   resignation?: ResignationFields
   retirement?: RetirementFields
+  totalComp?: TotalCompFields
   
   // Custom Overrides / Signature
   signerName?: string
@@ -126,3 +153,4 @@ export interface TemplatePreset {
   description: string
   letter: LetterData
 }
+
