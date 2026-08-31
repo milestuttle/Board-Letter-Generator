@@ -64,7 +64,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         <div className="mb-2.5 text-[10.5pt] font-normal">{salutation}</div>
 
         {/* Dynamic Letter Body Content Based on Type */}
-        <div className="space-y-2.5 text-[10.2pt] text-gray-900 text-justify leading-[1.38]">
+        <div className="space-y-2.5 text-[10.2pt] text-gray-900 text-left leading-[1.38]">
           {/* ================= CERTIFIED ================= */}
           {letter.type === 'certified' && (
             <>
