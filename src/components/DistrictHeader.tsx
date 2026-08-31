@@ -5,13 +5,15 @@ import letterheadImg from '../assets/letterhead.png'
 
 interface DistrictHeaderProps {
   config: DistrictConfig
+  compact?: boolean
+  className?: string
 }
 
-export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config }) => {
+export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config, compact = false, className = '' }) => {
   // Use the official scanned/extracted letterhead image dropped by the user by default
   if (config.headerType !== 'vector') {
     return (
-      <div className="district-letterhead w-full mb-4 select-none block">
+      <div className={`district-letterhead w-full ${compact ? 'mb-1.5' : 'mb-4'} select-none block ${className}`}>
         <img
           src={letterheadImg}
           alt="Cañon City Schools Official Letterhead"
@@ -23,7 +25,7 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config }) => {
 
   // Fallback: Dynamic HTML/Vector Header
   return (
-    <header className="w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 mb-3.5">
+    <header className={`w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 ${compact ? 'mb-2' : 'mb-3.5'} ${className}`}>
       <div className="grid grid-cols-[115px_1fr_195px] items-start gap-3">
         {/* Left: District Seal Logo */}
         <div className="flex justify-start items-center pt-1">

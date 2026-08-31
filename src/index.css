@@ -62,6 +62,10 @@
     box-sizing: border-box !important;
   }
 
+  #total-comp-sheet {
+    padding: 0.35in 0.65in 0.35in 0.65in !important;
+  }
+
   .page-break-after-always {
     page-break-after: always !important;
     break-after: page !important;
