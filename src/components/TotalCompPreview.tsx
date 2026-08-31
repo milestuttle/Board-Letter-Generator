@@ -48,14 +48,14 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
         </div>
 
         {/* Metadata Header Block */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1 mb-2.5 text-[9.5pt] bg-slate-50/70 p-2.5 rounded border border-slate-200/80">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1 mb-2.5 text-[9.5pt] bg-white p-2.5 rounded border border-gray-300">
           <div>
             <span className="font-semibold text-gray-900">Date:</span>{' '}
             <span>{letter.letterDate || 'August 24, 2026'}</span>
           </div>
           <div>
             <span className="font-semibold text-gray-900">Position Title:</span>{' '}
-            <span className="font-medium">{letter.positionTitle || '[Position Title]'}</span>
+            <span className="font-medium text-gray-950">{letter.positionTitle || '[Position Title]'}</span>
           </div>
           <div>
             <span className="font-semibold text-gray-900">Employee Name:</span>{' '}
@@ -63,9 +63,7 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           </div>
           <div>
             <span className="font-semibold text-gray-900">Job Classification:</span>{' '}
-            <span className="inline-flex items-center px-2 py-0.2 text-[9pt] font-semibold rounded bg-sky-100/90 text-sky-900 border border-sky-200">
-              {comp.classification}
-            </span>
+            <span className="font-medium text-gray-950">{comp.classification}</span>
           </div>
         </div>
 
@@ -86,8 +84,8 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
         {/* Breakdown Sections */}
         <div className="space-y-2 text-[9.3pt] text-gray-900">
           {/* 1. DIRECT CASH COMPENSATION */}
-          <div className="border border-slate-200 rounded p-2 bg-white">
-            <div className="font-bold text-[9.6pt] text-slate-900 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-slate-100 pb-0.5">
+          <div className="border border-gray-300 rounded p-2 bg-white">
+            <div className="font-bold text-[9.6pt] text-gray-950 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-gray-200 pb-0.5">
               <span>1. Direct Cash Compensation</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
@@ -111,7 +109,7 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
               )}
               <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950">
                 <span>TOTAL DIRECT CASH PAY:</span>
-                <span className="font-mono text-emerald-800">{comp.formattedDirectPayTotal}</span>
+                <span className="font-mono text-gray-950">{comp.formattedDirectPayTotal}</span>
               </div>
               <div className="text-[7.8pt] italic text-gray-500 pt-0.5">
                 *Gross cash pay before employee PERA contributions, state and federal taxes, and Medicare withholdings.
@@ -120,8 +118,8 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           </div>
 
           {/* 2. DISTRICT-PAID INSURANCE BENEFITS */}
-          <div className="border border-slate-200 rounded p-2 bg-white">
-            <div className="font-bold text-[9.6pt] text-slate-900 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-slate-100 pb-0.5">
+          <div className="border border-gray-300 rounded p-2 bg-white">
+            <div className="font-bold text-[9.6pt] text-gray-950 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-gray-200 pb-0.5">
               <span>2. District-Paid Insurance Benefits</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
@@ -157,14 +155,14 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
               )}
               <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950">
                 <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
-                <span className="font-mono text-emerald-800">{formatCurrency(comp.insuranceTotal)}</span>
+                <span className="font-mono text-gray-950">{formatCurrency(comp.insuranceTotal)}</span>
               </div>
             </div>
           </div>
 
           {/* 3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS */}
-          <div className="border border-slate-200 rounded p-2 bg-white">
-            <div className="font-bold text-[9.6pt] text-slate-900 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-slate-100 pb-0.5">
+          <div className="border border-gray-300 rounded p-2 bg-white">
+            <div className="font-bold text-[9.6pt] text-gray-950 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-gray-200 pb-0.5">
               <span>3. Retirement &amp; Mandatory Statutory Contributions</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
@@ -186,14 +184,14 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
               </div>
               <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950">
                 <span>TOTAL RETIREMENT &amp; STATUTORY CONTRIBUTIONS:</span>
-                <span className="font-mono text-emerald-800">{formatCurrency(comp.statutoryTotal)}</span>
+                <span className="font-mono text-gray-950">{formatCurrency(comp.statutoryTotal)}</span>
               </div>
             </div>
           </div>
 
           {/* 4. PAID TIME OFF & HOLIDAYS ALLOCATION */}
-          <div className="border border-slate-200 rounded p-2 bg-white">
-            <div className="font-bold text-[9.6pt] text-slate-900 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-slate-100 pb-0.5">
+          <div className="border border-gray-300 rounded p-2 bg-white">
+            <div className="font-bold text-[9.6pt] text-gray-950 uppercase tracking-wide mb-1 flex items-center justify-between border-b border-gray-200 pb-0.5">
               <span>4. Paid Time Off &amp; Holidays Allocation</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
@@ -220,18 +218,18 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
             </div>
           </div>
 
-          {/* GRAND TOTAL CALLOUT BOX */}
-          <div className="rounded-lg bg-slate-900 text-white p-2.5 shadow-md flex justify-between items-center border border-slate-800">
+          {/* GRAND TOTAL CALLOUT BOX (Clean Black on White) */}
+          <div className="rounded border-2 border-gray-950 bg-white text-gray-950 p-2.5 flex justify-between items-center">
             <div>
-              <div className="text-[10pt] font-bold tracking-wider uppercase">
+              <div className="text-[10pt] font-bold tracking-wider uppercase text-gray-950">
                 Estimated Total Annual Investment
               </div>
-              <div className="text-[8pt] text-slate-300">
+              <div className="text-[8.2pt] text-gray-600">
                 Direct Pay ({formatCurrency(comp.directPayTotal, { includeCents: false })}) + Benefits &amp; Statutory (
                 {formatCurrency(comp.benefitsAndStatutoryTotal, { includeCents: false })})
               </div>
             </div>
-            <div className="text-[14pt] font-extrabold font-mono text-emerald-300">
+            <div className="text-[13.5pt] font-bold font-mono text-gray-950">
               {formatCurrency(comp.grandTotal)}
             </div>
           </div>
