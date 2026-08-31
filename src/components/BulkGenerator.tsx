@@ -39,6 +39,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
     return saved ? JSON.parse(saved) : []
   })
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [isConfirmingClearBatch, setIsConfirmingClearBatch] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Persist batch letters so closing/reopening or editing single retains batch roster
@@ -503,19 +504,40 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
               </span>
               <div className="flex items-center gap-2">
                 {batchLetters.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (confirm('Clear current batch roster? (Saved drafts will not be affected)')) {
-                        setBatchLetters([])
-                        localStorage.removeItem('ccs_batch_letters')
-                      }
-                    }}
-                    className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
-                    title="Clear batch list"
-                  >
-                    Clear
-                  </button>
+                  <>
+                    {isConfirmingClearBatch ? (
+                      <div className="flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded-lg border border-red-200">
+                        <span className="text-[10px] font-semibold text-red-700">Clear?</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setBatchLetters([])
+                            setIsConfirmingClearBatch(false)
+                            localStorage.removeItem('ccs_batch_letters')
+                          }}
+                          className="text-[10px] bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
+                        >
+                          Yes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsConfirmingClearBatch(false)}
+                          className="text-[10px] text-slate-500 hover:text-slate-700 px-1 py-0.5 font-medium cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsConfirmingClearBatch(true)}
+                        className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                        title="Clear batch list"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </>
                 )}
                 <button
                   type="button"

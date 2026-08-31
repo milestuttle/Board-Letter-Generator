@@ -70,6 +70,7 @@ export function App() {
   const [showBulkModal, setShowBulkModal] = useState<boolean>(false)
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false)
   const [showHistoryDrawer, setShowHistoryDrawer] = useState<boolean>(false)
+  const [isConfirmingClearDrafts, setIsConfirmingClearDrafts] = useState<boolean>(false)
   const [showFullscreenModal, setShowFullscreenModal] = useState<boolean>(false)
   const [zoomScale, setZoomScale] = useState<number>(0.92)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -573,21 +574,45 @@ export function App() {
             </h3>
             <div className="flex items-center gap-2">
               {savedLetters.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (confirm('Clear all saved drafts?')) {
-                      setSavedLetters([])
-                      showToast('Drafts cleared')
-                    }
-                  }}
-                  className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
-                >
-                  Clear All
-                </button>
+                <>
+                  {isConfirmingClearDrafts ? (
+                    <div className="flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg border border-red-200">
+                      <span className="text-[10px] font-semibold text-red-700">Clear all?</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSavedLetters([])
+                          setIsConfirmingClearDrafts(false)
+                          showToast('All drafts cleared')
+                        }}
+                        className="text-[10px] bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsConfirmingClearDrafts(false)}
+                        className="text-[10px] text-slate-500 hover:text-slate-700 px-1 py-0.5 font-medium cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsConfirmingClearDrafts(true)}
+                      className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                    >
+                      Clear All
+                    </button>
+                  )}
+                </>
               )}
               <button
-                onClick={() => setShowHistoryDrawer(false)}
+                onClick={() => {
+                  setShowHistoryDrawer(false)
+                  setIsConfirmingClearDrafts(false)
+                }}
                 className="text-xs text-slate-400 hover:text-slate-700 font-semibold cursor-pointer"
               >
                 Close
