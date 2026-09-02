@@ -1,14 +1,19 @@
-import type { LetterData, JobClassificationType } from '../types/letter'
+import type { LetterData, JobClassificationType, DistrictConfig } from '../types/letter'
 
 export const DEFAULT_TOTAL_COMP_RATES = {
   healthMonthlyRate: 651.2, // $651.20 / month -> $7,814.40 / year
   dentalMonthlyRate: 5.0, // $5.00 / month -> $60.00 / year
-  lifeInsurancePremiumAnnual: 0, // Excluded by default
+  lifeInsurancePremiumAnnual: 0, // Excluded by default ($20k policy optional)
   peraRate: 0.214, // 21.40%
   medicareRate: 0.0145, // 1.45%
   defaultHoursPerDay: 8,
   defaultDays9Month: 176,
   defaultDays12Month: 260,
+  defaultLeaveDaysLicensed: 11,
+  defaultLeaveDays9Month: 11,
+  defaultLeaveDays12Month: 25,
+  defaultHolidaysDays12Month: 11,
+  defaultAdditionalLeavesText: 'Up to 5 Bereavement Days & 5 Professional Days',
 }
 
 export function parseCurrency(val?: string | number | null): number {
@@ -48,6 +53,9 @@ export function determineDefaultClassification(letter: LetterData): JobClassific
 
 export interface ComputedTotalComp {
   classification: JobClassificationType
+  fte: number
+  isBenefitEligible: boolean
+  benefitEligibilityNote: string
   isHourlyClassified: boolean
   hourlyRate: number
   hoursPerDay: number
@@ -86,32 +94,62 @@ export interface ComputedTotalComp {
   benefitsPercentage: number
 }
 
-export function computeTotalComp(letter: LetterData): ComputedTotalComp {
+export function computeTotalComp(letter: LetterData, config?: DistrictConfig): ComputedTotalComp {
   const classification = determineDefaultClassification(letter)
   const tc = letter.totalComp || {}
+  const cfgDefaults = config?.totalCompDefaults
 
-  const healthMonthlyRate = tc.healthMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.healthMonthlyRate
-  const healthAnnual = healthMonthlyRate * 12
+  // Determine FTE (defaults to 1.0; if certified marked part-time without explicit fte, defaults to 0.5)
+  let fte = 1.0
+  if (tc.fte !== undefined && tc.fte !== null) {
+    fte = Number(tc.fte)
+  } else if (letter.certified?.isPartTime) {
+    fte = 0.5
+  }
 
-  const dentalMonthlyRate = tc.dentalMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.dentalMonthlyRate
-  const dentalAnnual = dentalMonthlyRate * 12
+  // Insurance Benefit Rule: < 0.5 FTE gets $0 insurance benefits, >= 0.5 FTE gets full package (not pro-rated)
+  const isBenefitEligible = fte >= 0.5
 
-  const lifePremiumAnnual =
-    tc.lifeInsurancePremiumAnnual ?? DEFAULT_TOTAL_COMP_RATES.lifeInsurancePremiumAnnual
+  const rawHealthMonthlyRate =
+    tc.healthMonthlyRate ?? cfgDefaults?.healthMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.healthMonthlyRate
+  const rawDentalMonthlyRate =
+    tc.dentalMonthlyRate ?? cfgDefaults?.dentalMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.dentalMonthlyRate
+  const rawLifePremiumAnnual =
+    tc.lifeInsurancePremiumAnnual ??
+    cfgDefaults?.lifeInsurancePremiumAnnual ??
+    DEFAULT_TOTAL_COMP_RATES.lifeInsurancePremiumAnnual
 
-  const peraRate = tc.peraRate ?? DEFAULT_TOTAL_COMP_RATES.peraRate
-  const medicareRate = tc.medicareRate ?? DEFAULT_TOTAL_COMP_RATES.medicareRate
+  const healthMonthlyRate = isBenefitEligible ? rawHealthMonthlyRate : 0
+  const healthAnnual = isBenefitEligible ? rawHealthMonthlyRate * 12 : 0
+
+  const dentalMonthlyRate = isBenefitEligible ? rawDentalMonthlyRate : 0
+  const dentalAnnual = isBenefitEligible ? rawDentalMonthlyRate * 12 : 0
+
+  const lifePremiumAnnual = isBenefitEligible ? rawLifePremiumAnnual : 0
+  const insuranceTotal = healthAnnual + dentalAnnual + lifePremiumAnnual
+
+  const benefitEligibilityNote = !isBenefitEligible
+    ? 'Ineligible for District Insurance Benefits (Part-Time < 0.5 FTE)'
+    : fte < 1.0
+    ? 'Eligible for Full District Insurance Benefits Package (≥ 0.5 FTE)'
+    : 'Full District Insurance Benefits Package'
+
+  // Statutory Rates
+  const peraRate = tc.peraRate ?? cfgDefaults?.peraRate ?? DEFAULT_TOTAL_COMP_RATES.peraRate
+  const medicareRate =
+    tc.medicareRate ?? cfgDefaults?.medicareRate ?? DEFAULT_TOTAL_COMP_RATES.medicareRate
 
   // Hourly / Annual Schedule determination
   const isHourlyClassified =
     letter.type === 'classified' &&
     (tc.isHourly ?? (letter.classified?.wageUnit !== 'year'))
 
-  const hoursPerDay = tc.hoursPerDay ?? DEFAULT_TOTAL_COMP_RATES.defaultHoursPerDay
+  const hoursPerDay =
+    tc.hoursPerDay ?? cfgDefaults?.defaultHoursPerDay ?? DEFAULT_TOTAL_COMP_RATES.defaultHoursPerDay
   const defaultDays =
     classification === '12-Month Classified'
-      ? DEFAULT_TOTAL_COMP_RATES.defaultDays12Month
-      : DEFAULT_TOTAL_COMP_RATES.defaultDays9Month
+      ? (cfgDefaults?.defaultDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultDays12Month)
+      : (cfgDefaults?.defaultDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultDays9Month)
   const daysPerYear = tc.daysPerYear ?? defaultDays
 
   let hourlyRate = 0
@@ -124,7 +162,7 @@ export function computeTotalComp(letter: LetterData): ComputedTotalComp {
     } else {
       basePay = parseCurrency(letter.certified?.baseSalary || '$52,400.00')
     }
-    basePayLabel = 'Base Annual Salary'
+    basePayLabel = fte !== 1.0 ? `Base Annual Salary (${fte} FTE)` : 'Base Annual Salary'
   } else {
     // Classified (9-Month or 12-Month)
     if (tc.isHourly ?? true) {
@@ -153,7 +191,6 @@ export function computeTotalComp(letter: LetterData): ComputedTotalComp {
   }
 
   const directPayTotal = basePay + stipend
-  const insuranceTotal = healthAnnual + dentalAnnual + lifePremiumAnnual
 
   const peraContribution = directPayTotal * peraRate
   const medicareContribution = directPayTotal * medicareRate
@@ -165,28 +202,29 @@ export function computeTotalComp(letter: LetterData): ComputedTotalComp {
     directPayTotal > 0 ? (benefitsAndStatutoryTotal / directPayTotal) * 100 : 0
 
   // Paid Time Off Allocations
-  let defaultLeaveDays = 11
+  let defaultLeaveDays = cfgDefaults?.defaultLeaveDaysLicensed ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDaysLicensed
   let defaultHolidaysDays = 0
 
   if (classification === '12-Month Classified') {
-    defaultLeaveDays = 25
-    defaultHolidaysDays = 11
+    defaultLeaveDays = cfgDefaults?.defaultLeaveDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays12Month
+    defaultHolidaysDays = cfgDefaults?.defaultHolidaysDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultHolidaysDays12Month
   } else if (classification === '9-Month Classified') {
-    defaultLeaveDays = 11
-    defaultHolidaysDays = 0
-  } else {
-    // Licensed
-    defaultLeaveDays = 11
+    defaultLeaveDays = cfgDefaults?.defaultLeaveDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays9Month
     defaultHolidaysDays = 0
   }
 
   const leaveDays = tc.paidLeaveDays ?? defaultLeaveDays
   const holidaysDays = tc.paidHolidaysDays ?? defaultHolidaysDays
   const additionalLeavesText =
-    tc.additionalLeavesText || 'Up to 5 Bereavement Days & 5 Professional Days'
+    tc.additionalLeavesText ||
+    cfgDefaults?.defaultAdditionalLeavesText ||
+    DEFAULT_TOTAL_COMP_RATES.defaultAdditionalLeavesText
 
   return {
     classification,
+    fte,
+    isBenefitEligible,
+    benefitEligibilityNote,
     isHourlyClassified,
     hourlyRate,
     hoursPerDay,

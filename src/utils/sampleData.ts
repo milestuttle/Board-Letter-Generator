@@ -59,6 +59,23 @@ export const DEFAULT_DISTRICT_CONFIG: DistrictConfig = {
     'MA+48',
     'Doc/PhD',
   ],
+
+  // Total Compensation & Benefit Defaults
+  totalCompDefaults: {
+    healthMonthlyRate: 651.2, // $651.20 / mo -> $7,814.40 / yr
+    dentalMonthlyRate: 5.0, // $5.00 / mo -> $60.00 / yr
+    lifeInsurancePremiumAnnual: 0, // $0 (optional $20k policy)
+    peraRate: 0.214, // 21.40%
+    medicareRate: 0.0145, // 1.45%
+    defaultHoursPerDay: 8,
+    defaultDays9Month: 176,
+    defaultDays12Month: 260,
+    defaultLeaveDaysLicensed: 11,
+    defaultLeaveDays9Month: 11,
+    defaultLeaveDays12Month: 25,
+    defaultHolidaysDays12Month: 11,
+    defaultAdditionalLeavesText: 'Up to 5 Bereavement Days & 5 Professional Days',
+  },
 }
 
 export const SAMPLE_PRESETS: TemplatePreset[] = [

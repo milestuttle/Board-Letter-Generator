@@ -15,6 +15,9 @@ import {
   ChevronDown,
   ChevronUp,
   UserCheck,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
 } from 'lucide-react'
 
 interface TotalCompFormProps {
@@ -23,11 +26,12 @@ interface TotalCompFormProps {
   config: DistrictConfig
 }
 
-export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }) => {
+export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, config }) => {
   const [showAdvancedBenefits, setShowAdvancedBenefits] = useState(false)
-  const comp = computeTotalComp(letter)
+  const comp = computeTotalComp(letter, config)
   const tc = letter.totalComp || {}
 
+  // Helper to update totalComp and propagate to parent
   const updateTc = (updates: Partial<typeof tc>) => {
     onChange({
       ...letter,
@@ -38,21 +42,127 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
     })
   }
 
+  // Bi-directional sync for Salary
+  const handleBaseAnnualSalaryChange = (newSalary: string) => {
+    const updated: LetterData = {
+      ...letter,
+      totalComp: {
+        ...tc,
+        baseAnnualSalary: newSalary,
+      },
+    }
+    if (letter.type === 'certified') {
+      updated.certified = {
+        ...(letter.certified || {
+          lane: 'BA',
+          step: '1',
+          baseSalary: newSalary,
+          startDate: 'August 20, 2026',
+        }),
+        baseSalary: newSalary,
+      }
+    } else if (letter.type === 'classified') {
+      updated.classified = {
+        ...(letter.classified || {
+          classification: 'P5',
+          level: 'A',
+          baseWage: newSalary,
+          startDate: 'August 20, 2026',
+        }),
+        baseWage: newSalary,
+        wageUnit: 'year',
+      }
+    }
+    onChange(updated)
+  }
+
+  // Bi-directional sync for Hourly Rate
+  const handleHourlyRateChange = (newRate: string) => {
+    const updated: LetterData = {
+      ...letter,
+      totalComp: {
+        ...tc,
+        isHourly: true,
+        hourlyRate: newRate,
+      },
+    }
+    if (letter.type === 'classified') {
+      updated.classified = {
+        ...(letter.classified || {
+          classification: 'P5',
+          level: 'A',
+          baseWage: newRate,
+          startDate: 'August 20, 2026',
+        }),
+        baseWage: newRate,
+        wageUnit: 'hour',
+      }
+    }
+    onChange(updated)
+  }
+
+  // Bi-directional sync for Stipend
+  const handleStipendChange = (newStipend: string, newDesc?: string) => {
+    const desc = newDesc !== undefined ? newDesc : (tc.stipendDescription || 'Hard-to-Fill / Center-Based')
+    const updated: LetterData = {
+      ...letter,
+      totalComp: {
+        ...tc,
+        stipendAmount: newStipend,
+        stipendDescription: desc,
+      },
+    }
+    if (letter.type === 'classified') {
+      updated.classified = {
+        ...(letter.classified || {
+          classification: 'P5',
+          level: 'A',
+          baseWage: '$19.67',
+          startDate: 'August 20, 2026',
+        }),
+        stipendText: newStipend ? `Plus a ${desc} stipend of ${newStipend}` : '',
+      }
+    }
+    onChange(updated)
+  }
+
+  // Bi-directional sync for FTE
+  const handleFteChange = (newFte: number) => {
+    const updated: LetterData = {
+      ...letter,
+      totalComp: {
+        ...tc,
+        fte: newFte,
+      },
+    }
+    if (letter.type === 'certified') {
+      updated.certified = {
+        ...(letter.certified || {
+          lane: 'BA',
+          step: '1',
+          baseSalary: '$52,400.00',
+          startDate: 'August 20, 2026',
+        }),
+        isPartTime: newFte < 1.0,
+        fteText: newFte < 1.0 ? `${newFte} FTE Part-Time` : 'Full-Time',
+      }
+    }
+    onChange(updated)
+  }
+
   const handleClassificationChange = (cls: JobClassificationType) => {
-    let leave = 11
+    const cfgDefaults = config?.totalCompDefaults
+    let leave = cfgDefaults?.defaultLeaveDaysLicensed ?? 11
     let hol = 0
-    let days = 176
+    let days = cfgDefaults?.defaultDays9Month ?? 176
     if (cls === '12-Month Classified') {
-      leave = 25
-      hol = 11
-      days = 260
+      leave = cfgDefaults?.defaultLeaveDays12Month ?? 25
+      hol = cfgDefaults?.defaultHolidaysDays12Month ?? 11
+      days = cfgDefaults?.defaultDays12Month ?? 260
     } else if (cls === '9-Month Classified') {
-      leave = 11
+      leave = cfgDefaults?.defaultLeaveDays9Month ?? 11
       hol = 0
-      days = 176
-    } else {
-      leave = 11
-      hol = 0
+      days = cfgDefaults?.defaultDays9Month ?? 176
     }
 
     updateTc({
@@ -64,17 +174,18 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
   }
 
   const handleResetRates = () => {
+    const cfgDefaults = config?.totalCompDefaults
     updateTc({
-      healthMonthlyRate: DEFAULT_TOTAL_COMP_RATES.healthMonthlyRate,
-      dentalMonthlyRate: DEFAULT_TOTAL_COMP_RATES.dentalMonthlyRate,
-      lifeInsurancePremiumAnnual: DEFAULT_TOTAL_COMP_RATES.lifeInsurancePremiumAnnual,
-      peraRate: DEFAULT_TOTAL_COMP_RATES.peraRate,
-      medicareRate: DEFAULT_TOTAL_COMP_RATES.medicareRate,
-      hoursPerDay: DEFAULT_TOTAL_COMP_RATES.defaultHoursPerDay,
+      healthMonthlyRate: cfgDefaults?.healthMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.healthMonthlyRate,
+      dentalMonthlyRate: cfgDefaults?.dentalMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.dentalMonthlyRate,
+      lifeInsurancePremiumAnnual: cfgDefaults?.lifeInsurancePremiumAnnual ?? DEFAULT_TOTAL_COMP_RATES.lifeInsurancePremiumAnnual,
+      peraRate: cfgDefaults?.peraRate ?? DEFAULT_TOTAL_COMP_RATES.peraRate,
+      medicareRate: cfgDefaults?.medicareRate ?? DEFAULT_TOTAL_COMP_RATES.medicareRate,
+      hoursPerDay: cfgDefaults?.defaultHoursPerDay ?? DEFAULT_TOTAL_COMP_RATES.defaultHoursPerDay,
       daysPerYear:
         comp.classification === '12-Month Classified'
-          ? DEFAULT_TOTAL_COMP_RATES.defaultDays12Month
-          : DEFAULT_TOTAL_COMP_RATES.defaultDays9Month,
+          ? (cfgDefaults?.defaultDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultDays12Month)
+          : (cfgDefaults?.defaultDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultDays9Month),
     })
   }
 
@@ -87,7 +198,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
             <Calculator className="w-4 h-4" /> Total Compensation Model
           </span>
           <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-medium">
-            +{(comp.benefitsPercentage).toFixed(1)}% District Benefit Boost
+            +{comp.benefitsPercentage.toFixed(1)}% District Benefit Boost
           </span>
         </div>
         <div className="flex items-baseline justify-between">
@@ -106,7 +217,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
         </div>
       </div>
 
-      {/* Employee & Position Quick Context */}
+      {/* Employee & Position Quick Context (Synced bi-directionally with Letter) */}
       <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs space-y-3">
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
           <UserCheck className="w-3.5 h-3.5 text-indigo-600" />
@@ -159,11 +270,11 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
         </div>
       </div>
 
-      {/* 1. Classification & Role */}
-      <div className="space-y-3">
+      {/* 1. Classification & FTE Allocation */}
+      <div className="space-y-3 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-          Job Classification
+          Job Classification &amp; Full-Time Equivalency (FTE)
         </label>
         <div className="grid grid-cols-3 gap-2">
           {(['Licensed', '9-Month Classified', '12-Month Classified'] as JobClassificationType[]).map(
@@ -174,9 +285,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                   key={cls}
                   type="button"
                   onClick={() => handleClassificationChange(cls)}
-                  className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-all text-center ${
+                  className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-all text-center cursor-pointer ${
                     active
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm ring-2 ring-indigo-300'
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs ring-2 ring-indigo-300'
                       : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                   }`}
                 >
@@ -186,10 +297,70 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
             }
           )}
         </div>
+
+        {/* FTE Selector Row */}
+        <div className="pt-2 border-t border-gray-100">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-indigo-600" />
+              Position FTE:
+            </span>
+            <div className="flex items-center gap-1">
+              {[1.0, 0.8, 0.75, 0.5, 0.4].map((fteOption) => (
+                <button
+                  key={fteOption}
+                  type="button"
+                  onClick={() => handleFteChange(fteOption)}
+                  className={`text-[11px] px-2 py-0.5 rounded font-medium border transition cursor-pointer ${
+                    comp.fte === fteOption
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  {fteOption === 1.0 ? '1.0 Full-Time' : `${fteOption} FTE`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <label className="text-[11px] text-gray-500">Custom FTE:</label>
+              <input
+                type="number"
+                step="0.05"
+                min="0.1"
+                max="1.5"
+                value={comp.fte}
+                onChange={(e) => handleFteChange(parseFloat(e.target.value) || 0)}
+                className="w-20 text-xs font-mono px-2 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+
+            {/* Live FTE Insurance Eligibility Badge */}
+            <div className="flex-1">
+              {comp.isBenefitEligible ? (
+                <div className="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>
+                    <strong>Eligible for Full Package (≥ 0.5 FTE)</strong> — Full district health, dental &amp; life.
+                  </span>
+                </div>
+              ) : (
+                <div className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex items-center gap-1.5 font-medium">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>
+                    <strong>Ineligible for Insurance (&lt; 0.5 FTE)</strong> — Insurance benefits resolve to $0.00.
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 2. Direct Cash Pay Settings */}
-      <div className="space-y-4 pt-1">
+      <div className="space-y-4 pt-1 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
             <DollarSign className="w-3.5 h-3.5 text-indigo-600" />
@@ -208,7 +379,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                 <button
                   type="button"
                   onClick={() => updateTc({ isHourly: true })}
-                  className={`text-xs px-2.5 py-1 rounded font-medium border ${
+                  className={`text-xs px-2.5 py-1 rounded font-medium border cursor-pointer ${
                     tc.isHourly ?? true
                       ? 'bg-indigo-600 text-white border-indigo-600'
                       : 'bg-white text-gray-600 border-gray-300'
@@ -219,7 +390,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                 <button
                   type="button"
                   onClick={() => updateTc({ isHourly: false })}
-                  className={`text-xs px-2.5 py-1 rounded font-medium border ${
+                  className={`text-xs px-2.5 py-1 rounded font-medium border cursor-pointer ${
                     tc.isHourly === false
                       ? 'bg-indigo-600 text-white border-indigo-600'
                       : 'bg-white text-gray-600 border-gray-300'
@@ -243,7 +414,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                         ? tc.hourlyRate
                         : letter.classified?.baseWage || '$19.67'
                     }
-                    onChange={(e) => updateTc({ hourlyRate: e.target.value })}
+                    onChange={(e) => handleHourlyRateChange(e.target.value)}
                     className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
                     placeholder="$19.67"
                   />
@@ -255,7 +426,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                   <input
                     type="number"
                     step="0.5"
-                    value={tc.hoursPerDay ?? 8}
+                    value={tc.hoursPerDay ?? config?.totalCompDefaults?.defaultHoursPerDay ?? 8}
                     onChange={(e) => updateTc({ hoursPerDay: parseFloat(e.target.value) || 0 })}
                     className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
                   />
@@ -268,7 +439,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                     type="number"
                     value={
                       tc.daysPerYear ??
-                      (comp.classification === '12-Month Classified' ? 260 : 176)
+                      (comp.classification === '12-Month Classified'
+                        ? (config?.totalCompDefaults?.defaultDays12Month ?? 260)
+                        : (config?.totalCompDefaults?.defaultDays9Month ?? 176))
                     }
                     onChange={(e) => updateTc({ daysPerYear: parseInt(e.target.value, 10) || 0 })}
                     className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
@@ -283,7 +456,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                 <input
                   type="text"
                   value={tc.baseAnnualSalary ?? comp.formattedBasePay}
-                  onChange={(e) => updateTc({ baseAnnualSalary: e.target.value })}
+                  onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
                   className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
                   placeholder="$45,000.00"
                 />
@@ -298,22 +471,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
             <input
               type="text"
               value={tc.baseAnnualSalary ?? letter.certified?.baseSalary ?? '$52,400.00'}
-              onChange={(e) => {
-                updateTc({ baseAnnualSalary: e.target.value })
-                if (letter.certified) {
-                  onChange({
-                    ...letter,
-                    certified: {
-                      ...letter.certified,
-                      baseSalary: e.target.value,
-                    },
-                    totalComp: {
-                      ...tc,
-                      baseAnnualSalary: e.target.value,
-                    },
-                  })
-                }
-              }}
+              onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
               className="w-full text-xs font-mono px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
               placeholder="$52,400.00"
             />
@@ -329,7 +487,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
             <input
               type="text"
               value={tc.stipendAmount ?? (comp.stipend > 0 ? comp.formattedStipend : '')}
-              onChange={(e) => updateTc({ stipendAmount: e.target.value })}
+              onChange={(e) => handleStipendChange(e.target.value)}
               className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
               placeholder="$0.00 or $2,000.00"
             />
@@ -341,16 +499,54 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
             <input
               type="text"
               value={tc.stipendDescription ?? 'Hard-to-Fill / Center-Based'}
-              onChange={(e) => updateTc({ stipendDescription: e.target.value })}
+              onChange={(e) => handleStipendChange(tc.stipendAmount || '', e.target.value)}
               className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
               placeholder="e.g. Center-Based"
             />
           </div>
         </div>
+
+        {/* Live Direct Cash Total Breakdown Badge */}
+        <div className="bg-slate-900 text-slate-100 rounded-xl p-3 border border-slate-800 shadow-inner">
+          <div className="flex items-center justify-between text-xs text-slate-400 mb-1 font-sans">
+            <span className="font-semibold uppercase tracking-wider text-indigo-300">
+              Live Direct Cash Calculation
+            </span>
+            <span className="font-mono font-bold text-emerald-400 text-sm">
+              {comp.formattedDirectPayTotal} / yr
+            </span>
+          </div>
+          <div className="text-xs font-mono text-slate-200">
+            {comp.classification !== 'Licensed' && (tc.isHourly ?? true) ? (
+              <div>
+                {formatCurrency(comp.hourlyRate, { includeCents: true })}/hr × {comp.hoursPerDay} hrs/day × {comp.daysPerYear} days ={' '}
+                <span className="text-white font-semibold">{formatCurrency(comp.basePay)}</span>
+                {comp.stipend > 0 && (
+                  <span>
+                    {' '}
+                    + <span className="text-amber-300">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-emerald-300 font-bold">{comp.formattedDirectPayTotal}</span>
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div>
+                Base Salary: <span className="text-white font-semibold">{formatCurrency(comp.basePay)}</span>
+                {comp.stipend > 0 && (
+                  <span>
+                    {' '}
+                    + <span className="text-amber-300">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-emerald-300 font-bold">{comp.formattedDirectPayTotal}</span>
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* 3. Leave & Holiday Allocations */}
-      <div className="space-y-3 pt-1">
+      <div className="space-y-3 pt-1 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
           <CalendarCheck className="w-3.5 h-3.5 text-indigo-600" />
           Paid Time Off &amp; Holiday Allocations
@@ -393,11 +589,11 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
       </div>
 
       {/* 4. District Insurance & Statutory Contribution Rates (Accordion) */}
-      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-xs">
         <button
           type="button"
           onClick={() => setShowAdvancedBenefits(!showAdvancedBenefits)}
-          className="w-full px-3.5 py-2.5 bg-gray-50 flex items-center justify-between text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+          className="w-full px-4 py-3 bg-gray-50 flex items-center justify-between text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-1.5">
             <Sliders className="w-3.5 h-3.5 text-indigo-600" />
@@ -411,20 +607,34 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
         </button>
 
         {showAdvancedBenefits && (
-          <div className="p-3.5 space-y-3 bg-white border-t border-gray-200 text-xs">
+          <div className="p-4 space-y-3 bg-white border-t border-gray-200 text-xs">
+            {!comp.isBenefitEligible && (
+              <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>
+                  Employee is marked at <strong>{comp.fte} FTE (&lt; 0.5 FTE)</strong>. District insurance contributions are set to $0.00. To enable insurance, increase FTE to 0.5 or above.
+                </span>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-600 mb-1">
-                  Health Monthly ($/mo)
+                  Health Monthly Rate ($/mo)
                 </label>
                 <input
                   type="number"
                   step="0.1"
-                  value={comp.healthMonthlyRate}
+                  disabled={!comp.isBenefitEligible}
+                  value={
+                    comp.isBenefitEligible
+                      ? comp.healthMonthlyRate
+                      : tc.healthMonthlyRate ?? config?.totalCompDefaults?.healthMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.healthMonthlyRate
+                  }
                   onChange={(e) =>
                     updateTc({ healthMonthlyRate: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
                 />
                 <span className="text-[10px] text-gray-400">
                   Annual: {formatCurrency(comp.healthAnnual)}
@@ -432,16 +642,21 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
               </div>
               <div>
                 <label className="block font-medium text-gray-600 mb-1">
-                  Dental Monthly ($/mo)
+                  Dental Monthly Rate ($/mo)
                 </label>
                 <input
                   type="number"
                   step="0.1"
-                  value={comp.dentalMonthlyRate}
+                  disabled={!comp.isBenefitEligible}
+                  value={
+                    comp.isBenefitEligible
+                      ? comp.dentalMonthlyRate
+                      : tc.dentalMonthlyRate ?? config?.totalCompDefaults?.dentalMonthlyRate ?? DEFAULT_TOTAL_COMP_RATES.dentalMonthlyRate
+                  }
                   onChange={(e) =>
                     updateTc({ dentalMonthlyRate: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
                 />
                 <span className="text-[10px] text-gray-400">
                   Annual: {formatCurrency(comp.dentalAnnual)}
@@ -454,11 +669,16 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                 <input
                   type="number"
                   step="0.1"
-                  value={comp.lifePremiumAnnual}
+                  disabled={!comp.isBenefitEligible}
+                  value={
+                    comp.isBenefitEligible
+                      ? comp.lifePremiumAnnual
+                      : tc.lifeInsurancePremiumAnnual ?? config?.totalCompDefaults?.lifeInsurancePremiumAnnual ?? DEFAULT_TOTAL_COMP_RATES.lifeInsurancePremiumAnnual
+                  }
                   onChange={(e) =>
                     updateTc({ lifeInsurancePremiumAnnual: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
                   placeholder="0.00"
                 />
                 <span className="text-[10px] text-gray-400">{comp.lifePremiumAnnual > 0 ? '$20,000 policy' : '$0 = Excluded from statement'}</span>
@@ -476,7 +696,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                   }
                   className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
                 />
-                <span className="text-[10px] text-gray-400">Default: 21.40%</span>
+                <span className="text-[10px] text-gray-400">Cañon City PERA default: {(comp.peraRate * 100).toFixed(2)}%</span>
               </div>
               <div>
                 <label className="block font-medium text-gray-600 mb-1">
@@ -491,7 +711,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
                   }
                   className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
                 />
-                <span className="text-[10px] text-gray-400">Default: 1.45%</span>
+                <span className="text-[10px] text-gray-400">Medicare default: {(comp.medicareRate * 100).toFixed(2)}%</span>
               </div>
             </div>
 
@@ -499,9 +719,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange }
               <button
                 type="button"
                 onClick={handleResetRates}
-                className="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+                className="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1 cursor-pointer"
               >
-                <RotateCcw className="w-3 h-3" /> Reset Rates to Standard District Defaults
+                <RotateCcw className="w-3 h-3" /> Reset Rates to District Defaults
               </button>
             </div>
           </div>

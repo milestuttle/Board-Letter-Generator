@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { DistrictConfig, AdminStaffMember } from '../types/letter'
+import type { DistrictConfig, AdminStaffMember, TotalCompDistrictDefaults } from '../types/letter'
 import {
   Settings,
   X,
@@ -12,6 +12,8 @@ import {
   Calendar,
   MapPin,
   GraduationCap,
+  Calculator,
+  RotateCcw,
 } from 'lucide-react'
 import { DEFAULT_DISTRICT_CONFIG } from '../utils/sampleData'
 
@@ -31,11 +33,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     ...config,
     districtLocations: config.districtLocations || DEFAULT_DISTRICT_CONFIG.districtLocations,
     certifiedLanes: config.certifiedLanes || DEFAULT_DISTRICT_CONFIG.certifiedLanes,
+    totalCompDefaults: {
+      ...DEFAULT_DISTRICT_CONFIG.totalCompDefaults,
+      ...config.totalCompDefaults,
+    },
   })
-  const [activeTab, setActiveTab] = useState<'general' | 'calendar' | 'directory' | 'staff' | 'signers'>('general')
+  const [activeTab, setActiveTab] = useState<'general' | 'calendar' | 'directory' | 'staff' | 'signers' | 'benefits'>('general')
 
   const [newLocationInput, setNewLocationInput] = useState('')
   const [newLaneInput, setNewLaneInput] = useState('')
+
+  const updateTotalCompDefaults = (updates: Partial<TotalCompDistrictDefaults>) => {
+    setFormData((prev) => ({
+      ...prev,
+      totalCompDefaults: {
+        ...(prev.totalCompDefaults || DEFAULT_DISTRICT_CONFIG.totalCompDefaults || {}),
+        ...updates,
+      },
+    }))
+  }
 
   const updateStaffMember = (id: string, field: 'name' | 'title', val: string) => {
     setFormData({
@@ -196,7 +212,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
-            Signers & CC
+            Signers &amp; CC
+          </button>
+
+          <button
+            onClick={() => setActiveTab('benefits')}
+            className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+              activeTab === 'benefits'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Calculator className="w-4 h-4 text-indigo-500" />
+            Benefits &amp; Total Comp
           </button>
         </div>
 
@@ -638,6 +666,261 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={formData.defaultCc}
                     onChange={(e) => setFormData({ ...formData, defaultCc: e.target.value })}
                     className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'benefits' && (
+            <div className="space-y-5 text-slate-800">
+              <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-2xl p-4 flex items-start justify-between gap-4">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1 flex items-center gap-1.5">
+                    <Calculator className="w-4 h-4 text-indigo-600" />
+                    District-Wide Compensation &amp; Benefit Standards
+                  </h4>
+                  <p className="text-xs text-indigo-700/90 leading-relaxed">
+                    Set standard district-paid insurance contributions, PERA/Medicare rates, work calendar days, and leave allocations. These defaults automatically apply to all newly generated Offer &amp; Total Compensation statements.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      totalCompDefaults: { ...DEFAULT_DISTRICT_CONFIG.totalCompDefaults },
+                    })
+                  }
+                  className="px-3 py-1.5 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition shrink-0 cursor-pointer shadow-2xs"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Reset to Standards
+                </button>
+              </div>
+
+              {/* 1. Insurance Contributions */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                  1. District-Paid Insurance Contributions
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Health Monthly Contribution ($/mo)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={formData.totalCompDefaults?.healthMonthlyRate ?? 651.2}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ healthMonthlyRate: parseFloat(e.target.value) || 0 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500">
+                      Annual: ${(((formData.totalCompDefaults?.healthMonthlyRate ?? 651.2) * 12).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Dental Monthly Contribution ($/mo)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={formData.totalCompDefaults?.dentalMonthlyRate ?? 5.0}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ dentalMonthlyRate: parseFloat(e.target.value) || 0 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500">
+                      Annual: ${(((formData.totalCompDefaults?.dentalMonthlyRate ?? 5.0) * 12).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Life Insurance Annual Premium ($)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={formData.totalCompDefaults?.lifeInsurancePremiumAnnual ?? 0}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          lifeInsurancePremiumAnnual: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500">
+                      {(formData.totalCompDefaults?.lifeInsurancePremiumAnnual ?? 0) > 0 ? '$20,000 policy included' : '$0 = Excluded from statement'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Statutory Retirement & Medicare */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                  2. Mandatory Statutory Rates
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Employer PERA Retirement Rate (%)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={((formData.totalCompDefaults?.peraRate ?? 0.214) * 100).toFixed(2)}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ peraRate: (parseFloat(e.target.value) || 0) / 100 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500">Cañon City Standard: 21.40%</span>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Employer Medicare Rate (%)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={((formData.totalCompDefaults?.medicareRate ?? 0.0145) * 100).toFixed(2)}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          medicareRate: (parseFloat(e.target.value) || 0) / 100,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500">Mandatory Federal: 1.45%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Work Schedules */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                  3. Standard Work Schedules &amp; Annual Calendar Days
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Standard Daily Hours
+                    </label>
+                    <input
+                      type="number"
+                      step="0.5"
+                      value={formData.totalCompDefaults?.defaultHoursPerDay ?? 8}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ defaultHoursPerDay: parseFloat(e.target.value) || 0 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      9-Month Classified Days / Year
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.totalCompDefaults?.defaultDays9Month ?? 176}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ defaultDays9Month: parseInt(e.target.value, 10) || 0 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      12-Month Classified Days / Year
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.totalCompDefaults?.defaultDays12Month ?? 260}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          defaultDays12Month: parseInt(e.target.value, 10) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. Leave Allocations */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                  4. Standard Leave Allocations
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Licensed / 9-Mo Leave Days
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.totalCompDefaults?.defaultLeaveDaysLicensed ?? 11}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          defaultLeaveDaysLicensed: parseInt(e.target.value, 10) || 0,
+                          defaultLeaveDays9Month: parseInt(e.target.value, 10) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      12-Month Leave Days
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.totalCompDefaults?.defaultLeaveDays12Month ?? 25}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          defaultLeaveDays12Month: parseInt(e.target.value, 10) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      12-Month Paid Holidays
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.totalCompDefaults?.defaultHolidaysDays12Month ?? 11}
+                      onChange={(e) =>
+                        updateTotalCompDefaults({
+                          defaultHolidaysDays12Month: parseInt(e.target.value, 10) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Protected Leaves Note
+                  </label>
+                  <input
+                    type="text"
+                    value={
+                      formData.totalCompDefaults?.defaultAdditionalLeavesText ??
+                      'Up to 5 Bereavement Days & 5 Professional Days'
+                    }
+                    onChange={(e) =>
+                      updateTotalCompDefaults({ defaultAdditionalLeavesText: e.target.value })
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
                   />
                 </div>
               </div>

@@ -12,11 +12,14 @@ interface TotalCompPreviewProps {
 
 export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps>(
   ({ letter, config, scale = 1 }, ref) => {
-    const comp = computeTotalComp(letter)
+    const comp = computeTotalComp(letter, config)
 
     const recipientName =
       `${letter.recipientFirstName || ''} ${letter.recipientLastName || ''}`.trim() ||
       'Employee Name'
+
+    const classificationDisplay =
+      comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
 
     return (
       <div
@@ -63,7 +66,7 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           </div>
           <div>
             <span className="font-semibold text-gray-900">Job Classification:</span>{' '}
-            <span className="font-medium text-gray-950">{comp.classification}</span>
+            <span className="font-medium text-gray-950">{classificationDisplay}</span>
           </div>
         </div>
 
@@ -76,8 +79,9 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
             <span className="font-medium text-gray-950">
               {letter.positionTitle || '[Position Title]'}
             </span>
-            . Beyond your base salary, the district invests heavily in your health, retirement, and
-            time off. This statement highlights the total value of your complete compensation package.
+            . Beyond your direct cash compensation, the district invests heavily in your retirement,
+            paid time off, and employee benefits. This statement highlights the total value of your complete
+            compensation package.
           </p>
         </div>
 
@@ -121,42 +125,65 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           <div className="border border-gray-300 rounded p-1.5 bg-white">
             <div className="font-bold text-[9pt] text-gray-950 uppercase tracking-wide mb-0.5 flex items-center justify-between border-b border-gray-200 pb-0.5">
               <span>2. District-Paid Insurance Benefits</span>
+              {comp.fte < 1.0 && (
+                <span className="text-[7.5pt] text-gray-600 font-normal italic">
+                  {comp.isBenefitEligible ? 'Full Package (≥ 0.5 FTE)' : 'Ineligible (< 0.5 FTE)'}
+                </span>
+              )}
             </div>
             <div className="space-y-0.5 pt-0.5">
-              {comp.healthAnnual > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">
-                    • Health Insurance Contribution ({formatCurrency(comp.healthMonthlyRate)}/month):
-                  </span>
-                  <span className="font-mono font-medium text-gray-950">
-                    {formatCurrency(comp.healthAnnual)}
-                  </span>
+              {comp.isBenefitEligible ? (
+                <>
+                  {comp.healthAnnual > 0 && (
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-700">
+                        • Health Insurance Contribution ({formatCurrency(comp.healthMonthlyRate)}/month):
+                      </span>
+                      <span className="font-mono font-medium text-gray-950">
+                        {formatCurrency(comp.healthAnnual)}
+                      </span>
+                    </div>
+                  )}
+                  {comp.dentalAnnual > 0 && (
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-700">
+                        • Dental Insurance Contribution ({formatCurrency(comp.dentalMonthlyRate)}/month):
+                      </span>
+                      <span className="font-mono font-medium text-gray-950">
+                        {formatCurrency(comp.dentalAnnual)}
+                      </span>
+                    </div>
+                  )}
+                  {comp.lifePremiumAnnual > 0 && (
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-700">
+                        • Basic Life Insurance Premium ($20,000 Coverage Policy):
+                      </span>
+                      <span className="font-mono font-medium text-gray-950">
+                        {formatCurrency(comp.lifePremiumAnnual)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
+                    <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
+                    <span className="font-mono text-gray-950">{formatCurrency(comp.insuranceTotal)}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="py-0.5">
+                  <div className="flex justify-between items-baseline text-gray-700">
+                    <span>• District Insurance Benefits Package:</span>
+                    <span className="font-mono font-medium text-gray-950">$0.00</span>
+                  </div>
+                  <div className="text-[7.4pt] italic text-gray-500 pt-0.5">
+                    *Positions scheduled under half-time (&lt; 0.5 FTE) are not eligible for district-paid insurance contributions per district policy.
+                  </div>
+                  <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
+                    <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
+                    <span className="font-mono text-gray-950">$0.00</span>
+                  </div>
                 </div>
               )}
-              {comp.dentalAnnual > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">
-                    • Dental Insurance Contribution ({formatCurrency(comp.dentalMonthlyRate)}/month):
-                  </span>
-                  <span className="font-mono font-medium text-gray-950">
-                    {formatCurrency(comp.dentalAnnual)}
-                  </span>
-                </div>
-              )}
-              {comp.lifePremiumAnnual > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">
-                    • Basic Life Insurance Premium ($20,000 Coverage Policy):
-                  </span>
-                  <span className="font-mono font-medium text-gray-950">
-                    {formatCurrency(comp.lifePremiumAnnual)}
-                  </span>
-                </div>
-              )}
-              <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
-                <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
-                <span className="font-mono text-gray-950">{formatCurrency(comp.insuranceTotal)}</span>
-              </div>
             </div>
           </div>
 

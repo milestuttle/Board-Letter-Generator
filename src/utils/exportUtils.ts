@@ -438,7 +438,7 @@ export const exportTotalCompToDocx = async (
   config: DistrictConfig,
   fileName: string = 'total_compensation_statement.docx'
 ) => {
-  const comp = computeTotalComp(letter)
+  const comp = computeTotalComp(letter, config)
 
   const baseName = fileName.replace(/\.docx$/i, '').replace(/[^a-zA-Z0-9_\-\s]/g, '_').trim()
   const finalFileName = `${baseName || 'total_compensation_statement'}.docx`
@@ -485,11 +485,12 @@ export const exportTotalCompToDocx = async (
         }),
       ],
       alignment: AlignmentType.CENTER,
-      spacing: { after: 200 },
+      spacing: { after: 240 },
     })
   )
 
   // Metadata block
+  const classificationText = comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
   paragraphs.push(
     new Paragraph({
       children: [
@@ -500,7 +501,7 @@ export const exportTotalCompToDocx = async (
           size: 21,
         }),
         new TextRun({ text: `Position Title: ${letter.positionTitle}\n`, bold: true, size: 21 }),
-        new TextRun({ text: `Job Classification: ${comp.classification}`, bold: true, size: 21 }),
+        new TextRun({ text: `Job Classification: ${classificationText}`, bold: true, size: 21 }),
       ],
       spacing: { after: 200 },
     })
@@ -563,40 +564,60 @@ export const exportTotalCompToDocx = async (
     new TextRun({ text: '2. DISTRICT-PAID INSURANCE BENEFITS\n', bold: true, size: 22 }),
   ]
 
-  if (comp.healthAnnual > 0) {
+  if (comp.isBenefitEligible) {
+    if (comp.healthAnnual > 0) {
+      insuranceRuns.push(
+        new TextRun({
+          text: `• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month): ${formatCurrency(comp.healthAnnual)}\n`,
+          size: 21,
+        })
+      )
+    }
+
+    if (comp.dentalAnnual > 0) {
+      insuranceRuns.push(
+        new TextRun({
+          text: `• Dental Insurance Contribution (${formatCurrency(comp.dentalMonthlyRate)}/month): ${formatCurrency(comp.dentalAnnual)}\n`,
+          size: 21,
+        })
+      )
+    }
+
+    if (comp.lifePremiumAnnual > 0) {
+      insuranceRuns.push(
+        new TextRun({
+          text: `• Basic Life Insurance Premium ($20,000 Coverage Policy): ${formatCurrency(comp.lifePremiumAnnual)}\n`,
+          size: 21,
+        })
+      )
+    }
+
     insuranceRuns.push(
       new TextRun({
-        text: `• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month): ${formatCurrency(comp.healthAnnual)}\n`,
+        text: `TOTAL INSURANCE CONTRIBUTIONS: ${formatCurrency(comp.insuranceTotal)}`,
+        bold: true,
+        size: 21,
+      })
+    )
+  } else {
+    insuranceRuns.push(
+      new TextRun({
+        text: `• District Insurance Benefits Package: $0.00\n`,
+        size: 21,
+      }),
+      new TextRun({
+        text: `*(Positions scheduled under half-time (< 0.5 FTE) are not eligible for district-paid insurance contributions per district policy)*\n`,
+        italics: true,
+        size: 18,
+        color: '555555',
+      }),
+      new TextRun({
+        text: `TOTAL INSURANCE CONTRIBUTIONS: $0.00`,
+        bold: true,
         size: 21,
       })
     )
   }
-
-  if (comp.dentalAnnual > 0) {
-    insuranceRuns.push(
-      new TextRun({
-        text: `• Dental Insurance Contribution (${formatCurrency(comp.dentalMonthlyRate)}/month): ${formatCurrency(comp.dentalAnnual)}\n`,
-        size: 21,
-      })
-    )
-  }
-
-  if (comp.lifePremiumAnnual > 0) {
-    insuranceRuns.push(
-      new TextRun({
-        text: `• Basic Life Insurance Premium ($20,000 Coverage Policy): ${formatCurrency(comp.lifePremiumAnnual)}\n`,
-        size: 21,
-      })
-    )
-  }
-
-  insuranceRuns.push(
-    new TextRun({
-      text: `TOTAL INSURANCE CONTRIBUTIONS: ${formatCurrency(comp.insuranceTotal)}`,
-      bold: true,
-      size: 21,
-    })
-  )
 
   paragraphs.push(
     new Paragraph({
@@ -739,9 +760,11 @@ export const exportTotalCompToDocx = async (
  * Copy Total Compensation text to clipboard
  */
 export const copyTotalCompText = async (letter: LetterData, config: DistrictConfig) => {
-  const comp = computeTotalComp(letter)
+  const comp = computeTotalComp(letter, config)
   const recipientName =
     `${letter.recipientFirstName || ''} ${letter.recipientLastName || ''}`.trim() || 'Employee'
+
+  const classificationText = comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
 
   const fullText = `[${config.districtName.toUpperCase()} LETTERHEAD]
 
@@ -750,7 +773,7 @@ OFFER & TOTAL COMPENSATION STATEMENT
 Date: ${letter.letterDate}
 Employee Name: ${recipientName}
 Position Title: ${letter.positionTitle}
-Job Classification: ${comp.classification}
+Job Classification: ${classificationText}
 
 Dear ${letter.recipientFirstName || recipientName},
 
@@ -767,14 +790,21 @@ TOTAL DIRECT CASH PAY:                                     ${comp.formattedDirec
 *(Gross cash pay before employee PERA contributions, state and federal taxes, and Medicare)*
 
 2. DISTRICT-PAID INSURANCE BENEFITS
-• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month):           ${formatCurrency(comp.healthAnnual)}
+${
+  comp.isBenefitEligible
+    ? `• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month):           ${formatCurrency(comp.healthAnnual)}
 • Dental Insurance Contribution (${formatCurrency(comp.dentalMonthlyRate)}/month):            ${formatCurrency(comp.dentalAnnual)}${
-    comp.lifePremiumAnnual > 0
-      ? `\n• Basic Life Insurance Premium ($20,000 Coverage Policy):  ${formatCurrency(comp.lifePremiumAnnual)}`
-      : ''
-  }
+        comp.lifePremiumAnnual > 0
+          ? `\n• Basic Life Insurance Premium ($20,000 Coverage Policy):  ${formatCurrency(comp.lifePremiumAnnual)}`
+          : ''
+      }
 ------------------------------------------------------------------
-TOTAL INSURANCE CONTRIBUTIONS:                             ${formatCurrency(comp.insuranceTotal)}
+TOTAL INSURANCE CONTRIBUTIONS:                             ${formatCurrency(comp.insuranceTotal)}`
+    : `• District Insurance Benefits Package: Ineligible (< 0.5 FTE)    $0.00
+*(Positions scheduled under half-time (< 0.5 FTE) are not eligible for district-paid insurance)*
+------------------------------------------------------------------
+TOTAL INSURANCE CONTRIBUTIONS:                             $0.00`
+}
 
 3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS
 • Employer PERA Retirement Contribution (${(comp.peraRate * 100).toFixed(2)}%):          ${formatCurrency(comp.peraContribution)}

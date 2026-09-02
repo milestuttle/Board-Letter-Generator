@@ -50,31 +50,67 @@ export const LetterForm: React.FC<LetterFormProps> = ({
   }
 
   const updateCertified = (key: string, value: string | boolean | undefined) => {
+    const newCertified = {
+      ...(letter.certified || {
+        lane: 'BA',
+        step: '1',
+        baseSalary: '$45,000.00',
+        startDate: 'August 20, 2026',
+      }),
+      [key]: value,
+    }
+    const tcUpdates: Record<string, unknown> = {}
+    if (key === 'baseSalary' && typeof value === 'string') {
+      tcUpdates.baseAnnualSalary = value
+    }
+    if (key === 'isPartTime') {
+      tcUpdates.fte = value ? 0.5 : 1.0
+    }
     onChange({
       ...letter,
-      certified: {
-        ...(letter.certified || {
-          lane: 'BA',
-          step: '1',
-          baseSalary: '$45,000.00',
-          startDate: 'August 20, 2026',
-        }),
-        [key]: value,
+      certified: newCertified,
+      totalComp: {
+        ...(letter.totalComp || {}),
+        ...tcUpdates,
       },
     })
   }
 
   const updateClassified = (key: string, value: string | undefined) => {
+    const newClassified = {
+      ...(letter.classified || {
+        classification: 'P5',
+        level: 'A',
+        baseWage: '$18.00',
+        startDate: 'August 20, 2026',
+      }),
+      [key]: value,
+    }
+    const tcUpdates: Record<string, unknown> = {}
+    if (key === 'baseWage' && typeof value === 'string') {
+      if (newClassified.wageUnit === 'year') {
+        tcUpdates.baseAnnualSalary = value
+      } else {
+        tcUpdates.hourlyRate = value
+      }
+    }
+    if (key === 'wageUnit') {
+      tcUpdates.isHourly = value !== 'year'
+    }
+    if (key === 'stipendText' && typeof value === 'string') {
+      const match = value.match(/\$([0-9,]+(\.[0-9]{2})?)/)
+      if (match) {
+        tcUpdates.stipendAmount = `$${match[1]}`
+      } else if (!value.trim()) {
+        tcUpdates.stipendAmount = '$0.00'
+      }
+    }
     onChange({
       ...letter,
-      classified: {
-        ...(letter.classified || {
-          classification: 'P5',
-          level: 'A',
-          baseWage: '$18.00',
-          startDate: 'August 20, 2026',
-        }),
-        [key]: value,
+      classified: newClassified,
+      totalComp: {
+        ...(letter.totalComp || {}),
+        ...tcUpdates,
       },
     })
   }

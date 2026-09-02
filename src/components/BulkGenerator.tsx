@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import type { LetterData, LetterType, DistrictConfig } from '../types/letter'
 import { LetterPreview } from './LetterPreview'
+import { TotalCompPreview } from './TotalCompPreview'
 import {
   Upload,
   FileSpreadsheet,
@@ -13,6 +14,8 @@ import {
   CheckCircle,
   FileText,
   Bookmark,
+  Calculator,
+  Layers,
 } from 'lucide-react'
 import { formatCertifiedSalary, formatClassifiedWage } from '../utils/formatUtils'
 
@@ -30,6 +33,9 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
   onSaveBatchAsDrafts,
 }) => {
   const [activeType, setActiveType] = useState<LetterType>('certified')
+  const [batchDocMode, setBatchDocMode] = useState<'board_letter' | 'total_comp' | 'combined'>('board_letter')
+  const [previewDoc, setPreviewDoc] = useState<'board_letter' | 'total_comp'>('board_letter')
+
   const [boardMeetingDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
   const [letterDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
   const [schoolYear] = useState(config.defaultSchoolYear || '2026-2027')
@@ -71,6 +77,13 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             step: '23',
             baseSalary: '$21,032',
             startDate: 'September 1, 2026',
+            isPartTime: true,
+            fteText: '0.5 FTE Part-time',
+          },
+          totalComp: {
+            jobClassification: 'Licensed',
+            fte: 0.5,
+            baseAnnualSalary: '$21,032',
           },
         },
         {
@@ -92,6 +105,13 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             step: '5',
             baseSalary: '$51,800',
             startDate: 'August 18, 2026',
+            isPartTime: false,
+            fteText: 'Full-time',
+          },
+          totalComp: {
+            jobClassification: 'Licensed',
+            fte: 1.0,
+            baseAnnualSalary: '$51,800',
           },
         },
         {
@@ -113,6 +133,13 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             step: '8',
             baseSalary: '$58,450',
             startDate: 'August 18, 2026',
+            isPartTime: false,
+            fteText: 'Full-time',
+          },
+          totalComp: {
+            jobClassification: 'Licensed',
+            fte: 1.0,
+            baseAnnualSalary: '$58,450',
           },
         },
       ])
@@ -138,6 +165,11 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             baseWage: '$19.67',
             startDate: 'August 20, 2026',
           },
+          totalComp: {
+            jobClassification: '9-Month Classified',
+            isHourly: true,
+            hourlyRate: '$19.67',
+          },
         },
         {
           id: 'batch-c2',
@@ -160,6 +192,13 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             stipendText: 'Plus a center-based stipend of $2,000',
             startDate: 'August 17, 2026',
           },
+          totalComp: {
+            jobClassification: '9-Month Classified',
+            isHourly: true,
+            hourlyRate: '$18.56',
+            stipendAmount: '$2,000.00',
+            stipendDescription: 'Center-Based',
+          },
         },
         {
           id: 'batch-c3',
@@ -178,63 +217,119 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           classified: {
             classification: 'P5',
             level: 'C',
-            baseWage: '$18.57',
+            baseWage: '$18.10',
             stipendText: 'Plus a center-based stipend of $2,000',
-            startDate: 'August 12, 2026',
+            startDate: 'August 17, 2026',
+          },
+          totalComp: {
+            jobClassification: '9-Month Classified',
+            isHourly: true,
+            hourlyRate: '$18.10',
+            stipendAmount: '$2,000.00',
+            stipendDescription: 'Center-Based',
+          },
+        },
+      ])
+    } else if (type === 'transfer') {
+      setBatchLetters([
+        {
+          id: 'batch-t1',
+          type: 'transfer',
+          letterDate,
+          boardMeetingDate,
+          schoolYear,
+          recipientFirstName: 'Cecelia',
+          recipientLastName: 'Cash',
+          streetAddress: '1030 High Street',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: 'Crossing Guard / Noon Aide',
+          location: 'Washington Elementary School',
+          transfer: {
+            previousPosition: 'Noon Aide',
+            newPosition: 'Crossing Guard / Noon Aide',
+            newLocation: 'Washington Elementary School',
+            transferDescription:
+              'your transfer in position and hours back to Crossing Guard / Noon Aide at Washington Elementary School',
+            effectiveDate: 'August 12, 2026',
+          },
+        },
+        {
+          id: 'batch-t2',
+          type: 'transfer',
+          letterDate,
+          boardMeetingDate,
+          schoolYear,
+          recipientFirstName: 'Derek',
+          recipientLastName: 'Holt',
+          streetAddress: '512 North 7th St',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: 'Lead Custodian',
+          location: 'Cañon City Middle School',
+          transfer: {
+            previousPosition: 'Night Custodian',
+            newPosition: 'Lead Custodian',
+            newLocation: 'Cañon City Middle School',
+            transferDescription:
+              'your promotional transfer to Lead Custodian at Cañon City Middle School',
+            effectiveDate: 'July 1, 2026',
+          },
+        },
+      ])
+    } else if (type === 'resignation') {
+      setBatchLetters([
+        {
+          id: 'batch-r1',
+          type: 'resignation',
+          letterDate,
+          boardMeetingDate,
+          schoolYear,
+          recipientFirstName: 'Sarah',
+          recipientLastName: 'Jenkins',
+          streetAddress: '522 Greenwood Ave',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: '4th Grade Teacher',
+          location: 'Harrison Elementary School',
+          resignation: {
+            position: '4th Grade Teacher',
+            location: 'Harrison Elementary School',
+            effectiveDate: 'August 15, 2026',
+            customAppreciation:
+              'We sincerely appreciate your dedicated service to the students of Harrison Elementary.',
           },
         },
       ])
     } else if (type === 'retirement') {
       setBatchLetters([
         {
-          id: 'batch-r1',
+          id: 'batch-ret1',
           type: 'retirement',
           letterDate,
           boardMeetingDate,
           schoolYear,
-          recipientFirstName: 'Margaret',
+          recipientFirstName: 'Patricia',
           recipientLastName: 'Holloway',
-          streetAddress: '412 Main Street',
+          streetAddress: '915 Whipple Ave',
           city: 'Cañon City',
           state: 'CO',
           zip: '81212',
-          positionTitle: 'Elementary Teacher',
-          location: 'Washington Elementary School',
+          positionTitle: 'Art Specialist',
+          location: 'Lincoln School of Science and Technology',
           retirement: {
-            position: 'Elementary Teacher',
-            location: 'Washington Elementary School',
+            position: 'Art Specialist',
+            location: 'Lincoln School of Science and Technology',
             effectiveDate: 'June 5, 2026',
-            actionType: 'approved_request',
-            includeRemainderOfYear: false,
-            yearsOfService: '25',
+            yearsOfService: '26',
+            actionType: 'accepted_action',
+            includeRemainderOfYear: true,
+            remainderYearText: `for the remainder of the ${schoolYear} School Year.`,
             celebrationText:
               'We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event.',
-          },
-        },
-        {
-          id: 'batch-r2',
-          type: 'retirement',
-          letterDate,
-          boardMeetingDate,
-          schoolYear: '2025/2026',
-          recipientFirstName: 'Robert',
-          recipientLastName: 'Vance',
-          streetAddress: '1209 Elm Avenue',
-          city: 'Cañon City',
-          state: 'CO',
-          zip: '81212',
-          positionTitle: 'High School Counselor',
-          location: 'Cañon City High School',
-          retirement: {
-            position: 'High School Counselor',
-            location: 'Cañon City High School',
-            effectiveDate: 'May 29, 2026',
-            actionType: 'approved_request',
-            includeRemainderOfYear: true,
-            remainderYearText: 'for the remainder of the 2025/2026 School Year.',
-            yearsOfService: '20',
-            celebrationText:
-              'We will be holding a celebration for retirees from 5:00 pm to 7:30 pm on Tuesday, May 5th, 2026. Please watch for more detailed information to be shared closer to the event.',
           },
         },
       ])
@@ -298,19 +393,36 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
         }
 
         if (activeType === 'certified') {
+          const baseSalary = formatCertifiedSalary(getVal('salary') || '$45,000')
+          const fteVal = getVal('fte') ? parseFloat(getVal('fte')) : 1.0
           item.certified = {
             lane: getVal('lane') || 'BA',
             step: getVal('step') || '1',
-            baseSalary: formatCertifiedSalary(getVal('salary') || '$45,000'),
+            baseSalary,
             startDate: getVal('start') || 'August 20, 2026',
+            isPartTime: fteVal < 1.0,
+            fteText: fteVal < 1.0 ? `${fteVal} FTE Part-time` : 'Full-time',
+          }
+          item.totalComp = {
+            jobClassification: 'Licensed',
+            fte: fteVal,
+            baseAnnualSalary: baseSalary,
           }
         } else if (activeType === 'classified') {
+          const baseWage = formatClassifiedWage(getVal('wage') || '$18.00')
+          const stipend = getVal('stipend') || ''
           item.classified = {
             classification: getVal('class') || 'P5',
             level: getVal('level') || 'A',
-            baseWage: formatClassifiedWage(getVal('wage') || '$18.00'),
-            stipendText: getVal('stipend') || '',
+            baseWage,
+            stipendText: stipend,
             startDate: getVal('start') || 'August 20, 2026',
+          }
+          item.totalComp = {
+            jobClassification: '9-Month Classified',
+            isHourly: true,
+            hourlyRate: baseWage,
+            stipendAmount: stipend,
           }
         } else if (activeType === 'transfer') {
           item.transfer = {
@@ -348,8 +460,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
     let csvRow = ''
 
     if (activeType === 'certified') {
-      csvHeader = 'FirstName,LastName,StreetAddress,City,State,Zip,Position,Location,Lane,Step,Salary,StartDate'
-      csvRow = 'Stacy,Andrews,"1431 Lombard Street",Cañon City,CO,81212,"Part-time Lead Counselor",District-wide,MA+48,23,"$21,032","September 1, 2026"'
+      csvHeader = 'FirstName,LastName,StreetAddress,City,State,Zip,Position,Location,Lane,Step,Salary,FTE,StartDate'
+      csvRow = 'Stacy,Andrews,"1431 Lombard Street",Cañon City,CO,81212,"Part-time Lead Counselor",District-wide,MA+48,23,"$21,032",0.5,"September 1, 2026"'
     } else if (activeType === 'classified') {
       csvHeader = 'FirstName,LastName,StreetAddress,City,State,Zip,Position,Location,Classification,Level,BaseWage,Stipend,StartDate'
       csvRow = 'Sharla,McGuire,"804 Harding Avenue",Cañon City,CO,81212,"School Health Technician","Cañon City High School",P6,E,"$19.67","","August 20, 2026"'
@@ -389,10 +501,10 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">
-                Bulk Board Letter Batch Generator
+                Bulk Board Letter &amp; Total Comp Batch Generator
               </h2>
               <p className="text-xs text-slate-500">
-                Upload a board agenda roster CSV or populate multiple letters for 1-click batch printing.
+                Upload a board agenda roster CSV or populate multiple staff records for 1-click batch printing.
               </p>
             </div>
           </div>
@@ -420,7 +532,9 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
                 >
                   <Printer className="w-4 h-4" />
-                  Print All {batchLetters.length} Letters
+                  {batchDocMode === 'board_letter' && `Print All ${batchLetters.length} Letters`}
+                  {batchDocMode === 'total_comp' && `Print All ${batchLetters.length} Total Comp Statements`}
+                  {batchDocMode === 'combined' && `Print All ${batchLetters.length} Packets (${batchLetters.length * 2} Pages)`}
                 </button>
               </>
             )}
@@ -436,24 +550,78 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
 
         {/* Control Bar */}
         <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <label className="text-xs font-bold text-slate-600">Batch Type:</label>
-            <div className="inline-flex rounded-xl bg-slate-200 p-1">
-              {(['certified', 'classified', 'transfer', 'resignation', 'retirement'] as LetterType[]).map(
-                (type) => (
-                  <button
-                    key={type}
-                    onClick={() => setActiveType(type)}
-                    className={`px-3 py-1 text-xs rounded-lg font-semibold capitalize transition cursor-pointer ${
-                      activeType === type
-                        ? 'bg-white text-slate-900 shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {type}
-                  </button>
-                )
-              )}
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-bold text-slate-600">Batch Type:</label>
+              <div className="inline-flex rounded-xl bg-slate-200 p-1">
+                {(['certified', 'classified', 'transfer', 'resignation', 'retirement'] as LetterType[]).map(
+                  (type) => (
+                    <button
+                      key={type}
+                      onClick={() => setActiveType(type)}
+                      className={`px-3 py-1 text-xs rounded-lg font-semibold capitalize transition cursor-pointer ${
+                        activeType === type
+                          ? 'bg-white text-slate-900 shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="h-5 w-px bg-slate-300 hidden md:block" />
+
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-bold text-slate-600">Document Output:</label>
+              <div className="inline-flex rounded-xl bg-slate-200 p-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBatchDocMode('board_letter')
+                    setPreviewDoc('board_letter')
+                  }}
+                  className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
+                    batchDocMode === 'board_letter'
+                      ? 'bg-white text-blue-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  Board Letters
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBatchDocMode('total_comp')
+                    setPreviewDoc('total_comp')
+                  }}
+                  className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
+                    batchDocMode === 'total_comp'
+                      ? 'bg-white text-indigo-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Calculator className="w-3.5 h-3.5" />
+                  Total Comp
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBatchDocMode('combined')
+                  }}
+                  className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
+                    batchDocMode === 'combined'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5 text-blue-600" />
+                  2-Page Packets
+                </button>
+              </div>
             </div>
           </div>
 
@@ -532,9 +700,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                         type="button"
                         onClick={() => setIsConfirmingClearBatch(true)}
                         className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
-                        title="Clear batch list"
                       >
-                        Clear
+                        Clear List
                       </button>
                     )}
                   </>
@@ -542,7 +709,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    const newRec: LetterData = {
+                    const newItem: LetterData = {
                       id: `batch-${Date.now()}`,
                       type: activeType,
                       letterDate,
@@ -550,29 +717,59 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       schoolYear,
                       recipientFirstName: 'New',
                       recipientLastName: 'Employee',
-                      streetAddress: '101 Main St',
+                      streetAddress: '',
                       city: 'Cañon City',
                       state: 'CO',
                       zip: '81212',
-                      positionTitle: 'Position Title',
-                      location: 'Cañon City High School',
+                      positionTitle: 'Staff Member',
+                      location: 'District-wide',
+                      signerName: config.defaultSignerName,
+                      signerTitle: config.defaultSignerTitle,
+                      typistInitials: config.defaultTypistInitials,
+                      ccLine: config.defaultCc,
                     }
-                    setBatchLetters([...batchLetters, newRec])
+                    if (activeType === 'certified') {
+                      newItem.certified = {
+                        lane: 'BA',
+                        step: '1',
+                        baseSalary: '$45,000',
+                        startDate: 'August 20, 2026',
+                      }
+                      newItem.totalComp = {
+                        jobClassification: 'Licensed',
+                        fte: 1.0,
+                        baseAnnualSalary: '$45,000',
+                      }
+                    } else if (activeType === 'classified') {
+                      newItem.classified = {
+                        classification: 'P5',
+                        level: 'A',
+                        baseWage: '$18.00',
+                        startDate: 'August 20, 2026',
+                      }
+                      newItem.totalComp = {
+                        jobClassification: '9-Month Classified',
+                        isHourly: true,
+                        hourlyRate: '$18.00',
+                      }
+                    }
+                    setBatchLetters([...batchLetters, newItem])
                     setSelectedIndex(batchLetters.length)
                   }}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1 cursor-pointer"
+                  className="p-1 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition cursor-pointer"
+                  title="Add empty record"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Add Staff
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
             {batchLetters.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-slate-400">
-                <FileSpreadsheet className="w-12 h-12 stroke-[1.5] mb-2 text-slate-300" />
-                <p className="text-sm font-medium text-slate-600">No batch letters loaded</p>
-                <p className="text-xs text-slate-400 mt-1 max-w-xs">
-                  Click &ldquo;Load Sample Batch&rdquo; or upload a CSV containing staff info to preview and batch generate.
+              <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 p-6">
+                <FileSpreadsheet className="w-12 h-12 text-slate-300 stroke-1 mb-2" />
+                <p className="text-xs">No recipients in current batch.</p>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Click &ldquo;Load Sample Batch&rdquo; or upload a CSV file above.
                 </p>
               </div>
             ) : (
@@ -581,21 +778,41 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   <div
                     key={item.id}
                     onClick={() => setSelectedIndex(idx)}
-                    className={`p-3 rounded-xl border transition cursor-pointer flex items-center justify-between ${
+                    className={`p-3 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
                       selectedIndex === idx
-                        ? 'border-blue-500 bg-blue-50/70 shadow-xs ring-1 ring-blue-500/30'
+                        ? 'border-blue-600 bg-blue-50/70 shadow-xs'
                         : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                   >
-                    <div className="overflow-hidden">
-                      <div className="text-sm font-bold text-slate-900 truncate">
+                    <div className="min-w-0 pr-2">
+                      <div className="text-xs font-bold text-slate-900 truncate">
                         {item.recipientFirstName} {item.recipientLastName}
                       </div>
-                      <div className="text-xs text-slate-500 truncate">
-                        {item.positionTitle} &bull; {item.location}
+                      <div className="text-[11px] text-slate-500 truncate">
+                        {item.positionTitle || 'Untitled Position'}
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">
+                        {item.type === 'certified' && (
+                          <span>
+                            {item.certified?.lane} / Step {item.certified?.step} &bull;{' '}
+                            {item.certified?.baseSalary}
+                          </span>
+                        )}
+                        {item.type === 'classified' && (
+                          <span>
+                            {item.classified?.classification}-{item.classified?.level} &bull;{' '}
+                            {item.classified?.baseWage}/hr
+                          </span>
+                        )}
+                        {item.type === 'transfer' && <span>Transfer &bull; {item.location}</span>}
+                        {item.type === 'resignation' && <span>Resignation</span>}
+                        {item.type === 'retirement' && (
+                          <span>Retirement ({item.retirement?.yearsOfService} yrs)</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
+
+                    <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -604,7 +821,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           onClose()
                         }}
                         title="Edit as single in main generator (saves all batch to drafts)"
-                        className="text-slate-400 hover:text-blue-600 p-1.5 rounded-lg hover:bg-blue-50 transition"
+                        className="text-slate-400 hover:text-blue-600 p-1.5 rounded-lg hover:bg-blue-50 transition cursor-pointer"
                       >
                         <FileText className="w-4 h-4" />
                       </button>
@@ -619,7 +836,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           }
                         }}
                         title="Remove from batch"
-                        className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition"
+                        className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -634,35 +851,70 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           <div className="lg:col-span-8 bg-slate-200/80 rounded-2xl border border-slate-300 p-4 flex flex-col items-center overflow-y-auto max-h-[70vh]">
             {currentLetter ? (
               <div className="w-full flex flex-col items-center">
-                {/* Navigation pills */}
-                <div className="bg-white px-4 py-1.5 rounded-full shadow-xs border border-slate-200 mb-4 flex items-center gap-4 text-xs font-semibold text-slate-700">
-                  <button
-                    disabled={selectedIndex <= 0}
-                    onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
-                    className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <span>
-                    Letter {selectedIndex + 1} of {batchLetters.length}
-                  </span>
-                  <button
-                    disabled={selectedIndex >= batchLetters.length - 1}
-                    onClick={() => setSelectedIndex((prev) => Math.min(batchLetters.length - 1, prev + 1))}
-                    className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                {/* Navigation and View Switcher */}
+                <div className="flex flex-wrap items-center justify-between gap-3 w-full max-w-2xl mb-4">
+                  {/* Navigation pills */}
+                  <div className="bg-white px-4 py-1.5 rounded-full shadow-xs border border-slate-200 flex items-center gap-4 text-xs font-semibold text-slate-700">
+                    <button
+                      disabled={selectedIndex <= 0}
+                      onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
+                      className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <span>
+                      Recipient {selectedIndex + 1} of {batchLetters.length}
+                    </span>
+                    <button
+                      disabled={selectedIndex >= batchLetters.length - 1}
+                      onClick={() => setSelectedIndex((prev) => Math.min(batchLetters.length - 1, prev + 1))}
+                      className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Document Toggle for Preview */}
+                  <div className="bg-white p-1 rounded-xl shadow-xs border border-slate-200 flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDoc('board_letter')}
+                      className={`px-3 py-1 text-xs font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                        previewDoc === 'board_letter'
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      Board Letter
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDoc('total_comp')}
+                      className={`px-3 py-1 text-xs font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                        previewDoc === 'total_comp'
+                          ? 'bg-indigo-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Calculator className="w-3.5 h-3.5" />
+                      Total Comp Statement
+                    </button>
+                  </div>
                 </div>
 
                 {/* Printable scale preview */}
                 <div className="transform scale-90 origin-top">
-                  <LetterPreview letter={currentLetter} config={config} />
+                  {previewDoc === 'board_letter' ? (
+                    <LetterPreview letter={currentLetter} config={config} />
+                  ) : (
+                    <TotalCompPreview letter={currentLetter} config={config} />
+                  )}
                 </div>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-slate-400 text-sm">
-                Select or load a batch to view the letter preview
+                Select or load a batch to view the document preview
               </div>
             )}
           </div>
@@ -670,15 +922,48 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
 
         {/* Hidden Printable Batch Container for Native window.print() */}
         <div id="printable-batch-container" className="hidden print:block">
-          {batchLetters.map((bLetter, idx) => (
-            <div
-              key={bLetter.id}
-              className="page-break-after-always print:w-[8.5in] print:h-[11in] print:p-0 print:m-0"
-              style={{ pageBreakAfter: idx < batchLetters.length - 1 ? 'always' : 'auto' }}
-            >
-              <LetterPreview letter={bLetter} config={config} />
-            </div>
-          ))}
+          {batchLetters.map((bLetter, idx) => {
+            const isLast = idx === batchLetters.length - 1
+            if (batchDocMode === 'board_letter') {
+              return (
+                <div
+                  key={bLetter.id}
+                  className="page-break-after-always print:w-[8.5in] print:h-[11in] print:p-0 print:m-0"
+                  style={{ pageBreakAfter: !isLast ? 'always' : 'auto' }}
+                >
+                  <LetterPreview letter={bLetter} config={config} />
+                </div>
+              )
+            }
+            if (batchDocMode === 'total_comp') {
+              return (
+                <div
+                  key={bLetter.id}
+                  className="page-break-after-always print:w-[8.5in] print:h-[11in] print:p-0 print:m-0"
+                  style={{ pageBreakAfter: !isLast ? 'always' : 'auto' }}
+                >
+                  <TotalCompPreview letter={bLetter} config={config} />
+                </div>
+              )
+            }
+            // Combined 2-Page Packet: Page 1 Board Letter, Page 2 Total Comp
+            return (
+              <React.Fragment key={bLetter.id}>
+                <div
+                  className="page-break-after-always print:w-[8.5in] print:h-[11in] print:p-0 print:m-0"
+                  style={{ pageBreakAfter: 'always' }}
+                >
+                  <LetterPreview letter={bLetter} config={config} />
+                </div>
+                <div
+                  className="page-break-after-always print:w-[8.5in] print:h-[11in] print:p-0 print:m-0"
+                  style={{ pageBreakAfter: !isLast ? 'always' : 'auto' }}
+                >
+                  <TotalCompPreview letter={bLetter} config={config} />
+                </div>
+              </React.Fragment>
+            )
+          })}
         </div>
       </div>
     </div>

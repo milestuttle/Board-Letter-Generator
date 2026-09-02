@@ -32,6 +32,25 @@ export interface DistrictConfig {
   // Directory & Scale Presets
   districtLocations?: string[]
   certifiedLanes?: string[]
+
+  // Total Compensation & Benefit Defaults
+  totalCompDefaults?: TotalCompDistrictDefaults
+}
+
+export interface TotalCompDistrictDefaults {
+  healthMonthlyRate?: number
+  dentalMonthlyRate?: number
+  lifeInsurancePremiumAnnual?: number
+  peraRate?: number
+  medicareRate?: number
+  defaultHoursPerDay?: number
+  defaultDays9Month?: number
+  defaultDays12Month?: number
+  defaultLeaveDaysLicensed?: number
+  defaultLeaveDays9Month?: number
+  defaultLeaveDays12Month?: number
+  defaultHolidaysDays12Month?: number
+  defaultAdditionalLeavesText?: string
 }
 
 export interface CertifiedFields {
@@ -83,6 +102,7 @@ export type JobClassificationType = 'Licensed' | '9-Month Classified' | '12-Mont
 
 export interface TotalCompFields {
   jobClassification?: JobClassificationType
+  fte?: number // default 1.0 (e.g. 0.5, 0.4). Rule: < 0.5 FTE gets $0 insurance benefits, >= 0.5 gets full package.
   baseAnnualSalary?: string // e.g. "$52,400.00"
   stipendAmount?: string // e.g. "$2,000.00" or "$0.00"
   stipendDescription?: string // e.g. "Hard-to-Fill / Center-Based"
