@@ -18,6 +18,8 @@ import {
   Layers,
 } from 'lucide-react'
 import { formatCertifiedSalary, formatClassifiedWage } from '../utils/formatUtils'
+import { getDefaultLetterDate, getDefaultSchoolYear } from '../utils/dateUtils'
+import { safeStorage, STORAGE_KEYS } from '../utils/storageUtils'
 
 interface BulkGeneratorProps {
   config: DistrictConfig
@@ -36,21 +38,20 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
   const [batchDocMode, setBatchDocMode] = useState<'board_letter' | 'total_comp' | 'combined'>('board_letter')
   const [previewDoc, setPreviewDoc] = useState<'board_letter' | 'total_comp'>('board_letter')
 
-  const [boardMeetingDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
-  const [letterDate] = useState(config.defaultBoardMeetingDate || 'August 24, 2026')
-  const [schoolYear] = useState(config.defaultSchoolYear || '2026-2027')
+  const [boardMeetingDate] = useState(() => getDefaultLetterDate(config.defaultBoardMeetingDate))
+  const [letterDate] = useState(() => getDefaultLetterDate(config.defaultBoardMeetingDate))
+  const [schoolYear] = useState(() => getDefaultSchoolYear(config.defaultSchoolYear))
   
-  const [batchLetters, setBatchLetters] = useState<LetterData[]>(() => {
-    const saved = localStorage.getItem('ccs_batch_letters')
-    return saved ? JSON.parse(saved) : []
-  })
+  const [batchLetters, setBatchLetters] = useState<LetterData[]>(() =>
+    safeStorage.getItem(STORAGE_KEYS.BATCH_LETTERS, [])
+  )
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const [isConfirmingClearBatch, setIsConfirmingClearBatch] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Persist batch letters so closing/reopening or editing single retains batch roster
   useEffect(() => {
-    localStorage.setItem('ccs_batch_letters', JSON.stringify(batchLetters))
+    safeStorage.setItem(STORAGE_KEYS.BATCH_LETTERS, batchLetters)
   }, [batchLetters])
 
   // Pre-fill sample batch
@@ -530,11 +531,12 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   type="button"
                   onClick={handleBatchPrint}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
+                  title="Print or select 'Save as PDF' to generate a multi-page searchable vector PDF"
                 >
                   <Printer className="w-4 h-4" />
-                  {batchDocMode === 'board_letter' && `Print All ${batchLetters.length} Letters`}
-                  {batchDocMode === 'total_comp' && `Print All ${batchLetters.length} Total Comp Statements`}
-                  {batchDocMode === 'combined' && `Print All ${batchLetters.length} Packets (${batchLetters.length * 2} Pages)`}
+                  {batchDocMode === 'board_letter' && `Print / Save ${batchLetters.length} Letters as Vector PDF`}
+                  {batchDocMode === 'total_comp' && `Print / Save ${batchLetters.length} Total Comp Statements`}
+                  {batchDocMode === 'combined' && `Print / Save ${batchLetters.length} Packets (${batchLetters.length * 2} Pages)`}
                 </button>
               </>
             )}
@@ -681,7 +683,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           onClick={() => {
                             setBatchLetters([])
                             setIsConfirmingClearBatch(false)
-                            localStorage.removeItem('ccs_batch_letters')
+                            safeStorage.removeItem(STORAGE_KEYS.BATCH_LETTERS)
                           }}
                           className="text-[10px] bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
                         >

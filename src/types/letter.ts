@@ -56,7 +56,7 @@ export interface TotalCompDistrictDefaults {
 export interface CertifiedFields {
   lane: string // e.g. "MA+48", "BA", "MA"
   step: string // e.g. "23", "5"
-  baseSalary: string // e.g. "$21,031.50" or "$52,400.00"
+  baseSalary: string | number // e.g. "$52,400.00" or 52400
   startDate: string // e.g. "September 1, 2026"
   isPartTime?: boolean
   fteText?: string // e.g. "Part-time" or "Full-time"
@@ -65,7 +65,7 @@ export interface CertifiedFields {
 export interface ClassifiedFields {
   classification: string // e.g. "P6", "P5", "S2"
   level: string // e.g. "E", "D", "C"
-  baseWage: string // e.g. "$19.67" or "$18.56"
+  baseWage: string | number // e.g. "$19.67", 19.67, or annual
   wageUnit?: 'hour' | 'year' // default per hour
   stipendText?: string // e.g. "Plus a center-based stipend of $2,000"
   startDate: string // e.g. "August 20, 2026"
@@ -103,8 +103,8 @@ export type JobClassificationType = 'Licensed' | '9-Month Classified' | '12-Mont
 export interface TotalCompFields {
   jobClassification?: JobClassificationType
   fte?: number // default 1.0 (e.g. 0.5, 0.4). Rule: < 0.5 FTE gets $0 insurance benefits, >= 0.5 gets full package.
-  baseAnnualSalary?: string // e.g. "$52,400.00"
-  stipendAmount?: string // e.g. "$2,000.00" or "$0.00"
+  baseAnnualSalary?: string | number // e.g. "$52,400.00" or 52400
+  stipendAmount?: string | number // e.g. "$2,000.00", 2000, or 0
   stipendDescription?: string // e.g. "Hard-to-Fill / Center-Based"
   
   // Custom Benefit Overrides (optional, defaults provided by totalCompUtils)
@@ -120,7 +120,7 @@ export interface TotalCompFields {
 
   // Hourly schedule helper for classified
   isHourly?: boolean
-  hourlyRate?: string
+  hourlyRate?: string | number
   hoursPerDay?: number // default 8
   daysPerYear?: number // default 176 (9-month) or 260 (12-month)
 }

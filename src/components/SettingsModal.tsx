@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import type { DistrictConfig, AdminStaffMember, TotalCompDistrictDefaults } from '../types/letter'
 import {
   Settings,
@@ -14,19 +14,36 @@ import {
   GraduationCap,
   Calculator,
   RotateCcw,
+  Database,
+  Download,
+  Upload,
+  AlertTriangle,
+  CheckCircle2,
 } from 'lucide-react'
 import { DEFAULT_DISTRICT_CONFIG } from '../utils/sampleData'
+import {
+  downloadBackupFile,
+  restoreDistrictBackup,
+  clearPersonnelData,
+  clearAllDistrictStorage,
+  safeStorage,
+  STORAGE_KEYS,
+} from '../utils/storageUtils'
 
 interface SettingsModalProps {
   config: DistrictConfig
   onSave: (newConfig: DistrictConfig) => void
   onClose: () => void
+  onDataRestored?: () => void
+  onDataCleared?: () => void
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   config,
   onSave,
   onClose,
+  onDataRestored,
+  onDataCleared,
 }) => {
   const [formData, setFormData] = useState<DistrictConfig>({
     ...DEFAULT_DISTRICT_CONFIG,
@@ -38,7 +55,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       ...config.totalCompDefaults,
     },
   })
-  const [activeTab, setActiveTab] = useState<'general' | 'calendar' | 'directory' | 'staff' | 'signers' | 'benefits'>('general')
+  const [activeTab, setActiveTab] = useState<'general' | 'calendar' | 'directory' | 'staff' | 'signers' | 'benefits' | 'backup'>('general')
+  const [backupStatus, setBackupStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const backupFileInputRef = useRef<HTMLInputElement>(null)
 
   const [newLocationInput, setNewLocationInput] = useState('')
   const [newLaneInput, setNewLaneInput] = useState('')
@@ -225,6 +244,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           >
             <Calculator className="w-4 h-4 text-indigo-500" />
             Benefits &amp; Total Comp
+          </button>
+
+          <button
+            onClick={() => setActiveTab('backup')}
+            className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+              activeTab === 'backup'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Database className="w-4 h-4 text-emerald-600" />
+            Backup &amp; Privacy
           </button>
         </div>
 
@@ -922,6 +953,184 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     }
                     className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'backup' && (
+            <div className="space-y-5">
+              {backupStatus && (
+                <div
+                  className={`p-4 rounded-2xl border flex items-center gap-3 text-xs ${
+                    backupStatus.type === 'success'
+                      ? 'bg-emerald-50/80 border-emerald-200 text-emerald-800'
+                      : 'bg-rose-50/80 border-rose-200 text-rose-800'
+                  }`}
+                >
+                  {backupStatus.type === 'success' ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
+                  )}
+                  <span className="font-medium">{backupStatus.message}</span>
+                </div>
+              )}
+
+              {/* Export Backup Card */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+                      <Download className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-900">Export District Backup</h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-lg">
+                        Downloads an offline JSON bundle containing all district letterhead settings, salary scale lanes, school facilities, saved draft letters, and bulk rosters.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      try {
+                        downloadBackupFile()
+                        setBackupStatus({
+                          type: 'success',
+                          message: 'District backup successfully exported and downloaded!',
+                        })
+                      } catch (err) {
+                        setBackupStatus({
+                          type: 'error',
+                          message: `Export failed: ${err instanceof Error ? err.message : String(err)}`,
+                        })
+                      }
+                    }}
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2 cursor-pointer shrink-0 transition"
+                  >
+                    <Download className="w-4 h-4" /> Download Backup (.json)
+                  </button>
+                </div>
+              </div>
+
+              {/* Import & Restore Card */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 shrink-0">
+                      <Upload className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-900">Restore from Backup File</h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-lg">
+                        Import a previously exported JSON backup file to restore district configurations, letter drafts, and custom salary lanes.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <input
+                      ref={backupFileInputRef}
+                      type="file"
+                      accept=".json,application/json"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        const reader = new FileReader()
+                        reader.onload = (event) => {
+                          try {
+                            const parsed = JSON.parse(event.target?.result as string)
+                            const result = restoreDistrictBackup(parsed)
+                            if (result.success) {
+                              const newConfig = safeStorage.getItem(STORAGE_KEYS.CONFIG, formData)
+                              setFormData(newConfig)
+                              onDataRestored?.()
+                              setBackupStatus({ type: 'success', message: result.message })
+                            } else {
+                              setBackupStatus({ type: 'error', message: result.message })
+                            }
+                          } catch (parseErr) {
+                            setBackupStatus({
+                              type: 'error',
+                              message: `Invalid JSON file: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}`,
+                            })
+                          }
+                        }
+                        reader.readAsText(file)
+                        // Reset input so same file can be selected again if needed
+                        e.target.value = ''
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => backupFileInputRef.current?.click()}
+                      className="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2 cursor-pointer shrink-0 transition"
+                    >
+                      <Upload className="w-4 h-4" /> Select Backup File
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Shared HR Workstation Privacy Controls */}
+              <div className="bg-amber-50/50 border border-amber-200/80 rounded-2xl p-5 space-y-4">
+                <div className="flex gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-900">Workstation Privacy &amp; Data Cleanup</h4>
+                    <p className="text-xs text-slate-600 mt-1">
+                      Saved letters contain employee names, home addresses, and compensation figures. If you are operating on a shared district workstation, use these controls to purge cached PII.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-amber-200/60 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          'Are you sure you want to clear all saved letter drafts and batch rosters from this browser? Your district stationery settings will be preserved.'
+                        )
+                      ) {
+                        clearPersonnelData()
+                        onDataCleared?.()
+                        setBackupStatus({
+                          type: 'success',
+                          message: 'All saved draft letters and batch rosters have been purged from this browser.',
+                        })
+                      }
+                    }}
+                    className="px-3.5 py-2 bg-white border border-amber-300 hover:bg-amber-50 text-amber-900 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-amber-600" /> Clear Drafts &amp; Rosters
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          'WARNING: This will wipe ALL cached district data, stationery settings, draft letters, and batch rosters, returning the tool to factory defaults. Proceed?'
+                        )
+                      ) {
+                        clearAllDistrictStorage()
+                        setFormData(DEFAULT_DISTRICT_CONFIG)
+                        onDataCleared?.()
+                        setBackupStatus({
+                          type: 'success',
+                          message: 'Factory reset complete: all local district storage has been wiped.',
+                        })
+                      }
+                    }}
+                    className="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" /> Factory Reset (Clear All)
+                  </button>
                 </div>
               </div>
             </div>

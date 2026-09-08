@@ -43,28 +43,26 @@ import {
   Calculator,
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import { safeStorage, STORAGE_KEYS, clearPersonnelData } from './utils/storageUtils'
 
 export function App() {
   // District Config
-  const [config, setConfig] = useState<DistrictConfig>(() => {
-    const saved = localStorage.getItem('ccs_district_config')
-    return saved ? JSON.parse(saved) : DEFAULT_DISTRICT_CONFIG
-  })
+  const [config, setConfig] = useState<DistrictConfig>(() =>
+    safeStorage.getItem(STORAGE_KEYS.CONFIG, DEFAULT_DISTRICT_CONFIG)
+  )
 
   // Active Working Letter
-  const [activeLetter, setActiveLetter] = useState<LetterData>(() => {
-    const saved = localStorage.getItem('ccs_active_letter')
-    return saved ? JSON.parse(saved) : SAMPLE_PRESETS[0].letter
-  })
+  const [activeLetter, setActiveLetter] = useState<LetterData>(() =>
+    safeStorage.getItem(STORAGE_KEYS.ACTIVE_LETTER, SAMPLE_PRESETS[0].letter)
+  )
 
   // Active Document Tab ('board_letter' | 'total_comp')
   const [activeDocumentTab, setActiveDocumentTab] = useState<'board_letter' | 'total_comp'>('board_letter')
 
   // Saved Drafts & History
-  const [savedLetters, setSavedLetters] = useState<LetterData[]>(() => {
-    const saved = localStorage.getItem('ccs_saved_letters')
-    return saved ? JSON.parse(saved) : []
-  })
+  const [savedLetters, setSavedLetters] = useState<LetterData[]>(() =>
+    safeStorage.getItem(STORAGE_KEYS.SAVED_LETTERS, [])
+  )
 
   // Modals & UI Controls
   const [showBulkModal, setShowBulkModal] = useState<boolean>(false)
@@ -80,15 +78,15 @@ export function App() {
 
   // Persist State
   useEffect(() => {
-    localStorage.setItem('ccs_district_config', JSON.stringify(config))
+    safeStorage.setItem(STORAGE_KEYS.CONFIG, config)
   }, [config])
 
   useEffect(() => {
-    localStorage.setItem('ccs_active_letter', JSON.stringify(activeLetter))
+    safeStorage.setItem(STORAGE_KEYS.ACTIVE_LETTER, activeLetter)
   }, [activeLetter])
 
   useEffect(() => {
-    localStorage.setItem('ccs_saved_letters', JSON.stringify(savedLetters))
+    safeStorage.setItem(STORAGE_KEYS.SAVED_LETTERS, savedLetters)
   }, [savedLetters])
 
   // Show Toast
@@ -158,6 +156,7 @@ export function App() {
 
   // Actions
   const handlePrint = () => {
+    showToast("Tip: In print dialog, choose 'Save as PDF' to save a searchable vector document.")
     window.print()
   }
 
@@ -296,23 +295,23 @@ export function App() {
 
             <button
               type="button"
-              onClick={handleExportPdf}
-              disabled={isExporting}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              title="Download PDF"
+              onClick={handlePrint}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-md hover:shadow-blue-500/20 transition cursor-pointer"
+              title="Print letter or select 'Save as PDF' for a searchable vector PDF (Cmd+P)"
             >
-              <FileDown className="w-4 h-4 text-indigo-400" />
-              <span className="hidden sm:inline">PDF</span>
+              <Printer className="w-4 h-4" />
+              <span>Print / Save Vector PDF</span>
             </button>
 
             <button
               type="button"
-              onClick={handlePrint}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-md hover:shadow-blue-500/20 transition cursor-pointer"
-              title="Print letter (Cmd+P)"
+              onClick={handleExportPdf}
+              disabled={isExporting}
+              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              title="Quick 1-click direct file download (.pdf)"
             >
-              <Printer className="w-4 h-4" />
-              <span>Print Letter</span>
+              <FileDown className="w-4 h-4 text-indigo-400" />
+              <span className="hidden sm:inline">Direct PDF</span>
             </button>
 
             <button
@@ -521,16 +520,18 @@ export function App() {
                 type="button"
                 onClick={handlePrint}
                 className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                title="Print or select 'Save as PDF' for a searchable vector document"
               >
-                <Printer className="w-3.5 h-3.5" /> Print
+                <Printer className="w-3.5 h-3.5" /> Print / Vector PDF
               </button>
               <button
                 type="button"
                 onClick={handleExportPdf}
                 disabled={isExporting}
                 className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                title="1-Click direct file download (.pdf)"
               >
-                <FileDown className="w-3.5 h-3.5 text-indigo-400" /> PDF
+                <FileDown className="w-3.5 h-3.5 text-indigo-400" /> Direct PDF
               </button>
               <button
                 type="button"
@@ -665,6 +666,28 @@ export function App() {
               ))}
             </div>
           )}
+
+          {/* Shared HR Terminal Privacy Purge Control */}
+          <div className="pt-3 mt-auto border-t border-slate-200">
+            <button
+              type="button"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    'Clear all cached drafts and employee letters from this shared terminal? (District configuration and letterhead will be preserved).'
+                  )
+                ) {
+                  clearPersonnelData()
+                  setSavedLetters([])
+                  setActiveLetter(SAMPLE_PRESETS[0].letter)
+                  showToast('Personnel drafts purged for privacy')
+                }
+              }}
+              className="w-full text-center text-xs text-slate-500 hover:text-red-700 py-2 px-3 rounded-lg bg-slate-50 hover:bg-red-50 border border-slate-200 transition font-medium cursor-pointer"
+            >
+              Shared Terminal: Purge Cached Drafts
+            </button>
+          </div>
         </div>
       )}
 
@@ -695,6 +718,18 @@ export function App() {
             showToast('District settings saved!')
           }}
           onClose={() => setShowSettingsModal(false)}
+          onDataRestored={() => {
+            setConfig(safeStorage.getItem(STORAGE_KEYS.CONFIG, DEFAULT_DISTRICT_CONFIG))
+            setActiveLetter(safeStorage.getItem(STORAGE_KEYS.ACTIVE_LETTER, SAMPLE_PRESETS[0].letter))
+            setSavedLetters(safeStorage.getItem(STORAGE_KEYS.SAVED_LETTERS, []))
+            showToast('Backup restored successfully!')
+          }}
+          onDataCleared={() => {
+            setConfig(safeStorage.getItem(STORAGE_KEYS.CONFIG, DEFAULT_DISTRICT_CONFIG))
+            setActiveLetter(SAMPLE_PRESETS[0].letter)
+            setSavedLetters([])
+            showToast('Personnel storage purged.')
+          }}
         />
       )}
 

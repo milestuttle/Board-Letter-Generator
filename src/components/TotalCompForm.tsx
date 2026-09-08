@@ -43,7 +43,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
   }
 
   // Bi-directional sync for Salary
-  const handleBaseAnnualSalaryChange = (newSalary: string) => {
+  const handleBaseAnnualSalaryChange = (newSalary: string | number) => {
     const updated: LetterData = {
       ...letter,
       totalComp: {
@@ -77,7 +77,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
   }
 
   // Bi-directional sync for Hourly Rate
-  const handleHourlyRateChange = (newRate: string) => {
+  const handleHourlyRateChange = (newRate: string | number) => {
     const updated: LetterData = {
       ...letter,
       totalComp: {
@@ -102,7 +102,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
   }
 
   // Bi-directional sync for Stipend
-  const handleStipendChange = (newStipend: string, newDesc?: string) => {
+  const handleStipendChange = (newStipend: string | number, newDesc?: string) => {
     const desc = newDesc !== undefined ? newDesc : (tc.stipendDescription || 'Hard-to-Fill / Center-Based')
     const updated: LetterData = {
       ...letter,
@@ -113,6 +113,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       },
     }
     if (letter.type === 'classified') {
+      const stipendStr = typeof newStipend === 'number' ? `$${newStipend.toFixed(2)}` : newStipend
       updated.classified = {
         ...(letter.classified || {
           classification: 'P5',
@@ -120,7 +121,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           baseWage: '$19.67',
           startDate: 'August 20, 2026',
         }),
-        stipendText: newStipend ? `Plus a ${desc} stipend of ${newStipend}` : '',
+        stipendText: stipendStr ? `Plus a ${desc} stipend of ${stipendStr}` : '',
       }
     }
     onChange(updated)
