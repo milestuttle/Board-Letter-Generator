@@ -22,19 +22,30 @@ export const exportToPdf = async (
   const baseName = fileName.replace(/\.pdf$/i, '').replace(/[^a-zA-Z0-9_\-\s]/g, '_').trim()
   const finalFileName = `${baseName || 'board_letter'}.pdf`
 
+  // Exact 8.5in x 11in dimensions at 96 DPI (standard CSS inch)
+  const WIDTH_PX = 816
+  const HEIGHT_PX = 1056
+
   // Render to canvas via browser's native engine at ultra-sharp 300 DPI resolution
+  // Explicitly set width & height options so html-to-image never reads squished flexbox client dimensions
   const canvas = await toCanvas(element, {
     pixelRatio: 3,
+    width: WIDTH_PX,
+    height: HEIGHT_PX,
+    canvasWidth: WIDTH_PX * 3,
+    canvasHeight: HEIGHT_PX * 3,
     backgroundColor: '#ffffff',
-    fontEmbedCSS: '',
-    skipFonts: true,
     style: {
       transform: 'none',
       margin: '0',
       boxShadow: 'none',
-      width: '8.5in',
-      height: '11in',
-      maxHeight: '11in',
+      width: `${WIDTH_PX}px`,
+      minWidth: `${WIDTH_PX}px`,
+      maxWidth: `${WIDTH_PX}px`,
+      height: `${HEIGHT_PX}px`,
+      minHeight: `${HEIGHT_PX}px`,
+      maxHeight: `${HEIGHT_PX}px`,
+      flexShrink: '0',
       overflow: 'hidden',
     },
   })
@@ -50,7 +61,7 @@ export const exportToPdf = async (
   const pdfWidth = pdf.internal.pageSize.getWidth()
   const pdfHeight = pdf.internal.pageSize.getHeight()
 
-  // Add canvas directly to PDF (exact single page fit)
+  // Add canvas directly to PDF with identical 8.5:11 aspect ratio (exact single page fit)
   pdf.addImage(canvas, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
 
   // Save natively using jsPDF's built-in file downloader

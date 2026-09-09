@@ -19,7 +19,7 @@ export const Signature: React.FC<SignatureProps> = ({
       <img
         src={customSignatureData}
         alt={`Signature of ${signerName}`}
-        className={`h-12 w-auto object-contain ${className}`}
+        className={`h-10 w-auto object-contain ${className}`}
       />
     )
   }
@@ -40,7 +40,7 @@ export const Signature: React.FC<SignatureProps> = ({
       <img
         src={jamieSigImg}
         alt={`Signature of ${signerName}`}
-        className="h-13 w-auto object-contain max-w-[210px] block"
+        className="h-11 w-auto object-contain max-w-[190px] block"
       />
     </div>
   )

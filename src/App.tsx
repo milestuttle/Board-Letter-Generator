@@ -459,7 +459,7 @@ export function App() {
           </div>
 
           {/* Letter Canvas Container */}
-          <div className="w-full flex justify-center overflow-x-auto p-2 bg-slate-200/70 rounded-3xl border border-slate-300 shadow-inner print:p-0 print:bg-white print:border-none print:shadow-none">
+          <div className="w-full flex justify-center overflow-x-auto p-2 bg-slate-200/70 rounded-3xl border border-slate-300 shadow-inner print:p-0 print:bg-white print:border-none print:shadow-none print:block print:overflow-visible">
             {activeDocumentTab === 'board_letter' ? (
               <LetterPreview
                 ref={letterRef}

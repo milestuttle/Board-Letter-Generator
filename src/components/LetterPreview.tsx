@@ -18,16 +18,19 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
       <div
         ref={ref}
         id="letter-preview-sheet"
-        className="letter-sheet bg-white text-gray-900 mx-auto shadow-2xl relative select-text origin-top print:shadow-none print:m-0 print:border-none"
+        className="letter-sheet bg-white text-gray-900 mx-auto shadow-2xl relative select-text origin-top print:shadow-none print:m-0 print:border-none shrink-0"
         style={{
           width: '8.5in',
+          minWidth: '8.5in',
+          maxWidth: '8.5in',
           height: '11in',
+          minHeight: '11in',
           maxHeight: '11in',
-          padding: '0.45in 0.75in 0.4in 0.75in',
+          padding: '0.4in 0.75in 0.35in 0.75in',
           boxSizing: 'border-box',
           fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
-          fontSize: '10.5pt',
-          lineHeight: '1.38',
+          fontSize: '10pt',
+          lineHeight: '1.34',
           transform: scale !== 1 ? `scale(${scale})` : undefined,
           transformOrigin: 'top center',
           overflow: 'hidden',
@@ -37,22 +40,22 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         <DistrictHeader config={config} />
 
         {/* Letter Date */}
-        <div className="mb-3.5 text-[10.5pt] text-gray-900 font-medium">
+        <div className="mb-2.5 text-[10pt] text-gray-900 font-medium">
           {doc.letterDate}
         </div>
 
         {/* Recipient Address Block */}
-        <div className="mb-3.5 text-[10.5pt] text-gray-900 leading-tight space-y-0.5">
+        <div className="mb-2.5 text-[10pt] text-gray-900 leading-tight space-y-0.5">
           <div className="font-semibold text-gray-950">{doc.recipient.fullName}</div>
           {doc.recipient.streetAddress && <div>{doc.recipient.streetAddress}</div>}
           {doc.recipient.cityStateZip && <div>{doc.recipient.cityStateZip}</div>}
         </div>
 
         {/* Salutation */}
-        <div className="mb-2.5 text-[10.5pt] font-normal">{doc.salutation}</div>
+        <div className="mb-2 text-[10pt] font-normal">{doc.salutation}</div>
 
         {/* Dynamic Letter Body Blocks */}
-        <div className="space-y-2.5 text-[10.2pt] text-gray-900 text-left leading-[1.38]">
+        <div className="space-y-2 text-[9.8pt] text-gray-900 text-left leading-[1.34]">
           {doc.blocks.map((block, idx) => {
             if (block.type === 'paragraph') {
               return (
@@ -83,7 +86,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
               return (
                 <div key={idx} className="pt-0.5 pb-0.5">
                   <p className="font-normal mb-1">{block.lead}</p>
-                  <ul className="list-disc pl-7 space-y-0.5 text-[10.2pt]">
+                  <ul className="list-disc pl-7 space-y-0.5 text-[9.8pt]">
                     {block.items.map((item, itemIdx) => (
                       <li key={itemIdx}>
                         <strong className="font-semibold">{item.label}</strong> {item.value}
@@ -99,7 +102,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         </div>
 
         {/* Sign-off Block */}
-        <div className="mt-4 text-[10.5pt] leading-tight space-y-0.5 font-serif text-gray-950">
+        <div className="mt-3 text-[10pt] leading-tight space-y-0.5 font-serif text-gray-950">
           <div>{doc.closing.signOff}</div>
 
           <div className="py-0.5">
@@ -111,11 +114,11 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
           </div>
 
           <div className="font-semibold text-gray-950">{doc.closing.signerName}</div>
-          <div className="text-gray-800 text-[10pt]">{doc.closing.signerTitle}</div>
-          <div className="text-gray-800 text-[10pt]">{doc.closing.organization}</div>
+          <div className="text-gray-800 text-[9.5pt]">{doc.closing.signerTitle}</div>
+          <div className="text-gray-800 text-[9.5pt]">{doc.closing.organization}</div>
 
           {/* Footer Initials & Cc */}
-          <div className="pt-2 text-[9.5pt] text-gray-700 space-y-0.5">
+          <div className="pt-1.5 text-[9pt] text-gray-700 space-y-0.5">
             <div>{doc.closing.typistInitials}</div>
             <div>{doc.closing.ccLine}</div>
           </div>

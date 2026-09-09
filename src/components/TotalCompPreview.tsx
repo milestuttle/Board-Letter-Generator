@@ -25,10 +25,13 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
       <div
         ref={ref}
         id="total-comp-sheet"
-        className="letter-sheet bg-white text-gray-900 mx-auto shadow-2xl relative select-text origin-top print:shadow-none print:m-0 print:border-none"
+        className="letter-sheet bg-white text-gray-900 mx-auto shadow-2xl relative select-text origin-top print:shadow-none print:m-0 print:border-none shrink-0"
         style={{
           width: '8.5in',
+          minWidth: '8.5in',
+          maxWidth: '8.5in',
           height: '11in',
+          minHeight: '11in',
           maxHeight: '11in',
           padding: '0.35in 0.65in 0.35in 0.65in',
           boxSizing: 'border-box',
