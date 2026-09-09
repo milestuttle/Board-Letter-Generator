@@ -461,7 +461,16 @@ export const exportTotalCompToDocx = async (
     new TextRun({ text: '4. PAID TIME OFF & HOLIDAYS ALLOCATION\n', bold: true, size: 22 }),
   ]
 
-  if (comp.leaveDays > 0) {
+  if (comp.leaveBreakdown && comp.leaveBreakdown.length > 0) {
+    comp.leaveBreakdown.forEach((item) => {
+      ptoRuns.push(
+        new TextRun({
+          text: `• ${item.label}: ${item.value}\n`,
+          size: 21,
+        })
+      )
+    })
+  } else if (comp.leaveDays > 0) {
     ptoRuns.push(
       new TextRun({
         text: `• Allocated Annual Paid Leave Days: ${comp.leaveDays} Days\n`,
@@ -482,8 +491,18 @@ export const exportTotalCompToDocx = async (
   if (comp.additionalLeavesText) {
     ptoRuns.push(
       new TextRun({
-        text: `• Additional Protected Leaves: ${comp.additionalLeavesText}`,
+        text: `• Additional Protected Leaves: ${comp.additionalLeavesText}${comp.vacationScaleNote ? `\n` : ''}`,
         size: 21,
+      })
+    )
+  }
+
+  if (comp.vacationScaleNote) {
+    ptoRuns.push(
+      new TextRun({
+        text: comp.vacationScaleNote,
+        italics: true,
+        size: 19,
       })
     )
   }
@@ -616,11 +635,17 @@ TOTAL INSURANCE CONTRIBUTIONS:                             $0.00`
 TOTAL RETIREMENT & STATUTORY CONTRIBUTIONS:                ${formatCurrency(comp.statutoryTotal)}
 
 4. PAID TIME OFF & HOLIDAYS ALLOCATION${
-    comp.leaveDays > 0 ? `\n• Allocated Annual Paid Leave Days:                         ${comp.leaveDays} Days` : ''
+    comp.leaveBreakdown && comp.leaveBreakdown.length > 0
+      ? comp.leaveBreakdown.map((item) => `\n• ${item.label.padEnd(46, ' ')} ${item.value}`).join('')
+      : comp.leaveDays > 0
+      ? `\n• Allocated Annual Paid Leave Days:                         ${comp.leaveDays} Days`
+      : ''
   }${
     comp.holidaysDays > 0 ? `\n• Paid District Holidays:                                  ${comp.holidaysDays} Days` : ''
   }${
     comp.additionalLeavesText ? `\n• Additional Protected Leaves:                             ${comp.additionalLeavesText}` : ''
+  }${
+    comp.vacationScaleNote ? `\n${comp.vacationScaleNote}` : ''
   }
 
 ==================================================================

@@ -885,21 +885,138 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* 4. Leave Allocations */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-4">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-                  4. Standard Leave Allocations
+                  4. Standard Leave Allocations &amp; Accrual Rates
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+                {/* 12-Month Classified Settings */}
+                <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                  <span className="text-xs font-semibold text-slate-800">
+                    12-Month Classified Staff (New Hire / Years 1–5)
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Upfront Annual Days
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.totalCompDefaults?.classified12MoAnnualDaysUpfront ?? 3}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            classified12MoAnnualDaysUpfront: parseInt(e.target.value, 10) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">Frontloaded upfront</span>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Sick Leave (Days/Mo)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={formData.totalCompDefaults?.classified12MoSickDaysPerMonth ?? 1.0}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            classified12MoSickDaysPerMonth: parseFloat(e.target.value) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">1 day/mo = 12 days/yr</span>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Vacation Rate (Days/Mo)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={formData.totalCompDefaults?.classified12MoVacationMonthlyRate ?? 0.84}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            classified12MoVacationMonthlyRate: parseFloat(e.target.value) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">0.84 days/mo (Years 1–5)</span>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Paid District Holidays
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.totalCompDefaults?.defaultHolidaysDays12Month ?? 11}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            defaultHolidaysDays12Month: parseInt(e.target.value, 10) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">Paid holidays</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Certified / Licensed Settings */}
+                <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                  <span className="text-xs font-semibold text-slate-800">
+                    Certified / Licensed School Year Staff (New Hire / Years 1–4)
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Personal Days (Upfront)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.totalCompDefaults?.certifiedPersonalDaysUpfront ?? 3}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            certifiedPersonalDaysUpfront: parseInt(e.target.value, 10) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">3 personal days upfront</span>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Sick Leave Days (Upfront)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.totalCompDefaults?.certifiedSickDaysUpfront ?? 8}
+                        onChange={(e) =>
+                          updateTotalCompDefaults({
+                            certifiedSickDaysUpfront: parseInt(e.target.value, 10) || 0,
+                          })
+                        }
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      />
+                      <span className="text-[10px] text-slate-400">8 sick days upfront (Total 11)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 9-Month Classified & Protected Note */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-slate-700 mb-1">
-                      Licensed / 9-Mo Leave Days
+                      9-Month Classified Leave Days
                     </label>
                     <input
                       type="number"
-                      value={formData.totalCompDefaults?.defaultLeaveDaysLicensed ?? 11}
+                      value={formData.totalCompDefaults?.defaultLeaveDays9Month ?? 11}
                       onChange={(e) =>
                         updateTotalCompDefaults({
-                          defaultLeaveDaysLicensed: parseInt(e.target.value, 10) || 0,
                           defaultLeaveDays9Month: parseInt(e.target.value, 10) || 0,
                         })
                       }
@@ -908,51 +1025,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-700 mb-1">
-                      12-Month Leave Days
+                      Protected Leaves Note
                     </label>
                     <input
-                      type="number"
-                      value={formData.totalCompDefaults?.defaultLeaveDays12Month ?? 25}
-                      onChange={(e) =>
-                        updateTotalCompDefaults({
-                          defaultLeaveDays12Month: parseInt(e.target.value, 10) || 0,
-                        })
+                      type="text"
+                      value={
+                        formData.totalCompDefaults?.defaultAdditionalLeavesText ??
+                        'Up to 5 Bereavement Days & 5 Professional Days'
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      onChange={(e) =>
+                        updateTotalCompDefaults({ defaultAdditionalLeavesText: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
-                      12-Month Paid Holidays
-                    </label>
-                    <input
-                      type="number"
-                      value={formData.totalCompDefaults?.defaultHolidaysDays12Month ?? 11}
-                      onChange={(e) =>
-                        updateTotalCompDefaults({
-                          defaultHolidaysDays12Month: parseInt(e.target.value, 10) || 0,
-                        })
-                      }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Protected Leaves Note
-                  </label>
-                  <input
-                    type="text"
-                    value={
-                      formData.totalCompDefaults?.defaultAdditionalLeavesText ??
-                      'Up to 5 Bereavement Days & 5 Professional Days'
-                    }
-                    onChange={(e) =>
-                      updateTotalCompDefaults({ defaultAdditionalLeavesText: e.target.value })
-                    }
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
-                  />
                 </div>
               </div>
             </div>

@@ -153,15 +153,15 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
   const handleClassificationChange = (cls: JobClassificationType) => {
     const cfgDefaults = config?.totalCompDefaults
-    let leave = cfgDefaults?.defaultLeaveDaysLicensed ?? 11
+    let leave = cfgDefaults?.defaultLeaveDaysLicensed ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDaysLicensed
     let hol = 0
     let days = cfgDefaults?.defaultDays9Month ?? 176
     if (cls === '12-Month Classified') {
-      leave = cfgDefaults?.defaultLeaveDays12Month ?? 25
-      hol = cfgDefaults?.defaultHolidaysDays12Month ?? 11
+      leave = cfgDefaults?.defaultLeaveDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays12Month
+      hol = cfgDefaults?.defaultHolidaysDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultHolidaysDays12Month
       days = cfgDefaults?.defaultDays12Month ?? 260
     } else if (cls === '9-Month Classified') {
-      leave = cfgDefaults?.defaultLeaveDays9Month ?? 11
+      leave = cfgDefaults?.defaultLeaveDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays9Month
       hol = 0
       days = cfgDefaults?.defaultDays9Month ?? 176
     }
@@ -171,6 +171,11 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       paidLeaveDays: leave,
       paidHolidaysDays: hol,
       daysPerYear: days,
+      classified12MoAnnualDaysUpfront: undefined,
+      classified12MoSickDaysPerMonth: undefined,
+      classified12MoVacationMonthlyRate: undefined,
+      certifiedPersonalDaysUpfront: undefined,
+      certifiedSickDaysUpfront: undefined,
     })
   }
 
@@ -548,34 +553,223 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
       {/* 3. Leave & Holiday Allocations */}
       <div className="space-y-3 pt-1 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-          <CalendarCheck className="w-3.5 h-3.5 text-indigo-600" />
-          Paid Time Off &amp; Holiday Allocations
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Annual Leave Days
-            </label>
-            <input
-              type="number"
-              value={comp.leaveDays}
-              onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
-              className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Paid District Holidays
-            </label>
-            <input
-              type="number"
-              value={comp.holidaysDays}
-              onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
-              className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
+            <CalendarCheck className="w-3.5 h-3.5 text-indigo-600" />
+            Paid Time Off &amp; Holiday Allocations
+          </label>
+          <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+            {comp.classification}
+          </span>
         </div>
+
+        {comp.classification === '12-Month Classified' ? (
+          <>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Annual Days (Upfront)
+                </label>
+                <input
+                  type="number"
+                  value={
+                    tc.classified12MoAnnualDaysUpfront ??
+                    config?.totalCompDefaults?.classified12MoAnnualDaysUpfront ??
+                    DEFAULT_TOTAL_COMP_RATES.classified12MoAnnualDaysUpfront
+                  }
+                  onChange={(e) =>
+                    updateTc({
+                      classified12MoAnnualDaysUpfront: parseInt(e.target.value, 10) || 0,
+                      paidLeaveDays: undefined,
+                    })
+                  }
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Sick Leave (Days / Mo)
+                </label>
+                <input
+                  type="number"
+                  step="0.5"
+                  value={
+                    tc.classified12MoSickDaysPerMonth ??
+                    config?.totalCompDefaults?.classified12MoSickDaysPerMonth ??
+                    DEFAULT_TOTAL_COMP_RATES.classified12MoSickDaysPerMonth
+                  }
+                  onChange={(e) =>
+                    updateTc({
+                      classified12MoSickDaysPerMonth: parseFloat(e.target.value) || 0,
+                      paidLeaveDays: undefined,
+                    })
+                  }
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">
+                  = {comp.classifiedSickDaysAnnual ?? 12} days / year
+                </span>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Vacation Rate (Days / Mo)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={
+                    tc.classified12MoVacationMonthlyRate ??
+                    config?.totalCompDefaults?.classified12MoVacationMonthlyRate ??
+                    DEFAULT_TOTAL_COMP_RATES.classified12MoVacationMonthlyRate
+                  }
+                  onChange={(e) =>
+                    updateTc({
+                      classified12MoVacationMonthlyRate: parseFloat(e.target.value) || 0,
+                      paidLeaveDays: undefined,
+                    })
+                  }
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">
+                  = ~{(comp.classifiedVacationAnnual ?? 10.08).toFixed(2)} days/yr (Yrs 1–5)
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Paid District Holidays
+                </label>
+                <input
+                  type="number"
+                  value={comp.holidaysDays}
+                  onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Total Annual Paid Leave Days
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={comp.leaveDays}
+                  onChange={(e) => updateTc({ paidLeaveDays: parseFloat(e.target.value) || 0 })}
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">
+                  {tc.paidLeaveDays !== undefined
+                    ? 'Manual override active'
+                    : 'Auto calculated (3 upfront + 12 sick + ~10.08 vacation)'}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : comp.classification === 'Licensed' || letter.type === 'certified' ? (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Personal Days (Upfront, Years 1–4)
+                </label>
+                <input
+                  type="number"
+                  value={
+                    tc.certifiedPersonalDaysUpfront ??
+                    config?.totalCompDefaults?.certifiedPersonalDaysUpfront ??
+                    DEFAULT_TOTAL_COMP_RATES.certifiedPersonalDaysUpfront
+                  }
+                  onChange={(e) =>
+                    updateTc({
+                      certifiedPersonalDaysUpfront: parseInt(e.target.value, 10) || 0,
+                      paidLeaveDays: undefined,
+                    })
+                  }
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Sick Leave Days (Upfront, Years 1–4)
+                </label>
+                <input
+                  type="number"
+                  value={
+                    tc.certifiedSickDaysUpfront ??
+                    config?.totalCompDefaults?.certifiedSickDaysUpfront ??
+                    DEFAULT_TOTAL_COMP_RATES.certifiedSickDaysUpfront
+                  }
+                  onChange={(e) =>
+                    updateTc({
+                      certifiedSickDaysUpfront: parseInt(e.target.value, 10) || 0,
+                      paidLeaveDays: undefined,
+                    })
+                  }
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Total Upfront Paid Leave Days
+                </label>
+                <input
+                  type="number"
+                  value={comp.leaveDays}
+                  onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-[10px] text-gray-400">
+                  {tc.paidLeaveDays !== undefined ? 'Manual override active' : 'Auto calculated (3 + 8 = 11 days)'}
+                </span>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Paid District Holidays
+                </label>
+                <input
+                  type="number"
+                  value={comp.holidaysDays}
+                  onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Annual Leave Days
+              </label>
+              <input
+                type="number"
+                value={comp.leaveDays}
+                onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
+                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Paid District Holidays
+              </label>
+              <input
+                type="number"
+                value={comp.holidaysDays}
+                onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
+                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+        )}
+
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
             Additional Protected Leaves Note

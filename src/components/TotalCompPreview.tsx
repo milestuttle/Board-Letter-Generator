@@ -225,11 +225,20 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
               <span>4. Paid Time Off &amp; Holidays Allocation</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
-              {comp.leaveDays > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">• Allocated Annual Paid Leave Days:</span>
-                  <span className="font-semibold text-gray-950">{comp.leaveDays} Days</span>
-                </div>
+              {comp.leaveBreakdown && comp.leaveBreakdown.length > 0 ? (
+                comp.leaveBreakdown.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-baseline">
+                    <span className="text-gray-700">• {item.label}:</span>
+                    <span className="font-semibold text-gray-950">{item.value}</span>
+                  </div>
+                ))
+              ) : (
+                comp.leaveDays > 0 && (
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-gray-700">• Allocated Annual Paid Leave Days:</span>
+                    <span className="font-semibold text-gray-950">{comp.leaveDays} Days</span>
+                  </div>
+                )
               )}
               {comp.holidaysDays > 0 && (
                 <div className="flex justify-between items-baseline">
@@ -243,6 +252,11 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
                 <div className="flex justify-between items-baseline text-[8.4pt] text-gray-600">
                   <span>• Additional Protected Leaves:</span>
                   <span>{comp.additionalLeavesText}</span>
+                </div>
+              )}
+              {comp.vacationScaleNote && (
+                <div className="text-[7.2pt] italic text-gray-500 pt-0.5">
+                  {comp.vacationScaleNote}
                 </div>
               )}
             </div>

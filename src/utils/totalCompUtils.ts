@@ -11,9 +11,14 @@ export const DEFAULT_TOTAL_COMP_RATES = {
   defaultDays12Month: 260,
   defaultLeaveDaysLicensed: 11,
   defaultLeaveDays9Month: 11,
-  defaultLeaveDays12Month: 25,
+  defaultLeaveDays12Month: 25.08,
   defaultHolidaysDays12Month: 11,
   defaultAdditionalLeavesText: 'Up to 5 Bereavement Days & 5 Professional Days',
+  certifiedPersonalDaysUpfront: 3,
+  certifiedSickDaysUpfront: 8,
+  classified12MoAnnualDaysUpfront: 3,
+  classified12MoSickDaysPerMonth: 1.0,
+  classified12MoVacationMonthlyRate: 0.84,
 }
 
 export function parseCurrency(val?: string | number | null): number {
@@ -49,6 +54,12 @@ export function determineDefaultClassification(letter: LetterData): JobClassific
     return '9-Month Classified'
   }
   return 'Licensed'
+}
+
+export interface LeaveBreakdownItem {
+  label: string
+  value: string
+  note?: string
 }
 
 export interface ComputedTotalComp {
@@ -87,6 +98,17 @@ export interface ComputedTotalComp {
   leaveDays: number
   holidaysDays: number
   additionalLeavesText: string
+  leaveBreakdown: LeaveBreakdownItem[]
+  vacationScaleNote?: string
+
+  // Specific granular fields
+  certifiedPersonalDays?: number
+  certifiedSickDays?: number
+  classifiedAnnualDays?: number
+  classifiedSickDaysPerMonth?: number
+  classifiedSickDaysAnnual?: number
+  classifiedVacationMonthlyRate?: number
+  classifiedVacationAnnual?: number
   
   // Summary
   grandTotal: number
@@ -204,13 +226,91 @@ export function computeTotalComp(letter: LetterData, config?: DistrictConfig): C
   // Paid Time Off Allocations
   let defaultLeaveDays = cfgDefaults?.defaultLeaveDaysLicensed ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDaysLicensed
   let defaultHolidaysDays = 0
+  const leaveBreakdown: LeaveBreakdownItem[] = []
+  let vacationScaleNote: string | undefined
+
+  let certifiedPersonalDays: number | undefined
+  let certifiedSickDays: number | undefined
+  let classifiedAnnualDays: number | undefined
+  let classifiedSickDaysPerMonth: number | undefined
+  let classifiedSickDaysAnnual: number | undefined
+  let classifiedVacationMonthlyRate: number | undefined
+  let classifiedVacationAnnual: number | undefined
 
   if (classification === '12-Month Classified') {
-    defaultLeaveDays = cfgDefaults?.defaultLeaveDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays12Month
-    defaultHolidaysDays = cfgDefaults?.defaultHolidaysDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultHolidaysDays12Month
-  } else if (classification === '9-Month Classified') {
-    defaultLeaveDays = cfgDefaults?.defaultLeaveDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays9Month
+    classifiedAnnualDays =
+      tc.classified12MoAnnualDaysUpfront ??
+      cfgDefaults?.classified12MoAnnualDaysUpfront ??
+      DEFAULT_TOTAL_COMP_RATES.classified12MoAnnualDaysUpfront
+    classifiedSickDaysPerMonth =
+      tc.classified12MoSickDaysPerMonth ??
+      cfgDefaults?.classified12MoSickDaysPerMonth ??
+      DEFAULT_TOTAL_COMP_RATES.classified12MoSickDaysPerMonth
+    classifiedVacationMonthlyRate =
+      tc.classified12MoVacationMonthlyRate ??
+      cfgDefaults?.classified12MoVacationMonthlyRate ??
+      DEFAULT_TOTAL_COMP_RATES.classified12MoVacationMonthlyRate
+
+    classifiedSickDaysAnnual = classifiedSickDaysPerMonth * 12
+    classifiedVacationAnnual = classifiedVacationMonthlyRate * 12
+    const computed12MoTotal =
+      classifiedAnnualDays + classifiedSickDaysAnnual + classifiedVacationAnnual
+
+    defaultLeaveDays =
+      tc.paidLeaveDays !== undefined
+        ? tc.paidLeaveDays
+        : cfgDefaults?.defaultLeaveDays12Month ?? computed12MoTotal
+    defaultHolidaysDays =
+      cfgDefaults?.defaultHolidaysDays12Month ?? DEFAULT_TOTAL_COMP_RATES.defaultHolidaysDays12Month
+
+    leaveBreakdown.push({
+      label: 'Annual Leave (Upfront Allocation)',
+      value: `${classifiedAnnualDays} Days`,
+    })
+    leaveBreakdown.push({
+      label: `Sick Leave (${classifiedSickDaysPerMonth === 1 ? '1 Day' : `${classifiedSickDaysPerMonth} Days`} / Month)`,
+      value: `${classifiedSickDaysAnnual} Days / Year`,
+    })
+    leaveBreakdown.push({
+      label: `Vacation Leave Accrual (${classifiedVacationMonthlyRate} Days / Month, Years 1–5)*`,
+      value: `~${parseFloat(classifiedVacationAnnual.toFixed(2))} Days / Year`,
+    })
+    vacationScaleNote = '*Vacation leave accrual scales up with subsequent years of service.'
+  } else if (classification === 'Licensed' || letter.type === 'certified') {
+    certifiedPersonalDays =
+      tc.certifiedPersonalDaysUpfront ??
+      cfgDefaults?.certifiedPersonalDaysUpfront ??
+      DEFAULT_TOTAL_COMP_RATES.certifiedPersonalDaysUpfront
+    certifiedSickDays =
+      tc.certifiedSickDaysUpfront ??
+      cfgDefaults?.certifiedSickDaysUpfront ??
+      DEFAULT_TOTAL_COMP_RATES.certifiedSickDaysUpfront
+
+    const computedCertTotal = certifiedPersonalDays + certifiedSickDays
+    defaultLeaveDays =
+      tc.paidLeaveDays !== undefined
+        ? tc.paidLeaveDays
+        : cfgDefaults?.defaultLeaveDaysLicensed ?? computedCertTotal
     defaultHolidaysDays = 0
+
+    leaveBreakdown.push({
+      label: 'Personal Leave (Upfront Allocation, Years 1–4)',
+      value: `${certifiedPersonalDays} Days`,
+    })
+    leaveBreakdown.push({
+      label: 'Sick Leave (Upfront Allocation, Years 1–4)',
+      value: `${certifiedSickDays} Days`,
+    })
+  } else {
+    // 9-Month Classified
+    defaultLeaveDays =
+      tc.paidLeaveDays ?? cfgDefaults?.defaultLeaveDays9Month ?? DEFAULT_TOTAL_COMP_RATES.defaultLeaveDays9Month
+    defaultHolidaysDays = 0
+
+    leaveBreakdown.push({
+      label: 'Allocated Annual Paid Leave',
+      value: `${tc.paidLeaveDays ?? defaultLeaveDays} Days`,
+    })
   }
 
   const leaveDays = tc.paidLeaveDays ?? defaultLeaveDays
@@ -253,6 +353,16 @@ export function computeTotalComp(letter: LetterData, config?: DistrictConfig): C
     leaveDays,
     holidaysDays,
     additionalLeavesText,
+    leaveBreakdown,
+    vacationScaleNote,
+
+    certifiedPersonalDays,
+    certifiedSickDays,
+    classifiedAnnualDays,
+    classifiedSickDaysPerMonth,
+    classifiedSickDaysAnnual,
+    classifiedVacationMonthlyRate,
+    classifiedVacationAnnual,
 
     grandTotal,
     benefitsAndStatutoryTotal,

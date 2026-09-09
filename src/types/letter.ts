@@ -51,6 +51,13 @@ export interface TotalCompDistrictDefaults {
   defaultLeaveDays12Month?: number
   defaultHolidaysDays12Month?: number
   defaultAdditionalLeavesText?: string
+
+  // Granular Leave Defaults
+  certifiedPersonalDaysUpfront?: number
+  certifiedSickDaysUpfront?: number
+  classified12MoAnnualDaysUpfront?: number
+  classified12MoSickDaysPerMonth?: number
+  classified12MoVacationMonthlyRate?: number
 }
 
 export interface CertifiedFields {
@@ -117,6 +124,13 @@ export interface TotalCompFields {
   paidLeaveDays?: number // default 11 (Licensed/9-Mo), 25 (12-Mo)
   paidHolidaysDays?: number // default 0 (Licensed/9-Mo), 11 (12-Mo)
   additionalLeavesText?: string // "Up to 5 Bereavement Days & 5 Professional Days"
+
+  // Granular Leave Overrides
+  certifiedPersonalDaysUpfront?: number
+  certifiedSickDaysUpfront?: number
+  classified12MoAnnualDaysUpfront?: number
+  classified12MoSickDaysPerMonth?: number
+  classified12MoVacationMonthlyRate?: number
 
   // Hourly schedule helper for classified
   isHourly?: boolean

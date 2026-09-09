@@ -252,5 +252,142 @@ describe('totalCompUtils', () => {
       expect(result.dentalAnnual).toBeCloseTo(5.0 * 12, 2)
       expect(result.benefitEligibilityNote).toContain('Eligible for Full District Insurance Benefits Package')
     })
+
+    describe('leave allocations', () => {
+      it('allocates 3 personal and 8 sick days upfront for certified school year staff', () => {
+        const letter: LetterData = {
+          id: 'cert-leave',
+          type: 'certified',
+          letterDate: 'August 24, 2026',
+          boardMeetingDate: 'August 24, 2026',
+          schoolYear: '2026-2027',
+          recipientFirstName: 'Sarah',
+          recipientLastName: 'Connor',
+          streetAddress: '123 Elm',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: 'High School English Teacher',
+          location: 'Cañon City High School',
+          certified: {
+            lane: 'BA',
+            step: '1',
+            baseSalary: '$52,400.00',
+            startDate: 'August 20, 2026',
+          },
+        }
+
+        const result = computeTotalComp(letter)
+
+        expect(result.certifiedPersonalDays).toBe(3)
+        expect(result.certifiedSickDays).toBe(8)
+        expect(result.leaveDays).toBe(11)
+        expect(result.holidaysDays).toBe(0)
+
+        // Check itemized breakdown
+        expect(result.leaveBreakdown).toEqual([
+          {
+            label: 'Personal Leave (Upfront Allocation, Years 1–4)',
+            value: '3 Days',
+          },
+          {
+            label: 'Sick Leave (Upfront Allocation, Years 1–4)',
+            value: '8 Days',
+          },
+        ])
+      })
+
+      it('allocates 3 upfront annual days, 1 sick day/mo, and 0.84 vacation days/mo for 12-month classified staff', () => {
+        const letter: LetterData = {
+          id: 'class-12mo',
+          type: 'classified',
+          letterDate: 'August 24, 2026',
+          boardMeetingDate: 'August 24, 2026',
+          schoolYear: '2026-2027',
+          recipientFirstName: 'Alex',
+          recipientLastName: 'Murphy',
+          streetAddress: '456 Pine',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: 'Maintenance Technician',
+          location: 'Transportation & Operations Center',
+          classified: {
+            classification: 'P5',
+            level: 'A',
+            baseWage: '$22.50',
+            wageUnit: 'hour',
+            startDate: 'August 20, 2026',
+          },
+          totalComp: {
+            jobClassification: '12-Month Classified',
+          },
+        }
+
+        const result = computeTotalComp(letter)
+
+        expect(result.classification).toBe('12-Month Classified')
+        expect(result.classifiedAnnualDays).toBe(3)
+        expect(result.classifiedSickDaysPerMonth).toBe(1.0)
+        expect(result.classifiedSickDaysAnnual).toBe(12)
+        expect(result.classifiedVacationMonthlyRate).toBe(0.84)
+        expect(result.classifiedVacationAnnual).toBeCloseTo(10.08, 2)
+        expect(result.leaveDays).toBeCloseTo(25.08, 2)
+        expect(result.holidaysDays).toBe(11)
+
+        // Check itemized breakdown labels and values
+        expect(result.leaveBreakdown).toEqual([
+          {
+            label: 'Annual Leave (Upfront Allocation)',
+            value: '3 Days',
+          },
+          {
+            label: 'Sick Leave (1 Day / Month)',
+            value: '12 Days / Year',
+          },
+          {
+            label: 'Vacation Leave Accrual (0.84 Days / Month, Years 1–5)*',
+            value: '~10.08 Days / Year',
+          },
+        ])
+        expect(result.vacationScaleNote).toBe('*Vacation leave accrual scales up with subsequent years of service.')
+      })
+
+      it('supports custom leave overrides on totalComp fields', () => {
+        const letter: LetterData = {
+          id: 'custom-leave',
+          type: 'classified',
+          letterDate: 'August 24, 2026',
+          boardMeetingDate: 'August 24, 2026',
+          schoolYear: '2026-2027',
+          recipientFirstName: 'Taylor',
+          recipientLastName: 'Swift',
+          streetAddress: '789 Music Row',
+          city: 'Cañon City',
+          state: 'CO',
+          zip: '81212',
+          positionTitle: 'Senior Operations Lead',
+          location: 'District Administration Office',
+          totalComp: {
+            jobClassification: '12-Month Classified',
+            classified12MoAnnualDaysUpfront: 5,
+            classified12MoSickDaysPerMonth: 1.5,
+            classified12MoVacationMonthlyRate: 1.25,
+            paidHolidaysDays: 12,
+          },
+        }
+
+        const result = computeTotalComp(letter)
+
+        expect(result.classifiedAnnualDays).toBe(5)
+        expect(result.classifiedSickDaysAnnual).toBe(1.5 * 12) // 18
+        expect(result.classifiedVacationAnnual).toBeCloseTo(1.25 * 12, 2) // 15
+        expect(result.leaveDays).toBeCloseTo(5 + 18 + 15, 2) // 38
+        expect(result.holidaysDays).toBe(12)
+        expect(result.leaveBreakdown[0].value).toBe('5 Days')
+        expect(result.leaveBreakdown[1].value).toBe('18 Days / Year')
+        expect(result.leaveBreakdown[2].value).toBe('~15 Days / Year')
+      })
+    })
   })
 })

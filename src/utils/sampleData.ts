@@ -72,9 +72,14 @@ export const DEFAULT_DISTRICT_CONFIG: DistrictConfig = {
     defaultDays12Month: 260,
     defaultLeaveDaysLicensed: 11,
     defaultLeaveDays9Month: 11,
-    defaultLeaveDays12Month: 25,
+    defaultLeaveDays12Month: 25.08,
     defaultHolidaysDays12Month: 11,
     defaultAdditionalLeavesText: 'Up to 5 Bereavement Days & 5 Professional Days',
+    certifiedPersonalDaysUpfront: 3,
+    certifiedSickDaysUpfront: 8,
+    classified12MoAnnualDaysUpfront: 3,
+    classified12MoSickDaysPerMonth: 1.0,
+    classified12MoVacationMonthlyRate: 0.84,
   },
 }
 
