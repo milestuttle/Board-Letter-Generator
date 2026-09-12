@@ -17,7 +17,7 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             Position / Role Title *
           </label>
           <input
@@ -25,11 +25,11 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
             value={letter.positionTitle}
             onChange={(e) => updateField('positionTitle', e.target.value)}
             placeholder="e.g. School Health Technician or SSN Paraprofessional"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             School / Location *
           </label>
           <input
@@ -38,12 +38,12 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
             value={letter.location}
             onChange={(e) => updateField('location', e.target.value)}
             placeholder="e.g. Cañon City High School or CCMS"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-emerald-50/40 p-4 rounded-xl border border-emerald-100">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-emerald-50/40 p-4 rounded-md border border-emerald-100">
         <div>
           <label className="block text-xs font-semibold text-emerald-950 mb-1">
             Classification
@@ -104,7 +104,7 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">
+        <label className="block text-xs font-medium text-ink-soft mb-1">
           Stipend Text (Optional)
         </label>
         <input
@@ -112,7 +112,7 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
           value={letter.classified?.stipendText || ''}
           onChange={(e) => updateClassified('stipendText', e.target.value)}
           placeholder="e.g. Plus a center-based stipend of $2,000"
-          className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+          className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
         />
       </div>
     </div>

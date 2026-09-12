@@ -1,10 +1,39 @@
 @import "tailwindcss";
 
+@theme {
+  /* Stationery palette: ink on paper, one muted accent. */
+  --color-ink: #1c2430;
+  --color-ink-soft: #3a4352;
+  --color-paper: #f6f5f1;
+  --color-paper-dim: #efede6;
+  --color-rule: #ddd8cc;
+  --color-accent: #9c7a2e;
+  --color-accent-dark: #7d6224;
+  --color-accent-soft: #f1e9d6;
+  --color-muted: #5c6470;
+  --color-danger: #8a3b2e;
+  --color-danger-soft: #f2e4e0;
+
+  --font-serif: 'Lora', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer base {
   body {
-    background-color: #f8fafc;
-    color: #1e293b;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
     margin: 0;
     padding: 0;
     -webkit-print-color-adjust: exact;

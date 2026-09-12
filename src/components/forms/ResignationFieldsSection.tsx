@@ -16,7 +16,7 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             Position Resigning From *
           </label>
           <input
@@ -27,11 +27,11 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
               updateField('positionTitle', e.target.value)
             }}
             placeholder="e.g. 4th Grade Teacher"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             School / Department *
           </label>
           <input
@@ -43,12 +43,12 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
               updateField('location', e.target.value)
             }}
             placeholder="e.g. Harrison Elementary School"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-amber-50/40 p-4 rounded-xl border border-amber-100">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-amber-50/40 p-4 rounded-md border border-amber-100">
         <div>
           <label className="block text-xs font-semibold text-amber-950 mb-1">
             Effective Date of Resignation
@@ -64,7 +64,7 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">
+        <label className="block text-xs font-medium text-ink-soft mb-1">
           Custom Appreciation Message (Optional)
         </label>
         <textarea
@@ -74,7 +74,7 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
             'Thank you for your dedicated service and commitment to the students and families of Cañon City Schools. We wish you the very best in all of your future personal and professional endeavors.'
           }
           onChange={(e) => updateResignation('customAppreciation', e.target.value)}
-          className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition font-sans"
+          className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none transition font-sans"
         />
       </div>
     </div>

@@ -17,7 +17,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       {/* Position & Location */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             Retiring Position Title *
           </label>
           <input
@@ -28,11 +28,11 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
               updateField('positionTitle', e.target.value)
             }}
             placeholder="e.g. Elementary Teacher"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-700 mb-1">
+          <label className="block text-xs font-medium text-ink-soft mb-1">
             School / Department *
           </label>
           <input
@@ -44,13 +44,13 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
               updateField('location', e.target.value)
             }}
             placeholder="e.g. Washington Elementary School"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition"
           />
         </div>
       </div>
 
       {/* Effective Date & Years of Service */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-teal-50/40 p-4 rounded-xl border border-teal-100">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-teal-50/40 p-4 rounded-md border border-teal-100">
         <div>
           <label className="block text-xs font-semibold text-teal-950 mb-1">
             Effective Date of Retirement *
@@ -82,7 +82,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       </div>
 
       {/* Remainder of School Year Toggle */}
-      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+      <div className="p-3 bg-paper-dim rounded-md border border-rule space-y-2">
         <label className="flex items-center gap-2 cursor-pointer select-none">
           <input
             type="checkbox"
@@ -90,7 +90,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
             onChange={(e) => updateRetirement('includeRemainderOfYear', e.target.checked)}
             className="rounded text-teal-600 focus:ring-teal-500 w-4 h-4"
           />
-          <span className="text-xs font-semibold text-slate-800">
+          <span className="text-xs font-semibold text-ink">
             Include &ldquo;for the remainder of the school year&rdquo; clause
           </span>
         </label>
@@ -105,7 +105,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
               }
               onChange={(e) => updateRetirement('remainderYearText', e.target.value)}
               placeholder="e.g. for the remainder of the 2025/2026 School Year."
-              className="w-full px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-200 focus:border-teal-500 outline-none"
+              className="w-full px-3 py-1.5 text-xs rounded-lg bg-white border border-rule focus:border-teal-500 outline-none"
             />
           </div>
         )}
@@ -114,7 +114,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       {/* Retiree Celebration Details */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="block text-xs font-semibold text-slate-800">
+          <label className="block text-xs font-semibold text-ink">
             Retiree Celebration Details Paragraph
           </label>
           <div className="flex items-center gap-1">
@@ -126,7 +126,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
                   'We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event.'
                 )
               }
-              className="text-[10.5px] px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium transition cursor-pointer"
+              className="text-[10.5px] px-2 py-0.5 bg-paper-dim hover:bg-paper-dim text-muted rounded font-medium transition cursor-pointer"
             >
               Preset: April, 2027
             </button>
@@ -138,7 +138,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
                   'We will be holding a celebration for retirees from 5:00 pm to 7:30 pm on Tuesday, May 5th, 2026. Please watch for more detailed information to be shared closer to the event.'
                 )
               }
-              className="text-[10.5px] px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium transition cursor-pointer"
+              className="text-[10.5px] px-2 py-0.5 bg-paper-dim hover:bg-paper-dim text-muted rounded font-medium transition cursor-pointer"
             >
               Preset: May 5th Event
             </button>
@@ -151,7 +151,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
             'We will be holding a celebration for retirees in April, 2027. Please watch for more detailed information to be shared closer to the event.'
           }
           onChange={(e) => updateRetirement('celebrationText', e.target.value)}
-          className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition font-sans"
+          className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-teal-500 focus:ring-2 focus:ring-teal-100 outline-none transition font-sans"
         />
       </div>
     </div>

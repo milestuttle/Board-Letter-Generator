@@ -198,25 +198,25 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
   return (
     <div className="space-y-6">
       {/* Live Investment Summary Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-xl p-4 shadow-lg border border-slate-700">
+      <div className="bg-ink text-paper rounded-lg p-4 border border-ink-soft">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
-            <Calculator className="w-4 h-4" /> Total Compensation Model
+          <span className="text-xs font-semibold text-paper/70 flex items-center gap-1.5">
+            <Calculator className="w-4 h-4" /> Total compensation model
           </span>
-          <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-medium">
-            +{comp.benefitsPercentage.toFixed(1)}% District Benefit Boost
+          <span className="text-xs px-2.5 py-0.5 rounded border border-white/20 text-paper/80 font-medium">
+            +{comp.benefitsPercentage.toFixed(1)}% district benefit boost
           </span>
         </div>
         <div className="flex items-baseline justify-between">
           <div>
-            <div className="text-xs text-slate-400">Estimated Total Annual Value</div>
-            <div className="text-2xl font-bold font-mono text-emerald-300">
+            <div className="text-xs text-paper/60">Estimated total annual value</div>
+            <div className="text-2xl font-semibold font-serif text-paper">
               {formatCurrency(comp.grandTotal)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-slate-400">Direct Cash Pay</div>
-            <div className="text-sm font-semibold font-mono text-slate-200">
+            <div className="text-xs text-paper/60">Direct cash pay</div>
+            <div className="text-sm font-semibold text-paper/90">
               {comp.formattedDirectPayTotal}
             </div>
           </div>
@@ -224,29 +224,29 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       </div>
 
       {/* Employee & Position Quick Context (Synced bi-directionally with Letter) */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs space-y-3">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-          <UserCheck className="w-3.5 h-3.5 text-indigo-600" />
+      <div className="bg-white p-4 rounded-md border border-rule space-y-3">
+        <label className="block text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+          <UserCheck className="w-3.5 h-3.5 text-accent-dark" />
           Employee &amp; Position Context
         </label>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">First Name</label>
+            <label className="block text-xs font-medium text-muted mb-1">First Name</label>
             <input
               type="text"
               value={letter.recipientFirstName}
               onChange={(e) => onChange({ ...letter, recipientFirstName: e.target.value })}
-              className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="e.g. Jane"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Last Name</label>
+            <label className="block text-xs font-medium text-muted mb-1">Last Name</label>
             <input
               type="text"
               value={letter.recipientLastName}
               onChange={(e) => onChange({ ...letter, recipientLastName: e.target.value })}
-              className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="e.g. Doe"
             />
           </div>
@@ -254,22 +254,22 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Position Title</label>
+            <label className="block text-xs font-medium text-muted mb-1">Position Title</label>
             <input
               type="text"
               value={letter.positionTitle}
               onChange={(e) => onChange({ ...letter, positionTitle: e.target.value })}
-              className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="e.g. Lead Counselor"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Letter Date</label>
+            <label className="block text-xs font-medium text-muted mb-1">Letter Date</label>
             <input
               type="text"
               value={letter.letterDate}
               onChange={(e) => onChange({ ...letter, letterDate: e.target.value })}
-              className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="e.g. August 24, 2026"
             />
           </div>
@@ -277,9 +277,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       </div>
 
       {/* 1. Classification & FTE Allocation */}
-      <div className="space-y-3 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
+      <div className="space-y-3 bg-white p-4 rounded-md border border-rule">
+        <label className="block text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-accent-dark" />
           Job Classification &amp; Full-Time Equivalency (FTE)
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -293,8 +293,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onClick={() => handleClassificationChange(cls)}
                   className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-all text-center cursor-pointer ${
                     active
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs ring-2 ring-indigo-300'
-                      : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                      ? 'bg-accent text-white border-accent ring-2 ring-accent'
+                      : 'bg-white text-ink-soft border-rule hover:bg-paper-dim'
                   }`}
                 >
                   {cls}
@@ -305,10 +305,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         </div>
 
         {/* FTE Selector Row */}
-        <div className="pt-2 border-t border-gray-100">
+        <div className="pt-2 border-t border-rule">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-indigo-600" />
+            <span className="text-xs font-medium text-ink-soft flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-accent-dark" />
               Position FTE:
             </span>
             <div className="flex items-center gap-1">
@@ -319,8 +319,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onClick={() => handleFteChange(fteOption)}
                   className={`text-[11px] px-2 py-0.5 rounded font-medium border transition cursor-pointer ${
                     comp.fte === fteOption
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
-                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                      ? 'bg-accent text-white border-accent shadow-2xs'
+                      : 'bg-paper-dim text-muted border-rule hover:bg-paper-dim'
                   }`}
                 >
                   {fteOption === 1.0 ? '1.0 Full-Time' : `${fteOption} FTE`}
@@ -331,7 +331,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <label className="text-[11px] text-gray-500">Custom FTE:</label>
+              <label className="text-[11px] text-muted">Custom FTE:</label>
               <input
                 type="number"
                 step="0.05"
@@ -339,7 +339,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 max="1.5"
                 value={comp.fte}
                 onChange={(e) => handleFteChange(parseFloat(e.target.value) || 0)}
-                className="w-20 text-xs font-mono px-2 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                className="w-20 text-xs font-mono px-2 py-1 rounded border border-rule focus:ring-1 focus:ring-accent"
               />
             </div>
 
@@ -366,29 +366,29 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       </div>
 
       {/* 2. Direct Cash Pay Settings */}
-      <div className="space-y-4 pt-1 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
+      <div className="space-y-4 pt-1 bg-white p-4 rounded-md border border-rule">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-            <DollarSign className="w-3.5 h-3.5 text-indigo-600" />
+          <label className="block text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+            <DollarSign className="w-3.5 h-3.5 text-accent-dark" />
             Direct Cash Compensation
           </label>
-          <p className="text-[11px] text-gray-500 italic mt-0.5">
+          <p className="text-[11px] text-muted italic mt-0.5">
             Note: Direct cash pay represents gross earnings prior to employee PERA contributions, federal &amp; state taxes, and Medicare.
           </p>
         </div>
 
         {comp.classification !== 'Licensed' ? (
-          <div className="space-y-3 bg-gray-50/80 p-3 rounded-lg border border-gray-200">
+          <div className="space-y-3 bg-paper-dim/80 p-3 rounded-lg border border-rule">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-700">Wage Calculation Mode:</span>
+              <span className="text-xs font-medium text-ink-soft">Wage Calculation Mode:</span>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => updateTc({ isHourly: true })}
                   className={`text-xs px-2.5 py-1 rounded font-medium border cursor-pointer ${
                     tc.isHourly ?? true
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-gray-600 border-gray-300'
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-white text-muted border-rule'
                   }`}
                 >
                   Hourly Rate
@@ -398,8 +398,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onClick={() => updateTc({ isHourly: false })}
                   className={`text-xs px-2.5 py-1 rounded font-medium border cursor-pointer ${
                     tc.isHourly === false
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-gray-600 border-gray-300'
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-white text-muted border-rule'
                   }`}
                 >
                   Annual Salary
@@ -410,7 +410,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
             {tc.isHourly ?? true ? (
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                  <label className="block text-[11px] font-medium text-muted mb-1">
                     Hourly Wage ($)
                   </label>
                   <input
@@ -421,12 +421,12 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                         : letter.classified?.baseWage || '$19.67'
                     }
                     onChange={(e) => handleHourlyRateChange(e.target.value)}
-                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-rule bg-white focus:ring-1 focus:ring-accent"
                     placeholder="$19.67"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                  <label className="block text-[11px] font-medium text-muted mb-1">
                     Hours / Day
                   </label>
                   <input
@@ -434,11 +434,11 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                     step="0.5"
                     value={tc.hoursPerDay ?? config?.totalCompDefaults?.defaultHoursPerDay ?? 8}
                     onChange={(e) => updateTc({ hoursPerDay: parseFloat(e.target.value) || 0 })}
-                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-rule bg-white focus:ring-1 focus:ring-accent"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                  <label className="block text-[11px] font-medium text-muted mb-1">
                     Annual Days
                   </label>
                   <input
@@ -450,20 +450,20 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                         : (config?.totalCompDefaults?.defaultDays9Month ?? 176))
                     }
                     onChange={(e) => updateTc({ daysPerYear: parseInt(e.target.value, 10) || 0 })}
-                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-rule bg-white focus:ring-1 focus:ring-accent"
                   />
                 </div>
               </div>
             ) : (
               <div>
-                <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                <label className="block text-[11px] font-medium text-muted mb-1">
                   Base Annual Salary
                 </label>
                 <input
                   type="text"
                   value={tc.baseAnnualSalary ?? comp.formattedBasePay}
                   onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
-                  className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-gray-300 bg-white focus:ring-1 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-2.5 py-1.5 rounded border border-rule bg-white focus:ring-1 focus:ring-accent"
                   placeholder="$45,000.00"
                 />
               </div>
@@ -471,14 +471,14 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           </div>
         ) : (
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Base Annual Salary
             </label>
             <input
               type="text"
               value={tc.baseAnnualSalary ?? letter.certified?.baseSalary ?? '$52,400.00'}
               onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
-              className="w-full text-xs font-mono px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs font-mono px-3 py-2 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="$52,400.00"
             />
           </div>
@@ -487,62 +487,62 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         {/* Stipends */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Stipend Amount ($)
             </label>
             <input
               type="text"
               value={tc.stipendAmount ?? (comp.stipend > 0 ? comp.formattedStipend : '')}
               onChange={(e) => handleStipendChange(e.target.value)}
-              className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="$0.00 or $2,000.00"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Stipend Type / Description
             </label>
             <input
               type="text"
               value={tc.stipendDescription ?? 'Hard-to-Fill / Center-Based'}
               onChange={(e) => handleStipendChange(tc.stipendAmount || '', e.target.value)}
-              className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               placeholder="e.g. Center-Based"
             />
           </div>
         </div>
 
         {/* Live Direct Cash Total Breakdown Badge */}
-        <div className="bg-slate-900 text-slate-100 rounded-xl p-3 border border-slate-800 shadow-inner">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-1 font-sans">
-            <span className="font-semibold uppercase tracking-wider text-indigo-300">
-              Live Direct Cash Calculation
+        <div className="bg-ink text-paper rounded-md p-3 border border-ink-soft">
+          <div className="flex items-center justify-between text-xs text-paper/60 mb-1 font-sans">
+            <span className="font-semibold text-paper/80">
+              Live direct cash calculation
             </span>
-            <span className="font-mono font-bold text-emerald-400 text-sm">
+            <span className="font-mono font-semibold text-paper text-sm">
               {comp.formattedDirectPayTotal} / yr
             </span>
           </div>
-          <div className="text-xs font-mono text-slate-200">
+          <div className="text-xs font-mono text-paper/70">
             {comp.classification !== 'Licensed' && (tc.isHourly ?? true) ? (
               <div>
                 {formatCurrency(comp.hourlyRate, { includeCents: true })}/hr × {comp.hoursPerDay} hrs/day × {comp.daysPerYear} days ={' '}
-                <span className="text-white font-semibold">{formatCurrency(comp.basePay)}</span>
+                <span className="text-paper font-semibold">{formatCurrency(comp.basePay)}</span>
                 {comp.stipend > 0 && (
                   <span>
                     {' '}
-                    + <span className="text-amber-300">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
-                    <span className="text-emerald-300 font-bold">{comp.formattedDirectPayTotal}</span>
+                    + <span className="text-accent">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-paper font-semibold">{comp.formattedDirectPayTotal}</span>
                   </span>
                 )}
               </div>
             ) : (
               <div>
-                Base Salary: <span className="text-white font-semibold">{formatCurrency(comp.basePay)}</span>
+                Base Salary: <span className="text-paper font-semibold">{formatCurrency(comp.basePay)}</span>
                 {comp.stipend > 0 && (
                   <span>
                     {' '}
-                    + <span className="text-amber-300">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
-                    <span className="text-emerald-300 font-bold">{comp.formattedDirectPayTotal}</span>
+                    + <span className="text-accent">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-paper font-semibold">{comp.formattedDirectPayTotal}</span>
                   </span>
                 )}
               </div>
@@ -552,13 +552,13 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
       </div>
 
       {/* 3. Leave & Holiday Allocations */}
-      <div className="space-y-3 pt-1 bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
+      <div className="space-y-3 pt-1 bg-white p-4 rounded-md border border-rule">
         <div className="flex items-center justify-between">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-            <CalendarCheck className="w-3.5 h-3.5 text-indigo-600" />
+          <label className="block text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+            <CalendarCheck className="w-3.5 h-3.5 text-accent-dark" />
             Paid Time Off &amp; Holiday Allocations
           </label>
-          <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+          <span className="text-[11px] font-medium text-muted bg-paper-dim px-2 py-0.5 rounded">
             {comp.classification}
           </span>
         </div>
@@ -567,7 +567,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           <>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Annual Days (Upfront)
                 </label>
                 <input
@@ -583,12 +583,12 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                       paidLeaveDays: undefined,
                     })
                   }
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+                <span className="text-[10px] text-muted">Frontloaded upfront</span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Sick Leave (Days / Mo)
                 </label>
                 <input
@@ -605,14 +605,14 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                       paidLeaveDays: undefined,
                     })
                   }
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   = {comp.classifiedSickDaysAnnual ?? 12} days / year
                 </span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Vacation Rate (Days / Mo)
                 </label>
                 <input
@@ -629,9 +629,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                       paidLeaveDays: undefined,
                     })
                   }
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   = ~{(comp.classifiedVacationAnnual ?? 10.08).toFixed(2)} days/yr (Yrs 1–5)
                 </span>
               </div>
@@ -639,18 +639,18 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Paid District Holidays
                 </label>
                 <input
                   type="number"
                   value={comp.holidaysDays}
                   onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Total Annual Paid Leave Days
                 </label>
                 <input
@@ -658,9 +658,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   step="0.01"
                   value={comp.leaveDays}
                   onChange={(e) => updateTc({ paidLeaveDays: parseFloat(e.target.value) || 0 })}
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   {tc.paidLeaveDays !== undefined
                     ? 'Manual override active'
                     : 'Auto calculated (3 upfront + 12 sick + ~10.08 vacation)'}
@@ -672,7 +672,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           <>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Personal Days (Upfront, Years 1–4)
                 </label>
                 <input
@@ -688,12 +688,12 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                       paidLeaveDays: undefined,
                     })
                   }
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+                <span className="text-[10px] text-muted">Frontloaded upfront</span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Sick Leave Days (Upfront, Years 1–4)
                 </label>
                 <input
@@ -709,36 +709,36 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                       paidLeaveDays: undefined,
                     })
                   }
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">Frontloaded upfront</span>
+                <span className="text-[10px] text-muted">Frontloaded upfront</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Total Upfront Paid Leave Days
                 </label>
                 <input
                   type="number"
                   value={comp.leaveDays}
                   onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   {tc.paidLeaveDays !== undefined ? 'Manual override active' : 'Auto calculated (3 + 8 = 11 days)'}
                 </span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   Paid District Holidays
                 </label>
                 <input
                   type="number"
                   value={comp.holidaysDays}
                   onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
                 />
               </div>
             </div>
@@ -746,63 +746,63 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         ) : (
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-muted mb-1">
                 Annual Leave Days
               </label>
               <input
                 type="number"
                 value={comp.leaveDays}
                 onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
-                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-muted mb-1">
                 Paid District Holidays
               </label>
               <input
                 type="number"
                 value={comp.holidaysDays}
                 onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
-                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+                className="w-full text-xs font-mono px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
               />
             </div>
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
+          <label className="block text-xs font-medium text-muted mb-1">
             Additional Protected Leaves Note
           </label>
           <input
             type="text"
             value={comp.additionalLeavesText}
             onChange={(e) => updateTc({ additionalLeavesText: e.target.value })}
-            className="w-full text-xs px-3 py-1.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-indigo-500"
+            className="w-full text-xs px-3 py-1.5 rounded-lg border border-rule bg-white focus:ring-2 focus:ring-accent"
           />
         </div>
       </div>
 
       {/* 4. District Insurance & Statutory Contribution Rates (Accordion) */}
-      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-xs">
+      <div className="border border-rule rounded-md overflow-hidden bg-white">
         <button
           type="button"
           onClick={() => setShowAdvancedBenefits(!showAdvancedBenefits)}
-          className="w-full px-4 py-3 bg-gray-50 flex items-center justify-between text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+          className="w-full px-4 py-3 bg-paper-dim flex items-center justify-between text-xs font-semibold text-ink-soft hover:bg-paper-dim transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-1.5">
-            <Sliders className="w-3.5 h-3.5 text-indigo-600" />
+            <Sliders className="w-3.5 h-3.5 text-accent-dark" />
             District Benefit &amp; Statutory Rates Configuration
           </span>
           {showAdvancedBenefits ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
+            <ChevronUp className="w-4 h-4 text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
+            <ChevronDown className="w-4 h-4 text-muted" />
           )}
         </button>
 
         {showAdvancedBenefits && (
-          <div className="p-4 space-y-3 bg-white border-t border-gray-200 text-xs">
+          <div className="p-4 space-y-3 bg-white border-t border-rule text-xs">
             {!comp.isBenefitEligible && (
               <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
@@ -814,7 +814,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-medium text-gray-600 mb-1">
+                <label className="block font-medium text-muted mb-1">
                   Health Monthly Rate ($/mo)
                 </label>
                 <input
@@ -829,14 +829,14 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onChange={(e) =>
                     updateTc({ healthMonthlyRate: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-rule focus:ring-1 focus:ring-accent disabled:bg-paper-dim disabled:text-muted"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   Annual: {formatCurrency(comp.healthAnnual)}
                 </span>
               </div>
               <div>
-                <label className="block font-medium text-gray-600 mb-1">
+                <label className="block font-medium text-muted mb-1">
                   Dental Monthly Rate ($/mo)
                 </label>
                 <input
@@ -851,14 +851,14 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onChange={(e) =>
                     updateTc({ dentalMonthlyRate: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-rule focus:ring-1 focus:ring-accent disabled:bg-paper-dim disabled:text-muted"
                 />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   Annual: {formatCurrency(comp.dentalAnnual)}
                 </span>
               </div>
               <div>
-                <label className="block font-medium text-gray-600 mb-1">
+                <label className="block font-medium text-muted mb-1">
                   Life Premium Annual ($ - Optional)
                 </label>
                 <input
@@ -873,13 +873,13 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onChange={(e) =>
                     updateTc({ lifeInsurancePremiumAnnual: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-rule focus:ring-1 focus:ring-accent disabled:bg-paper-dim disabled:text-muted"
                   placeholder="0.00"
                 />
-                <span className="text-[10px] text-gray-400">{comp.lifePremiumAnnual > 0 ? '$20,000 policy' : '$0 = Excluded from statement'}</span>
+                <span className="text-[10px] text-muted">{comp.lifePremiumAnnual > 0 ? '$20,000 policy' : '$0 = Excluded from statement'}</span>
               </div>
               <div>
-                <label className="block font-medium text-gray-600 mb-1">
+                <label className="block font-medium text-muted mb-1">
                   PERA Retirement Rate (%)
                 </label>
                 <input
@@ -889,12 +889,12 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onChange={(e) =>
                     updateTc({ peraRate: (parseFloat(e.target.value) || 0) / 100 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-rule focus:ring-1 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">Cañon City PERA default: {(comp.peraRate * 100).toFixed(2)}%</span>
+                <span className="text-[10px] text-muted">Cañon City PERA default: {(comp.peraRate * 100).toFixed(2)}%</span>
               </div>
               <div>
-                <label className="block font-medium text-gray-600 mb-1">
+                <label className="block font-medium text-muted mb-1">
                   Medicare Rate (%)
                 </label>
                 <input
@@ -904,9 +904,9 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   onChange={(e) =>
                     updateTc({ medicareRate: (parseFloat(e.target.value) || 0) / 100 })
                   }
-                  className="w-full font-mono px-2.5 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full font-mono px-2.5 py-1 rounded border border-rule focus:ring-1 focus:ring-accent"
                 />
-                <span className="text-[10px] text-gray-400">Medicare default: {(comp.medicareRate * 100).toFixed(2)}%</span>
+                <span className="text-[10px] text-muted">Medicare default: {(comp.medicareRate * 100).toFixed(2)}%</span>
               </div>
             </div>
 
@@ -914,7 +914,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
               <button
                 type="button"
                 onClick={handleResetRates}
-                className="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1 cursor-pointer"
+                className="text-[11px] text-accent-dark hover:text-accent-dark font-medium flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" /> Reset Rates to District Defaults
               </button>

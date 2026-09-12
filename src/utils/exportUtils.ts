@@ -3,8 +3,8 @@ import jsPDF from 'jspdf'
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx'
 import { saveAs } from 'file-saver'
 import type { LetterData, DistrictConfig } from '../types/letter'
-import { computeTotalComp, formatCurrency } from './totalCompUtils'
 import { generateLetterDocument, letterDocumentToPlainText } from './letterContent'
+import { generateTotalCompDocument } from './totalCompContent'
 
 /**
  * Generate high quality PDF file from letter preview DOM element
@@ -241,7 +241,7 @@ export const exportTotalCompToDocx = async (
   config: DistrictConfig,
   fileName: string = 'total_compensation_statement.docx'
 ) => {
-  const comp = computeTotalComp(letter, config)
+  const doc = generateTotalCompDocument(letter, config)
 
   const baseName = fileName.replace(/\.docx$/i, '').replace(/[^a-zA-Z0-9_\-\s]/g, '_').trim()
   const finalFileName = `${baseName || 'total_compensation_statement'}.docx`
@@ -282,7 +282,7 @@ export const exportTotalCompToDocx = async (
     new Paragraph({
       children: [
         new TextRun({
-          text: 'OFFER & TOTAL COMPENSATION STATEMENT',
+          text: doc.title.toUpperCase(),
           bold: true,
           size: 24,
         }),
@@ -293,18 +293,13 @@ export const exportTotalCompToDocx = async (
   )
 
   // Metadata block
-  const classificationText = comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
   paragraphs.push(
     new Paragraph({
       children: [
-        new TextRun({ text: `Date: ${letter.letterDate}\n`, bold: true, size: 21 }),
-        new TextRun({
-          text: `Employee Name: ${letter.recipientFirstName} ${letter.recipientLastName}\n`,
-          bold: true,
-          size: 21,
-        }),
-        new TextRun({ text: `Position Title: ${letter.positionTitle}\n`, bold: true, size: 21 }),
-        new TextRun({ text: `Job Classification: ${classificationText}`, bold: true, size: 21 }),
+        new TextRun({ text: `Date: ${doc.date}\n`, bold: true, size: 21 }),
+        new TextRun({ text: `Employee Name: ${doc.employeeName}\n`, bold: true, size: 21 }),
+        new TextRun({ text: `Position Title: ${doc.positionTitle}\n`, bold: true, size: 21 }),
+        new TextRun({ text: `Job Classification: ${doc.classificationText}`, bold: true, size: 21 }),
       ],
       spacing: { after: 200 },
     })
@@ -315,7 +310,7 @@ export const exportTotalCompToDocx = async (
     new Paragraph({
       children: [
         new TextRun({
-          text: `Dear ${letter.recipientFirstName || 'Employee'},\n\nWelcome to ${config.districtName}! We are excited to offer you the position of ${letter.positionTitle}. Beyond your base salary, the district invests heavily in your health, retirement, and time off. This statement highlights the total value of your complete compensation package.`,
+          text: `${doc.salutation}\n\n${doc.welcomeParagraph}`,
           size: 21,
         }),
       ],
@@ -323,203 +318,56 @@ export const exportTotalCompToDocx = async (
     })
   )
 
-  // 1. Direct Cash Pay
-  const directCashRuns = [
-    new TextRun({ text: '1. DIRECT CASH COMPENSATION\n', bold: true, size: 22 }),
-    new TextRun({
-      text: `• Base Annual Salary / Baseline Hourly Rate: ${comp.formattedBasePay}\n`,
-      size: 21,
-    }),
-  ]
+  // Sections (Direct Cash, Insurance, Statutory, PTO)
+  doc.sections.forEach((section, idx) => {
+    const runs: TextRun[] = [
+      new TextRun({ text: `${section.heading.toUpperCase()}\n`, bold: true, size: 22 }),
+    ]
 
-  if (comp.stipend > 0) {
-    directCashRuns.push(
-      new TextRun({
-        text: `• Stipends (Hard-to-Fill / Center-Based, if applicable): ${comp.formattedStipend}\n`,
-        size: 21,
-      })
-    )
-  }
-
-  directCashRuns.push(
-    new TextRun({
-      text: `TOTAL DIRECT CASH PAY: ${comp.formattedDirectPayTotal}\n`,
-      bold: true,
-      size: 21,
-    }),
-    new TextRun({
-      text: `*(Gross cash pay before employee PERA contributions, state and federal taxes, and Medicare)*`,
-      italics: true,
-      size: 18,
-      color: '555555',
-    })
-  )
-
-  paragraphs.push(
-    new Paragraph({
-      children: directCashRuns,
-      spacing: { after: 200 },
-    })
-  )
-
-  // 2. District-Paid Insurance
-  const insuranceRuns = [
-    new TextRun({ text: '2. DISTRICT-PAID INSURANCE BENEFITS\n', bold: true, size: 22 }),
-  ]
-
-  if (comp.isBenefitEligible) {
-    if (comp.healthAnnual > 0) {
-      insuranceRuns.push(
-        new TextRun({
-          text: `• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month): ${formatCurrency(comp.healthAnnual)}\n`,
-          size: 21,
-        })
-      )
-    }
-
-    if (comp.dentalAnnual > 0) {
-      insuranceRuns.push(
-        new TextRun({
-          text: `• Dental Insurance Contribution (${formatCurrency(comp.dentalMonthlyRate)}/month): ${formatCurrency(comp.dentalAnnual)}\n`,
-          size: 21,
-        })
-      )
-    }
-
-    if (comp.lifePremiumAnnual > 0) {
-      insuranceRuns.push(
-        new TextRun({
-          text: `• Basic Life Insurance Premium ($20,000 Coverage Policy): ${formatCurrency(comp.lifePremiumAnnual)}\n`,
-          size: 21,
-        })
-      )
-    }
-
-    insuranceRuns.push(
-      new TextRun({
-        text: `TOTAL INSURANCE CONTRIBUTIONS: ${formatCurrency(comp.insuranceTotal)}`,
-        bold: true,
-        size: 21,
-      })
-    )
-  } else {
-    insuranceRuns.push(
-      new TextRun({
-        text: `• District Insurance Benefits Package: $0.00\n`,
-        size: 21,
-      }),
-      new TextRun({
-        text: `*(Positions scheduled under half-time (< 0.5 FTE) are not eligible for district-paid insurance contributions per district policy)*\n`,
-        italics: true,
-        size: 18,
-        color: '555555',
-      }),
-      new TextRun({
-        text: `TOTAL INSURANCE CONTRIBUTIONS: $0.00`,
-        bold: true,
-        size: 21,
-      })
-    )
-  }
-
-  paragraphs.push(
-    new Paragraph({
-      children: insuranceRuns,
-      spacing: { after: 200 },
-    })
-  )
-
-  // 3. Retirement & Statutory
-  paragraphs.push(
-    new Paragraph({
-      children: [
-        new TextRun({
-          text: '3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS\n',
-          bold: true,
-          size: 22,
-        }),
-        new TextRun({
-          text: `• Employer PERA Retirement Contribution (${(comp.peraRate * 100).toFixed(2)}%): ${formatCurrency(comp.peraContribution)}\n`,
-          size: 21,
-        }),
-        new TextRun({
-          text: `• Employer Medicare Contribution (${(comp.medicareRate * 100).toFixed(2)}%): ${formatCurrency(comp.medicareContribution)}\n`,
-          size: 21,
-        }),
-        new TextRun({
-          text: `TOTAL RETIREMENT & STATUTORY CONTRIBUTIONS: ${formatCurrency(comp.statutoryTotal)}`,
-          bold: true,
-          size: 21,
-        }),
-      ],
-      spacing: { after: 200 },
-    })
-  )
-
-  // 4. Paid Time Off
-  const ptoRuns = [
-    new TextRun({ text: '4. PAID TIME OFF & HOLIDAYS ALLOCATION\n', bold: true, size: 22 }),
-  ]
-
-  if (comp.leaveBreakdown && comp.leaveBreakdown.length > 0) {
-    comp.leaveBreakdown.forEach((item) => {
-      ptoRuns.push(
+    section.items.forEach((item) => {
+      runs.push(
         new TextRun({
           text: `• ${item.label}: ${item.value}\n`,
           size: 21,
         })
       )
     })
-  } else if (comp.leaveDays > 0) {
-    ptoRuns.push(
-      new TextRun({
-        text: `• Allocated Annual Paid Leave Days: ${comp.leaveDays} Days\n`,
-        size: 21,
+
+    if (section.footnote) {
+      runs.push(
+        new TextRun({
+          text: `*(${section.footnote})*${section.totalLabel ? '\n' : ''}`,
+          italics: true,
+          size: 18,
+          color: '555555',
+        })
+      )
+    }
+
+    if (section.totalLabel) {
+      runs.push(
+        new TextRun({
+          text: `${section.totalLabel}: ${section.totalValue}`,
+          bold: true,
+          size: 21,
+        })
+      )
+    }
+
+    paragraphs.push(
+      new Paragraph({
+        children: runs,
+        spacing: { after: idx === doc.sections.length - 1 ? 240 : 200 },
       })
     )
-  }
-
-  if (comp.holidaysDays > 0) {
-    ptoRuns.push(
-      new TextRun({
-        text: `• Paid District Holidays: ${comp.holidaysDays} Days\n`,
-        size: 21,
-      })
-    )
-  }
-
-  if (comp.additionalLeavesText) {
-    ptoRuns.push(
-      new TextRun({
-        text: `• Additional Protected Leaves: ${comp.additionalLeavesText}${comp.vacationScaleNote ? `\n` : ''}`,
-        size: 21,
-      })
-    )
-  }
-
-  if (comp.vacationScaleNote) {
-    ptoRuns.push(
-      new TextRun({
-        text: comp.vacationScaleNote,
-        italics: true,
-        size: 19,
-      })
-    )
-  }
-
-  paragraphs.push(
-    new Paragraph({
-      children: ptoRuns,
-      spacing: { after: 240 },
-    })
-  )
+  })
 
   // Grand Total
   paragraphs.push(
     new Paragraph({
       children: [
         new TextRun({
-          text: `ESTIMATED TOTAL ANNUAL INVESTMENT: ${formatCurrency(comp.grandTotal)}`,
+          text: `${doc.grandTotalLabel.toUpperCase()}: ${doc.grandTotalValue}`,
           bold: true,
           size: 24,
         }),
@@ -533,7 +381,7 @@ export const exportTotalCompToDocx = async (
     new Paragraph({
       children: [
         new TextRun({
-          text: '*Note: Overtime, elective extra-duty stipends (e.g., coaching), and variable sub coverage pay are not included in initial hire statements but add further to earned annual pay.*',
+          text: `*Note: ${doc.disclaimerNote}*`,
           italics: true,
           size: 18,
           color: '555555',
@@ -548,7 +396,7 @@ export const exportTotalCompToDocx = async (
     new Paragraph({
       children: [
         new TextRun({
-          text: `Sincerely,\n\n${letter.signerName || config.defaultSignerName}\n${config.districtName} Human Resources`,
+          text: `${doc.signOff}\n\n${doc.signerName}\n${doc.signerOrg}`,
           size: 21,
         }),
       ],
@@ -556,7 +404,7 @@ export const exportTotalCompToDocx = async (
     })
   )
 
-  const doc = new Document({
+  const docxDoc = new Document({
     sections: [
       {
         properties: {
@@ -574,7 +422,7 @@ export const exportTotalCompToDocx = async (
     ],
   })
 
-  const blob = await Packer.toBlob(doc)
+  const blob = await Packer.toBlob(docxDoc)
   saveAs(blob, finalFileName)
 }
 
@@ -582,82 +430,46 @@ export const exportTotalCompToDocx = async (
  * Copy Total Compensation text to clipboard
  */
 export const copyTotalCompText = async (letter: LetterData, config: DistrictConfig) => {
-  const comp = computeTotalComp(letter, config)
-  const recipientName =
-    `${letter.recipientFirstName || ''} ${letter.recipientLastName || ''}`.trim() || 'Employee'
+  const doc = generateTotalCompDocument(letter, config)
 
-  const classificationText = comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
+  const sectionText = (section: (typeof doc.sections)[number]) => {
+    const itemLines = section.items
+      .map((item) => `• ${item.label.padEnd(50, ' ')} ${item.value}`)
+      .join('\n')
+    const footnoteLine = section.footnote ? `\n*(${section.footnote})*` : ''
+    const totalLine = section.totalLabel
+      ? `\n------------------------------------------------------------------\n${section.totalLabel}:${' '.repeat(
+          Math.max(1, 60 - section.totalLabel.length - 1)
+        )}${section.totalValue}`
+      : ''
+    return `${section.heading.toUpperCase()}\n${itemLines}${footnoteLine}${totalLine}`
+  }
 
   const fullText = `[${config.districtName.toUpperCase()} LETTERHEAD]
 
-OFFER & TOTAL COMPENSATION STATEMENT
+${doc.title.toUpperCase()}
 
-Date: ${letter.letterDate}
-Employee Name: ${recipientName}
-Position Title: ${letter.positionTitle}
-Job Classification: ${classificationText}
+Date: ${doc.date}
+Employee Name: ${doc.employeeName}
+Position Title: ${doc.positionTitle}
+Job Classification: ${doc.classificationText}
 
-Dear ${letter.recipientFirstName || recipientName},
+${doc.salutation}
 
-Welcome to ${config.districtName}! We are excited to offer you the position of ${letter.positionTitle}. Beyond your base salary, the district invests heavily in your health, retirement, and time off. This statement highlights the total value of your complete compensation package.
+${doc.welcomeParagraph}
 
-1. DIRECT CASH COMPENSATION
-• Base Annual Salary / Baseline Hourly Rate:                ${comp.formattedBasePay}${
-    comp.stipend > 0
-      ? `\n• Stipends (Hard-to-Fill / Center-Based, if applicable):     ${comp.formattedStipend}`
-      : ''
-  }
-------------------------------------------------------------------
-TOTAL DIRECT CASH PAY:                                     ${comp.formattedDirectPayTotal}
-*(Gross cash pay before employee PERA contributions, state and federal taxes, and Medicare)*
-
-2. DISTRICT-PAID INSURANCE BENEFITS
-${
-  comp.isBenefitEligible
-    ? `• Health Insurance Contribution (${formatCurrency(comp.healthMonthlyRate)}/month):           ${formatCurrency(comp.healthAnnual)}
-• Dental Insurance Contribution (${formatCurrency(comp.dentalMonthlyRate)}/month):            ${formatCurrency(comp.dentalAnnual)}${
-        comp.lifePremiumAnnual > 0
-          ? `\n• Basic Life Insurance Premium ($20,000 Coverage Policy):  ${formatCurrency(comp.lifePremiumAnnual)}`
-          : ''
-      }
-------------------------------------------------------------------
-TOTAL INSURANCE CONTRIBUTIONS:                             ${formatCurrency(comp.insuranceTotal)}`
-    : `• District Insurance Benefits Package: Ineligible (< 0.5 FTE)    $0.00
-*(Positions scheduled under half-time (< 0.5 FTE) are not eligible for district-paid insurance)*
-------------------------------------------------------------------
-TOTAL INSURANCE CONTRIBUTIONS:                             $0.00`
-}
-
-3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS
-• Employer PERA Retirement Contribution (${(comp.peraRate * 100).toFixed(2)}%):          ${formatCurrency(comp.peraContribution)}
-• Employer Medicare Contribution (${(comp.medicareRate * 100).toFixed(2)}%):                 ${formatCurrency(comp.medicareContribution)}
-------------------------------------------------------------------
-TOTAL RETIREMENT & STATUTORY CONTRIBUTIONS:                ${formatCurrency(comp.statutoryTotal)}
-
-4. PAID TIME OFF & HOLIDAYS ALLOCATION${
-    comp.leaveBreakdown && comp.leaveBreakdown.length > 0
-      ? comp.leaveBreakdown.map((item) => `\n• ${item.label.padEnd(46, ' ')} ${item.value}`).join('')
-      : comp.leaveDays > 0
-      ? `\n• Allocated Annual Paid Leave Days:                         ${comp.leaveDays} Days`
-      : ''
-  }${
-    comp.holidaysDays > 0 ? `\n• Paid District Holidays:                                  ${comp.holidaysDays} Days` : ''
-  }${
-    comp.additionalLeavesText ? `\n• Additional Protected Leaves:                             ${comp.additionalLeavesText}` : ''
-  }${
-    comp.vacationScaleNote ? `\n${comp.vacationScaleNote}` : ''
-  }
+${doc.sections.map(sectionText).join('\n\n')}
 
 ==================================================================
-ESTIMATED TOTAL ANNUAL INVESTMENT:                         ${formatCurrency(comp.grandTotal)}
+${doc.grandTotalLabel.toUpperCase()}:${' '.repeat(Math.max(1, 60 - doc.grandTotalLabel.length - 1))}${doc.grandTotalValue}
 ==================================================================
 
-*Note: Overtime, elective extra-duty stipends (e.g., coaching), and variable sub coverage pay are not included in initial hire statements but add further to earned annual pay.*
+*Note: ${doc.disclaimerNote}*
 
-Sincerely,
+${doc.signOff}
 
-${letter.signerName || config.defaultSignerName}
-${config.districtName} Human Resources
+${doc.signerName}
+${doc.signerOrg}
 `
 
   await navigator.clipboard.writeText(fullText)

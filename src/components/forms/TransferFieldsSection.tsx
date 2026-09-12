@@ -15,7 +15,7 @@ export const TransferFieldsSection: React.FC<TransferFieldsSectionProps> = ({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">
+        <label className="block text-xs font-medium text-ink-soft mb-1">
           Transfer Full Description Wording *
         </label>
         <textarea
@@ -26,16 +26,16 @@ export const TransferFieldsSection: React.FC<TransferFieldsSectionProps> = ({
           }
           onChange={(e) => updateTransfer('transferDescription', e.target.value)}
           placeholder="e.g. your transfer in position and hours back to Crossing Guard / Noon Aide at Washington Elementary School"
-          className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 outline-none transition font-sans"
+          className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-purple-500 focus:ring-2 focus:ring-purple-100 outline-none transition font-sans"
         />
-        <p className="text-[11px] text-slate-500 mt-1">
+        <p className="text-[11px] text-muted mt-1">
           Wording follows: &ldquo;The Board took action to approve{' '}
           <strong>[Description]</strong> effective [Date] for the [School Year] School
           Year.&rdquo;
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-purple-50/40 p-4 rounded-xl border border-purple-100">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-purple-50/40 p-4 rounded-md border border-purple-100">
         <div>
           <label className="block text-xs font-semibold text-purple-950 mb-1">
             Effective Date

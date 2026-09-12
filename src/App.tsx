@@ -42,7 +42,6 @@ import {
   Trash2,
   Calculator,
 } from 'lucide-react'
-import confetti from 'canvas-confetti'
 import { safeStorage, STORAGE_KEYS, clearPersonnelData } from './utils/storageUtils'
 
 export function App() {
@@ -126,7 +125,6 @@ export function App() {
       ]
     }
     setSavedLetters(updated)
-    confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } })
     showToast('Letter saved to Drafts!')
   }
 
@@ -149,7 +147,6 @@ export function App() {
     })
 
     if (notify) {
-      confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } })
       showToast(`Saved all ${letters.length} letters to Drafts!`)
     }
   }
@@ -210,26 +207,26 @@ export function App() {
 
 
   return (
-    <div className="min-h-screen bg-slate-100/90 text-slate-800 flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-paper text-ink flex flex-col font-sans selection:bg-accent-soft selection:text-ink">
       {/* Top Application Header */}
-      <header className="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md print:hidden">
+      <header className="bg-ink text-paper sticky top-0 z-40 border-b border-black/20 print:hidden">
         <div className="max-w-[1720px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-md text-sm tracking-wider">
+            <div className="w-9 h-9 rounded-md border border-white/25 flex items-center justify-center font-semibold text-paper text-xs tracking-wide">
               CCS
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold tracking-tight text-white m-0">
+                <h1 className="text-base font-semibold font-serif text-paper m-0">
                   Board Letter Generator
                 </h1>
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full">
-                  Fremont RE-1
+                <span className="px-2 py-0.5 text-[10px] font-medium text-paper/70 border border-white/20 rounded">
+                  {config.districtName}
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
-                Official Board-Approved Personnel Letters &bull; Human Resources
+              <p className="text-xs text-paper/60">
+                Official personnel letters for Human Resources
               </p>
             </div>
           </div>
@@ -239,46 +236,46 @@ export function App() {
             <button
               type="button"
               onClick={() => setShowBulkModal(true)}
-              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+              className="px-3.5 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Upload CSV or batch generate multiple letters"
             >
-              <Layers className="w-4 h-4 text-blue-400" />
+              <Layers className="w-4 h-4" />
               <span className="hidden sm:inline">Bulk Batch</span> Mode
             </button>
 
             <button
               type="button"
               onClick={handleSaveToHistory}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Save draft"
             >
-              <Bookmark className="w-4 h-4 text-amber-400" />
+              <Bookmark className="w-4 h-4" />
               <span className="hidden md:inline">Save Draft</span>
             </button>
 
             <button
               type="button"
               onClick={() => setShowHistoryDrawer(!showHistoryDrawer)}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer relative"
+              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer relative"
               title="View saved drafts"
             >
-              <History className="w-4 h-4 text-slate-300" />
+              <History className="w-4 h-4" />
               {savedLetters.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
+                <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 bg-accent text-ink rounded-full text-[9px] flex items-center justify-center font-semibold">
                   {savedLetters.length}
                 </span>
               )}
             </button>
 
-            <div className="h-6 w-px bg-slate-700 mx-1 hidden sm:block" />
+            <div className="h-6 w-px bg-white/20 mx-1 hidden sm:block" />
 
             <button
               type="button"
               onClick={handleCopyText}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Copy text to clipboard"
             >
-              <Copy className="w-4 h-4 text-emerald-400" />
+              <Copy className="w-4 h-4" />
               <span className="hidden lg:inline">Copy Text</span>
             </button>
 
@@ -286,17 +283,17 @@ export function App() {
               type="button"
               onClick={handleExportDocx}
               disabled={isExporting}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Export as Word (.docx)"
             >
-              <FileText className="w-4 h-4 text-sky-400" />
+              <FileText className="w-4 h-4" />
               <span className="hidden lg:inline">Word</span>
             </button>
 
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-md hover:shadow-blue-500/20 transition cursor-pointer"
+              className="px-4 py-2 bg-accent hover:bg-accent-dark text-ink font-semibold rounded-md text-xs flex items-center gap-1.5 transition cursor-pointer"
               title="Print letter or select 'Save as PDF' for a searchable vector PDF (Cmd+P)"
             >
               <Printer className="w-4 h-4" />
@@ -307,17 +304,17 @@ export function App() {
               type="button"
               onClick={handleExportPdf}
               disabled={isExporting}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Quick 1-click direct file download (.pdf)"
             >
-              <FileDown className="w-4 h-4 text-indigo-400" />
+              <FileDown className="w-4 h-4" />
               <span className="hidden sm:inline">Direct PDF</span>
             </button>
 
             <button
               type="button"
               onClick={() => setShowSettingsModal(true)}
-              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-xl transition cursor-pointer ml-1"
+              className="p-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md transition cursor-pointer ml-1"
               title="District stationery settings"
             >
               <Settings className="w-4 h-4" />
@@ -331,15 +328,15 @@ export function App() {
         {/* Left Column: Interactive Form Controls */}
         <div className="xl:col-span-6 space-y-6 print:hidden">
           {/* Header & Mode Switcher */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs">
-            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-lg border border-rule">
+            <div className="flex items-center gap-1 bg-paper-dim p-1 rounded-md border border-rule">
               <button
                 type="button"
                 onClick={() => setActiveDocumentTab('board_letter')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'board_letter'
-                    ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-ink ring-1 ring-rule'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -348,10 +345,10 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setActiveDocumentTab('total_comp')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'total_comp'
-                    ? 'bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-ink ring-1 ring-rule'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 <Calculator className="w-3.5 h-3.5" />
@@ -362,7 +359,7 @@ export function App() {
             <button
               type="button"
               onClick={() => handleResetType(activeLetter.type)}
-              className="text-xs text-slate-500 hover:text-blue-600 font-semibold flex items-center gap-1 transition cursor-pointer"
+              className="text-xs text-muted hover:text-accent-dark font-medium flex items-center gap-1 transition cursor-pointer"
             >
               <PlusCircle className="w-3.5 h-3.5" /> Start Clean Letter
             </button>
@@ -389,16 +386,16 @@ export function App() {
         {/* Right Column: High-Fidelity Paper Preview */}
         <div className="xl:col-span-6 flex flex-col items-center print:block print:w-full">
           {/* Zoom & View Toolbar */}
-          <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200/90 shadow-xs mb-4 print:hidden">
+          <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white px-4 py-2.5 rounded-lg border border-rule mb-4 print:hidden">
             {/* Document Switcher Tabs */}
-            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <div className="flex items-center gap-1 bg-paper-dim p-1 rounded-md border border-rule">
               <button
                 type="button"
                 onClick={() => setActiveDocumentTab('board_letter')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'board_letter'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-ink text-paper'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -407,10 +404,10 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setActiveDocumentTab('total_comp')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'total_comp'
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-ink text-paper'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 <Calculator className="w-3.5 h-3.5" />
@@ -423,18 +420,18 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setZoomScale((z) => Math.max(0.6, Number((z - 0.05).toFixed(2))))}
-                className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
                 title="Zoom out"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
-              <span className="text-xs font-semibold text-slate-600 min-w-[3rem] text-center">
+              <span className="text-xs font-semibold text-muted min-w-[3rem] text-center">
                 {Math.round(zoomScale * 100)}%
               </span>
               <button
                 type="button"
                 onClick={() => setZoomScale((z) => Math.min(1.3, Number((z + 0.05).toFixed(2))))}
-                className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
                 title="Zoom in"
               >
                 <ZoomIn className="w-4 h-4" />
@@ -442,7 +439,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setZoomScale(0.92)}
-                className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
                 title="Reset zoom to 92%"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -450,7 +447,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setShowFullscreenModal(true)}
-                className="p-1.5 rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 transition cursor-pointer ml-1"
+                className="p-1.5 rounded text-ink bg-paper-dim hover:bg-rule/60 transition cursor-pointer ml-1"
                 title="Open full screen preview"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
@@ -459,7 +456,7 @@ export function App() {
           </div>
 
           {/* Letter Canvas Container */}
-          <div className="w-full flex justify-center overflow-x-auto p-2 bg-slate-200/70 rounded-3xl border border-slate-300 shadow-inner print:p-0 print:bg-white print:border-none print:shadow-none print:block print:overflow-visible">
+          <div className="w-full flex justify-center overflow-x-auto p-2 bg-paper-dim rounded-lg border border-rule print:p-0 print:bg-white print:border-none print:shadow-none print:block print:overflow-visible">
             {activeDocumentTab === 'board_letter' ? (
               <LetterPreview
                 ref={letterRef}
@@ -481,18 +478,18 @@ export function App() {
 
       {/* Full-Screen Document Reviewer Modal */}
       {showFullscreenModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex flex-col p-4 md:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-ink/85 backdrop-blur-sm flex flex-col p-4 md:p-6 overflow-hidden">
           {/* Top Review Bar */}
-          <div className="max-w-5xl w-full mx-auto bg-slate-900 text-white px-5 py-3 rounded-2xl border border-slate-800 flex items-center justify-between shadow-2xl mb-4">
+          <div className="max-w-5xl w-full mx-auto bg-ink text-paper px-5 py-3 rounded-lg border border-white/15 flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700">
+              <div className="flex items-center gap-1 bg-white/10 p-1 rounded-md border border-white/15">
                 <button
                   type="button"
                   onClick={() => setActiveDocumentTab('board_letter')}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer ${
                     activeDocumentTab === 'board_letter'
-                      ? 'bg-blue-600 text-white'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-accent text-ink'
+                      : 'text-paper/60 hover:text-paper'
                   }`}
                 >
                   Board Letter
@@ -500,17 +497,17 @@ export function App() {
                 <button
                   type="button"
                   onClick={() => setActiveDocumentTab('total_comp')}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer ${
                     activeDocumentTab === 'total_comp'
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-accent text-ink'
+                      : 'text-paper/60 hover:text-paper'
                   }`}
                 >
                   Total Comp Statement
                 </button>
               </div>
 
-              <span className="text-xs text-slate-400 hidden sm:inline">
+              <span className="text-xs text-paper/60 hidden sm:inline">
                 {activeLetter.recipientFirstName} {activeLetter.recipientLastName}
               </span>
             </div>
@@ -519,7 +516,7 @@ export function App() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                className="px-3 py-1.5 bg-accent hover:bg-accent-dark text-ink rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 title="Print or select 'Save as PDF' for a searchable vector document"
               >
                 <Printer className="w-3.5 h-3.5" /> Print / Vector PDF
@@ -528,15 +525,15 @@ export function App() {
                 type="button"
                 onClick={handleExportPdf}
                 disabled={isExporting}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 title="1-Click direct file download (.pdf)"
               >
-                <FileDown className="w-3.5 h-3.5 text-indigo-400" /> Direct PDF
+                <FileDown className="w-3.5 h-3.5" /> Direct PDF
               </button>
               <button
                 type="button"
                 onClick={() => setShowFullscreenModal(false)}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl transition cursor-pointer ml-2"
+                className="p-1.5 bg-transparent hover:bg-white/10 text-paper/60 hover:text-paper rounded-md transition cursor-pointer ml-2"
                 title="Close full-screen (ESC)"
               >
                 <X className="w-4 h-4" />
@@ -567,18 +564,18 @@ export function App() {
 
       {/* Saved Drafts / History Sidebar Drawer */}
       {showHistoryDrawer && (
-        <div className="fixed inset-y-0 right-0 z-50 w-80 bg-white border-l border-slate-200 shadow-2xl p-4 flex flex-col print:hidden">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <History className="w-4 h-4 text-blue-600" />
+        <div className="fixed inset-y-0 right-0 z-50 w-80 bg-white border-l border-rule shadow-2xl p-4 flex flex-col print:hidden">
+          <div className="flex items-center justify-between pb-3 border-b border-rule mb-3">
+            <h3 className="text-sm font-semibold text-ink flex items-center gap-2">
+              <History className="w-4 h-4 text-muted" />
               Saved Drafts ({savedLetters.length})
             </h3>
             <div className="flex items-center gap-2">
               {savedLetters.length > 0 && (
                 <>
                   {isConfirmingClearDrafts ? (
-                    <div className="flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg border border-red-200">
-                      <span className="text-[10px] font-semibold text-red-700">Clear all?</span>
+                    <div className="flex items-center gap-1 bg-danger-soft px-2 py-1 rounded border border-danger/30">
+                      <span className="text-[10px] font-semibold text-danger">Clear all?</span>
                       <button
                         type="button"
                         onClick={() => {
@@ -586,14 +583,14 @@ export function App() {
                           setIsConfirmingClearDrafts(false)
                           showToast('All drafts cleared')
                         }}
-                        className="text-[10px] bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
+                        className="text-[10px] bg-danger hover:bg-danger/85 text-paper px-1.5 py-0.5 rounded font-semibold transition cursor-pointer"
                       >
                         Yes
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsConfirmingClearDrafts(false)}
-                        className="text-[10px] text-slate-500 hover:text-slate-700 px-1 py-0.5 font-medium cursor-pointer"
+                        className="text-[10px] text-muted hover:text-ink px-1 py-0.5 font-medium cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -602,7 +599,7 @@ export function App() {
                     <button
                       type="button"
                       onClick={() => setIsConfirmingClearDrafts(true)}
-                      className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                      className="text-xs text-muted hover:text-danger font-medium cursor-pointer"
                     >
                       Clear All
                     </button>
@@ -614,7 +611,7 @@ export function App() {
                   setShowHistoryDrawer(false)
                   setIsConfirmingClearDrafts(false)
                 }}
-                className="text-xs text-slate-400 hover:text-slate-700 font-semibold cursor-pointer"
+                className="text-xs text-muted hover:text-ink font-semibold cursor-pointer"
               >
                 Close
               </button>
@@ -622,8 +619,8 @@ export function App() {
           </div>
 
           {savedLetters.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 p-4">
-              <Bookmark className="w-10 h-10 text-slate-300 stroke-1 mb-2" />
+            <div className="flex-1 flex flex-col items-center justify-center text-center text-muted p-4">
+              <Bookmark className="w-10 h-10 text-rule stroke-1 mb-2" />
               <p className="text-xs">No saved drafts yet. Click &ldquo;Save Draft&rdquo; or batch save in Bulk Mode.</p>
             </div>
           ) : (
@@ -636,27 +633,27 @@ export function App() {
                     setShowHistoryDrawer(false)
                     showToast(`Loaded draft for ${draft.recipientFirstName} ${draft.recipientLastName}`)
                   }}
-                  className="p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 transition cursor-pointer"
+                  className="p-3 rounded-md border border-rule hover:border-accent hover:bg-accent-soft/40 transition cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900">
+                    <span className="text-xs font-semibold text-ink">
                       {draft.recipientFirstName} {draft.recipientLastName}
                     </span>
-                    <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-paper-dim rounded text-muted">
                       {draft.type}
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-1 truncate">
+                  <div className="text-[11px] text-muted mt-1 truncate">
                     {draft.positionTitle || 'Untitled Position'}
                   </div>
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-rule text-[10px] text-muted">
                     <span>{draft.letterDate}</span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
                         setSavedLetters(savedLetters.filter((l) => l.id !== draft.id))
                       }}
-                      className="hover:text-red-600 cursor-pointer"
+                      className="hover:text-danger cursor-pointer"
                       title="Delete draft"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -668,7 +665,7 @@ export function App() {
           )}
 
           {/* Shared HR Terminal Privacy Purge Control */}
-          <div className="pt-3 mt-auto border-t border-slate-200">
+          <div className="pt-3 mt-auto border-t border-rule">
             <button
               type="button"
               onClick={() => {
@@ -683,7 +680,7 @@ export function App() {
                   showToast('Personnel drafts purged for privacy')
                 }
               }}
-              className="w-full text-center text-xs text-slate-500 hover:text-red-700 py-2 px-3 rounded-lg bg-slate-50 hover:bg-red-50 border border-slate-200 transition font-medium cursor-pointer"
+              className="w-full text-center text-xs text-muted hover:text-danger py-2 px-3 rounded-md bg-paper-dim hover:bg-danger-soft border border-rule transition font-medium cursor-pointer"
             >
               Shared Terminal: Purge Cached Drafts
             </button>
@@ -735,8 +732,8 @@ export function App() {
 
       {/* Floating Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-xl border border-slate-700 flex items-center gap-2 text-xs font-semibold animate-bounce">
-          <Check className="w-4 h-4 text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 bg-ink text-paper px-4 py-2.5 rounded-md border border-white/10 flex items-center gap-2 text-xs font-medium animate-[toast-in_0.2s_ease-out]">
+          <Check className="w-4 h-4 text-accent" />
           {toastMessage}
         </div>
       )}

@@ -492,19 +492,19 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
   const currentLetter = batchLetters[selectedIndex]
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex flex-col p-4 md:p-6 overflow-y-auto">
-      <div className="bg-slate-100 rounded-3xl shadow-2xl border border-slate-300 w-full max-w-7xl mx-auto flex flex-col max-h-[95vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm flex flex-col p-4 md:p-6 overflow-y-auto">
+      <div className="bg-paper-dim rounded-lg shadow-2xl border border-rule w-full max-w-7xl mx-auto flex flex-col max-h-[95vh] overflow-hidden">
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div className="px-6 py-4 bg-white border-b border-rule flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+            <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white shadow-md">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-ink">
                 Bulk Board Letter &amp; Total Comp Batch Generator
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted">
                 Upload a board agenda roster CSV or populate multiple staff records for 1-click batch printing.
               </p>
             </div>
@@ -520,7 +520,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       onSaveBatchAsDrafts(batchLetters)
                     }
                   }}
-                  className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                   title="Save all batch letters to your Drafts list"
                 >
                   <Bookmark className="w-4 h-4 text-amber-600" />
@@ -530,7 +530,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                 <button
                   type="button"
                   onClick={handleBatchPrint}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
+                  className="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
                   title="Print or select 'Save as PDF' to generate a multi-page searchable vector PDF"
                 >
                   <Printer className="w-4 h-4" />
@@ -543,7 +543,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition cursor-pointer"
+              className="px-4 py-2 bg-paper-dim hover:bg-paper-dim text-ink-soft rounded-md text-xs font-semibold transition cursor-pointer"
             >
               Close Batch Mode
             </button>
@@ -551,11 +551,11 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
         </div>
 
         {/* Control Bar */}
-        <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div className="px-6 py-3 bg-paper-dim border-b border-rule flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
-              <label className="text-xs font-bold text-slate-600">Batch Type:</label>
-              <div className="inline-flex rounded-xl bg-slate-200 p-1">
+              <label className="text-xs font-bold text-muted">Batch Type:</label>
+              <div className="inline-flex rounded-md bg-paper-dim p-1">
                 {(['certified', 'classified', 'transfer', 'resignation', 'retirement'] as LetterType[]).map(
                   (type) => (
                     <button
@@ -563,8 +563,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       onClick={() => setActiveType(type)}
                       className={`px-3 py-1 text-xs rounded-lg font-semibold capitalize transition cursor-pointer ${
                         activeType === type
-                          ? 'bg-white text-slate-900 shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-white text-ink'
+                          : 'text-muted hover:text-ink'
                       }`}
                     >
                       {type}
@@ -574,11 +574,11 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
               </div>
             </div>
 
-            <div className="h-5 w-px bg-slate-300 hidden md:block" />
+            <div className="h-5 w-px bg-paper-dim hidden md:block" />
 
             <div className="flex items-center gap-2">
-              <label className="text-xs font-bold text-slate-600">Document Output:</label>
-              <div className="inline-flex rounded-xl bg-slate-200 p-1">
+              <label className="text-xs font-bold text-muted">Document Output:</label>
+              <div className="inline-flex rounded-md bg-paper-dim p-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -587,8 +587,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   }}
                   className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
                     batchDocMode === 'board_letter'
-                      ? 'bg-white text-blue-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-accent-dark'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -602,8 +602,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   }}
                   className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
                     batchDocMode === 'total_comp'
-                      ? 'bg-white text-indigo-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-accent-dark'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <Calculator className="w-3.5 h-3.5" />
@@ -616,11 +616,11 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   }}
                   className={`px-2.5 py-1 text-xs rounded-lg font-semibold transition cursor-pointer flex items-center gap-1 ${
                     batchDocMode === 'combined'
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-ink'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
-                  <Layers className="w-3.5 h-3.5 text-blue-600" />
+                  <Layers className="w-3.5 h-3.5 text-accent-dark" />
                   2-Page Packets
                 </button>
               </div>
@@ -631,18 +631,18 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             <button
               type="button"
               onClick={() => handleLoadSampleBatch(activeType)}
-              className="px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-medium text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              className="px-3 py-1.5 bg-white border border-rule hover:bg-paper-dim rounded-md text-xs font-medium text-ink-soft transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              <CheckCircle className="w-3.5 h-3.5 text-blue-600" />
+              <CheckCircle className="w-3.5 h-3.5 text-accent-dark" />
               Load Sample Batch
             </button>
 
             <button
               type="button"
               onClick={handleDownloadSampleCsv}
-              className="px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-medium text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              className="px-3 py-1.5 bg-white border border-rule hover:bg-paper-dim rounded-md text-xs font-medium text-ink-soft transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <Download className="w-3.5 h-3.5 text-muted" />
               CSV Template
             </button>
 
@@ -656,7 +656,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-1.5 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               Upload CSV
@@ -667,9 +667,9 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
         {/* Content Body: Sidebar list + Live Letter Preview */}
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 overflow-hidden">
           {/* Left Column: Letter Roster List */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 flex flex-col overflow-hidden shadow-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <div className="lg:col-span-4 bg-white rounded-lg border border-rule p-4 flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between pb-3 border-b border-rule mb-3">
+              <span className="text-xs font-bold text-muted">
                 Batch Recipients ({batchLetters.length})
               </span>
               <div className="flex items-center gap-2">
@@ -692,7 +692,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                         <button
                           type="button"
                           onClick={() => setIsConfirmingClearBatch(false)}
-                          className="text-[10px] text-slate-500 hover:text-slate-700 px-1 py-0.5 font-medium cursor-pointer"
+                          className="text-[10px] text-muted hover:text-ink-soft px-1 py-0.5 font-medium cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -701,7 +701,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsConfirmingClearBatch(true)}
-                        className="text-xs text-slate-400 hover:text-red-600 font-medium cursor-pointer"
+                        className="text-xs text-muted hover:text-red-600 font-medium cursor-pointer"
                       >
                         Clear List
                       </button>
@@ -758,7 +758,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     setBatchLetters([...batchLetters, newItem])
                     setSelectedIndex(batchLetters.length)
                   }}
-                  className="p-1 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition cursor-pointer"
+                  className="p-1 rounded-lg bg-accent-soft text-accent-dark hover:bg-accent-soft transition cursor-pointer"
                   title="Add empty record"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -767,10 +767,10 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             </div>
 
             {batchLetters.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 p-6">
-                <FileSpreadsheet className="w-12 h-12 text-slate-300 stroke-1 mb-2" />
+              <div className="flex-1 flex flex-col items-center justify-center text-center text-muted p-6">
+                <FileSpreadsheet className="w-12 h-12 text-muted stroke-1 mb-2" />
                 <p className="text-xs">No recipients in current batch.</p>
-                <p className="text-[11px] text-slate-400 mt-1">
+                <p className="text-[11px] text-muted mt-1">
                   Click &ldquo;Load Sample Batch&rdquo; or upload a CSV file above.
                 </p>
               </div>
@@ -780,20 +780,20 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   <div
                     key={item.id}
                     onClick={() => setSelectedIndex(idx)}
-                    className={`p-3 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
+                    className={`p-3 rounded-md border text-left transition cursor-pointer flex items-center justify-between ${
                       selectedIndex === idx
-                        ? 'border-blue-600 bg-blue-50/70 shadow-xs'
-                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                        ? 'border-accent bg-accent-soft'
+                        : 'border-rule hover:border-rule hover:bg-paper-dim'
                     }`}
                   >
                     <div className="min-w-0 pr-2">
-                      <div className="text-xs font-bold text-slate-900 truncate">
+                      <div className="text-xs font-bold text-ink truncate">
                         {item.recipientFirstName} {item.recipientLastName}
                       </div>
-                      <div className="text-[11px] text-slate-500 truncate">
+                      <div className="text-[11px] text-muted truncate">
                         {item.positionTitle || 'Untitled Position'}
                       </div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">
+                      <div className="text-[10px] text-muted mt-0.5">
                         {item.type === 'certified' && (
                           <span>
                             {item.certified?.lane} / Step {item.certified?.step} &bull;{' '}
@@ -823,7 +823,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           onClose()
                         }}
                         title="Edit as single in main generator (saves all batch to drafts)"
-                        className="text-slate-400 hover:text-blue-600 p-1.5 rounded-lg hover:bg-blue-50 transition cursor-pointer"
+                        className="text-muted hover:text-accent-dark p-1.5 rounded-lg hover:bg-accent-soft transition cursor-pointer"
                       >
                         <FileText className="w-4 h-4" />
                       </button>
@@ -838,7 +838,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           }
                         }}
                         title="Remove from batch"
-                        className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                        className="text-muted hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -850,17 +850,17 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
           </div>
 
           {/* Right Column: Active Preview */}
-          <div className="lg:col-span-8 bg-slate-200/80 rounded-2xl border border-slate-300 p-4 flex flex-col items-center overflow-y-auto max-h-[70vh]">
+          <div className="lg:col-span-8 bg-paper-dim/80 rounded-lg border border-rule p-4 flex flex-col items-center overflow-y-auto max-h-[70vh]">
             {currentLetter ? (
               <div className="w-full flex flex-col items-center">
                 {/* Navigation and View Switcher */}
                 <div className="flex flex-wrap items-center justify-between gap-3 w-full max-w-2xl mb-4">
                   {/* Navigation pills */}
-                  <div className="bg-white px-4 py-1.5 rounded-full shadow-xs border border-slate-200 flex items-center gap-4 text-xs font-semibold text-slate-700">
+                  <div className="bg-white px-4 py-1.5 rounded-full border border-rule flex items-center gap-4 text-xs font-semibold text-ink-soft">
                     <button
                       disabled={selectedIndex <= 0}
                       onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
-                      className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
+                      className="disabled:opacity-30 hover:text-accent-dark cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
@@ -870,21 +870,21 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     <button
                       disabled={selectedIndex >= batchLetters.length - 1}
                       onClick={() => setSelectedIndex((prev) => Math.min(batchLetters.length - 1, prev + 1))}
-                      className="disabled:opacity-30 hover:text-blue-600 cursor-pointer"
+                      className="disabled:opacity-30 hover:text-accent-dark cursor-pointer"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* Document Toggle for Preview */}
-                  <div className="bg-white p-1 rounded-xl shadow-xs border border-slate-200 flex items-center gap-1">
+                  <div className="bg-white p-1 rounded-md border border-rule flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => setPreviewDoc('board_letter')}
-                      className={`px-3 py-1 text-xs font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-3 py-1 text-xs font-semibold rounded transition cursor-pointer flex items-center gap-1.5 ${
                         previewDoc === 'board_letter'
-                          ? 'bg-blue-600 text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-ink text-paper'
+                          : 'text-muted hover:text-ink'
                       }`}
                     >
                       <FileText className="w-3.5 h-3.5" />
@@ -893,10 +893,10 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     <button
                       type="button"
                       onClick={() => setPreviewDoc('total_comp')}
-                      className={`px-3 py-1 text-xs font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-3 py-1 text-xs font-semibold rounded transition cursor-pointer flex items-center gap-1.5 ${
                         previewDoc === 'total_comp'
-                          ? 'bg-indigo-600 text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-ink text-paper'
+                          : 'text-muted hover:text-ink'
                       }`}
                     >
                       <Calculator className="w-3.5 h-3.5" />
@@ -915,7 +915,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-slate-400 text-sm">
+              <div className="h-full flex items-center justify-center text-muted text-sm">
                 Select or load a batch to view the document preview
               </div>
             )}

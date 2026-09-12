@@ -148,17 +148,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-2xl border border-rule w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-rule flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center text-accent-dark">
               <Settings className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">District Stationery & Defaults</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="text-base font-bold text-ink">District Stationery & Defaults</h2>
+              <p className="text-xs text-muted">
                 Customize district letterhead, calendar defaults, school directory, and salary scale lanes.
               </p>
             </div>
@@ -166,20 +166,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition cursor-pointer"
+            className="w-8 h-8 rounded-full bg-paper-dim hover:bg-paper-dim flex items-center justify-center text-muted transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Selector */}
-        <div className="px-6 pt-3 border-b border-slate-100 flex gap-4 overflow-x-auto">
+        <div className="px-6 pt-3 border-b border-rule flex gap-4 overflow-x-auto">
           <button
             onClick={() => setActiveTab('general')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'general'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <Building2 className="w-4 h-4" />
@@ -190,8 +190,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('calendar')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'calendar'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <Calendar className="w-4 h-4" />
@@ -202,8 +202,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('directory')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'directory'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <MapPin className="w-4 h-4" />
@@ -214,8 +214,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('staff')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'staff'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <Users className="w-4 h-4" />
@@ -226,8 +226,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('signers')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'signers'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -238,11 +238,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('benefits')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'benefits'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
-            <Calculator className="w-4 h-4 text-indigo-500" />
+            <Calculator className="w-4 h-4 text-accent-dark" />
             Benefits &amp; Total Comp
           </button>
 
@@ -250,8 +250,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('backup')}
             className={`pb-3 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'backup'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                ? 'border-accent text-accent-dark'
+                : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <Database className="w-4 h-4 text-emerald-600" />
@@ -263,21 +263,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
           {activeTab === 'general' && (
             <div className="space-y-4">
-              <div className="bg-blue-50/60 p-3.5 rounded-xl border border-blue-100 flex items-center justify-between">
+              <div className="bg-accent-soft p-3.5 rounded-md border border-accent flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-blue-950">Letterhead Graphic Style</div>
-                  <div className="text-[11px] text-blue-800">
+                  <div className="text-xs font-bold text-accent-dark">Letterhead Graphic Style</div>
+                  <div className="text-[11px] text-accent-dark">
                     Using official Canon City Schools letterhead banner (from images folder)
                   </div>
                 </div>
-                <div className="inline-flex rounded-lg bg-blue-100 p-1">
+                <div className="inline-flex rounded-lg bg-accent-soft p-1">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, headerType: 'image' })}
                     className={`px-2.5 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
                       formData.headerType !== 'vector'
-                        ? 'bg-white text-blue-900 shadow-2xs'
-                        : 'text-blue-700 hover:text-blue-900'
+                        ? 'bg-white text-accent-dark shadow-2xs'
+                        : 'text-accent-dark hover:text-accent-dark'
                     }`}
                   >
                     Official Image
@@ -287,8 +287,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={() => setFormData({ ...formData, headerType: 'vector' })}
                     className={`px-2.5 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
                       formData.headerType === 'vector'
-                        ? 'bg-white text-blue-900 shadow-2xs'
-                        : 'text-blue-700 hover:text-blue-900'
+                        ? 'bg-white text-accent-dark shadow-2xs'
+                        : 'text-accent-dark hover:text-accent-dark'
                     }`}
                   >
                     Dynamic HTML
@@ -298,102 +298,102 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     District Name
                   </label>
                   <input
                     type="text"
                     value={formData.districtName}
                     onChange={(e) => setFormData({ ...formData, districtName: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     District Subtitle / Code
                   </label>
                   <input
                     type="text"
                     value={formData.districtSubtitle}
                     onChange={(e) => setFormData({ ...formData, districtSubtitle: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     Address Line
                   </label>
                   <input
                     type="text"
                     value={formData.addressLine1}
                     onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     City, State, ZIP
                   </label>
                   <input
                     type="text"
                     value={formData.cityStateZip}
                     onChange={(e) => setFormData({ ...formData, cityStateZip: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Phone</label>
+                  <label className="block text-xs font-medium text-ink-soft mb-1">Phone</label>
                   <input
                     type="text"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Fax</label>
+                  <label className="block text-xs font-medium text-ink-soft mb-1">Fax</label>
                   <input
                     type="text"
                     value={formData.fax}
                     onChange={(e) => setFormData({ ...formData, fax: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">HR Email</label>
+                  <label className="block text-xs font-medium text-ink-soft mb-1">HR Email</label>
                   <input
                     type="text"
                     value={formData.hrEmail}
                     onChange={(e) => setFormData({ ...formData, hrEmail: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">HR Phone</label>
+                  <label className="block text-xs font-medium text-ink-soft mb-1">HR Phone</label>
                   <input
                     type="text"
                     value={formData.hrPhone}
                     onChange={(e) => setFormData({ ...formData, hrPhone: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-ink-soft mb-1">
                   District Mission Statement Quote
                 </label>
                 <textarea
                   rows={3}
                   value={formData.missionStatement}
                   onChange={(e) => setFormData({ ...formData, missionStatement: e.target.value })}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                 />
               </div>
             </div>
@@ -402,18 +402,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* Calendar & Academic Defaults Tab */}
           {activeTab === 'calendar' && (
             <div className="space-y-4">
-              <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/80">
-                <h3 className="text-xs font-bold text-blue-950 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-blue-600" />
+              <div className="bg-accent-soft p-4 rounded-lg border border-accent/40">
+                <h3 className="text-xs font-bold text-accent-dark mb-1 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-accent-dark" />
                   Upcoming Agenda & Academic Year Defaults
                 </h3>
-                <p className="text-xs text-blue-800/80 mb-4">
+                <p className="text-xs text-accent-dark mb-4">
                   Set the upcoming board meeting date and school year. Newly generated letters and sample batches will automatically pre-populate with these values.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">
                       Default / Next Board Meeting Date
                     </label>
                     <input
@@ -423,15 +423,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         setFormData({ ...formData, defaultBoardMeetingDate: e.target.value })
                       }
                       placeholder="e.g. August 24, 2026 or September 28, 2026"
-                      className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none font-medium"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-rule bg-white focus:border-accent focus:ring-2 focus:ring-accent outline-none font-medium"
                     />
-                    <span className="text-[11px] text-slate-400 mt-1 block">
+                    <span className="text-[11px] text-muted mt-1 block">
                       Used as official approval date across all personnel letters.
                     </span>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">
                       Default School Year
                     </label>
                     <input
@@ -441,9 +441,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         setFormData({ ...formData, defaultSchoolYear: e.target.value })
                       }
                       placeholder="e.g. 2026-2027"
-                      className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none font-medium"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-rule bg-white focus:border-accent focus:ring-2 focus:ring-accent outline-none font-medium"
                     />
-                    <span className="text-[11px] text-slate-400 mt-1 block">
+                    <span className="text-[11px] text-muted mt-1 block">
                       Default academic school year reference.
                     </span>
                   </div>
@@ -451,7 +451,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Default Annual Retiree Celebration Announcement
                 </label>
                 <textarea
@@ -461,9 +461,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     setFormData({ ...formData, defaultRetirementCelebrationText: e.target.value })
                   }
                   placeholder="We will be holding a celebration for retirees in April, 2027..."
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
+                  className="w-full px-3 py-2 text-sm rounded-md border border-rule focus:border-accent focus:ring-2 focus:ring-accent outline-none"
                 />
-                <span className="text-[11px] text-slate-400 mt-1 block">
+                <span className="text-[11px] text-muted mt-1 block">
                   Included in official retirement approval letters. Update this notice annually with event dates/times.
                 </span>
               </div>
@@ -474,14 +474,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {activeTab === 'directory' && (
             <div className="space-y-6">
               {/* Section 1: Schools Directory */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200 mb-3">
+              <div className="bg-paper-dim p-4 rounded-lg border border-rule">
+                <div className="flex items-center justify-between pb-2 border-b border-rule mb-3">
                   <div>
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-blue-600" />
+                    <h3 className="text-xs font-bold text-ink-soft flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 text-accent-dark" />
                       District School & Facility Directory ({(formData.districtLocations || []).length})
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-muted">
                       Standard school/building names used for instant autocomplete in letter forms.
                     </p>
                   </div>
@@ -499,12 +499,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       }
                     }}
                     placeholder="Add building (e.g. Cañon City High School)..."
-                    className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                    className="flex-1 px-3 py-1.5 text-xs rounded-md border border-rule bg-white focus:border-accent outline-none"
                   />
                   <button
                     type="button"
                     onClick={addLocation}
-                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 cursor-pointer transition shadow-2xs"
+                    className="px-3 py-1.5 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-1 cursor-pointer transition shadow-2xs"
                   >
                     <Plus className="w-3.5 h-3.5" /> Add
                   </button>
@@ -514,13 +514,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {(formData.districtLocations || []).map((loc, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-rule text-xs font-medium text-ink shadow-2xs"
                     >
                       {loc}
                       <button
                         type="button"
                         onClick={() => removeLocation(idx)}
-                        className="text-slate-400 hover:text-red-600 transition cursor-pointer"
+                        className="text-muted hover:text-red-600 transition cursor-pointer"
                         title="Remove location"
                       >
                         <X className="w-3 h-3" />
@@ -531,14 +531,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Section 2: Standard Certified Salary Lanes */}
-              <div className="bg-blue-50/40 p-4 rounded-2xl border border-blue-100">
-                <div className="flex items-center justify-between pb-2 border-b border-blue-100 mb-3">
+              <div className="bg-accent-soft p-4 rounded-lg border border-accent">
+                <div className="flex items-center justify-between pb-2 border-b border-accent mb-3">
                   <div>
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-blue-950 flex items-center gap-1.5">
-                      <GraduationCap className="w-4 h-4 text-blue-600" />
+                    <h3 className="text-xs font-bold text-accent-dark flex items-center gap-1.5">
+                      <GraduationCap className="w-4 h-4 text-accent-dark" />
                       Standard Certified Salary Lanes ({(formData.certifiedLanes || []).length})
                     </h3>
-                    <p className="text-[11px] text-blue-800/80">
+                    <p className="text-[11px] text-accent-dark">
                       Pre-configured salary schedule tiers (BA, MA, etc.) available as 1-click pills in Certified letter editing.
                     </p>
                   </div>
@@ -556,12 +556,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       }
                     }}
                     placeholder="Add salary lane (e.g. MA+60 or DOC)..."
-                    className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-blue-200 bg-white focus:border-blue-500 outline-none"
+                    className="flex-1 px-3 py-1.5 text-xs rounded-md border border-accent bg-white focus:border-accent outline-none"
                   />
                   <button
                     type="button"
                     onClick={addLane}
-                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 cursor-pointer transition shadow-2xs"
+                    className="px-3 py-1.5 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-1 cursor-pointer transition shadow-2xs"
                   >
                     <Plus className="w-3.5 h-3.5" /> Add Lane
                   </button>
@@ -571,13 +571,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {(formData.certifiedLanes || []).map((lane, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-blue-200 text-xs font-bold text-blue-950 shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-accent text-xs font-bold text-accent-dark shadow-2xs"
                     >
                       {lane}
                       <button
                         type="button"
                         onClick={() => removeLane(idx)}
-                        className="text-slate-400 hover:text-red-600 transition cursor-pointer"
+                        className="text-muted hover:text-red-600 transition cursor-pointer"
                         title="Remove lane"
                       >
                         <X className="w-3 h-3" />
@@ -591,14 +591,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {activeTab === 'staff' && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-xs font-medium text-slate-600">
+              <div className="flex items-center justify-between pb-2 border-b border-rule">
+                <span className="text-xs font-medium text-muted">
                   Header staff list displayed on upper right of letterhead:
                 </span>
                 <button
                   type="button"
                   onClick={addStaffMember}
-                  className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
+                  className="px-2.5 py-1 bg-accent-soft hover:bg-accent-soft text-accent-dark rounded-lg text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" /> Add Staff Member
                 </button>
@@ -608,7 +608,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {formData.adminStaff.map((staff) => (
                   <div
                     key={staff.id}
-                    className="grid grid-cols-12 gap-2 items-center bg-slate-50 p-2 rounded-xl border border-slate-200"
+                    className="grid grid-cols-12 gap-2 items-center bg-paper-dim p-2 rounded-md border border-rule"
                   >
                     <div className="col-span-5">
                       <input
@@ -616,7 +616,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         value={staff.name}
                         onChange={(e) => updateStaffMember(staff.id, 'name', e.target.value)}
                         placeholder="NAME (e.g. ADAM HARTMAN)"
-                        className="w-full px-2.5 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-white"
+                        className="w-full px-2.5 py-1.5 text-xs font-bold rounded-lg border border-rule bg-white"
                       />
                     </div>
                     <div className="col-span-6">
@@ -625,14 +625,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         value={staff.title}
                         onChange={(e) => updateStaffMember(staff.id, 'title', e.target.value)}
                         placeholder="Title (e.g. Superintendent of Schools)"
-                        className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 bg-white"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-rule bg-white"
                       />
                     </div>
                     <div className="col-span-1 flex justify-center">
                       <button
                         type="button"
                         onClick={() => removeStaffMember(staff.id)}
-                        className="text-slate-400 hover:text-red-600 p-1 transition"
+                        className="text-muted hover:text-red-600 p-1 transition"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -647,7 +647,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     Default Signer Name
                   </label>
                   <input
@@ -656,11 +656,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, defaultSignerName: e.target.value })
                     }
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     Default Signer Title
                   </label>
                   <input
@@ -669,14 +669,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, defaultSignerTitle: e.target.value })
                     }
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     Default Typist Initials
                   </label>
                   <input
@@ -685,18 +685,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onChange={(e) =>
                       setFormData({ ...formData, defaultTypistInitials: e.target.value })
                     }
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                  <label className="block text-xs font-medium text-ink-soft mb-1">
                     Default Cc: Line
                   </label>
                   <input
                     type="text"
                     value={formData.defaultCc}
                     onChange={(e) => setFormData({ ...formData, defaultCc: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-rule focus:border-accent outline-none"
                   />
                 </div>
               </div>
@@ -704,14 +704,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           )}
 
           {activeTab === 'benefits' && (
-            <div className="space-y-5 text-slate-800">
-              <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-2xl p-4 flex items-start justify-between gap-4">
+            <div className="space-y-5 text-ink">
+              <div className="bg-accent-soft border border-accent/40 rounded-lg p-4 flex items-start justify-between gap-4">
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1 flex items-center gap-1.5">
-                    <Calculator className="w-4 h-4 text-indigo-600" />
+                  <h4 className="text-xs font-bold text-accent-dark mb-1 flex items-center gap-1.5">
+                    <Calculator className="w-4 h-4 text-accent-dark" />
                     District-Wide Compensation &amp; Benefit Standards
                   </h4>
-                  <p className="text-xs text-indigo-700/90 leading-relaxed">
+                  <p className="text-xs text-accent-dark leading-relaxed">
                     Set standard district-paid insurance contributions, PERA/Medicare rates, work calendar days, and leave allocations. These defaults automatically apply to all newly generated Offer &amp; Total Compensation statements.
                   </p>
                 </div>
@@ -723,7 +723,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       totalCompDefaults: { ...DEFAULT_DISTRICT_CONFIG.totalCompDefaults },
                     })
                   }
-                  className="px-3 py-1.5 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition shrink-0 cursor-pointer shadow-2xs"
+                  className="px-3 py-1.5 bg-white border border-accent hover:bg-accent text-accent-dark text-xs font-semibold rounded-md flex items-center gap-1.5 transition shrink-0 cursor-pointer shadow-2xs"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   Reset to Standards
@@ -731,13 +731,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* 1. Insurance Contributions */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div className="bg-paper-dim p-4 rounded-lg border border-rule space-y-3">
+                <label className="block text-xs font-bold text-muted">
                   1. District-Paid Insurance Contributions
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Health Monthly Contribution ($/mo)
                     </label>
                     <input
@@ -747,14 +747,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ healthMonthlyRate: parseFloat(e.target.value) || 0 })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-muted">
                       Annual: ${(((formData.totalCompDefaults?.healthMonthlyRate ?? 651.2) * 12).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                     </span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Dental Monthly Contribution ($/mo)
                     </label>
                     <input
@@ -764,14 +764,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ dentalMonthlyRate: parseFloat(e.target.value) || 0 })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-muted">
                       Annual: ${(((formData.totalCompDefaults?.dentalMonthlyRate ?? 5.0) * 12).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                     </span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Life Insurance Annual Premium ($)
                     </label>
                     <input
@@ -783,9 +783,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           lifeInsurancePremiumAnnual: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-muted">
                       {(formData.totalCompDefaults?.lifeInsurancePremiumAnnual ?? 0) > 0 ? '$20,000 policy included' : '$0 = Excluded from statement'}
                     </span>
                   </div>
@@ -793,13 +793,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* 2. Statutory Retirement & Medicare */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div className="bg-paper-dim p-4 rounded-lg border border-rule space-y-3">
+                <label className="block text-xs font-bold text-muted">
                   2. Mandatory Statutory Rates
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Employer PERA Retirement Rate (%)
                     </label>
                     <input
@@ -809,12 +809,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ peraRate: (parseFloat(e.target.value) || 0) / 100 })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
-                    <span className="text-[10px] text-slate-500">Cañon City Standard: 21.40%</span>
+                    <span className="text-[10px] text-muted">Cañon City Standard: 21.40%</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Employer Medicare Rate (%)
                     </label>
                     <input
@@ -826,21 +826,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           medicareRate: (parseFloat(e.target.value) || 0) / 100,
                         })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
-                    <span className="text-[10px] text-slate-500">Mandatory Federal: 1.45%</span>
+                    <span className="text-[10px] text-muted">Mandatory Federal: 1.45%</span>
                   </div>
                 </div>
               </div>
 
               {/* 3. Work Schedules */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div className="bg-paper-dim p-4 rounded-lg border border-rule space-y-3">
+                <label className="block text-xs font-bold text-muted">
                   3. Standard Work Schedules &amp; Annual Calendar Days
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Standard Daily Hours
                     </label>
                     <input
@@ -850,11 +850,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ defaultHoursPerDay: parseFloat(e.target.value) || 0 })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       9-Month Classified Days / Year
                     </label>
                     <input
@@ -863,11 +863,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ defaultDays9Month: parseInt(e.target.value, 10) || 0 })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       12-Month Classified Days / Year
                     </label>
                     <input
@@ -878,26 +878,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           defaultDays12Month: parseInt(e.target.value, 10) || 0,
                         })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               {/* 4. Leave Allocations */}
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-4">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div className="bg-paper-dim p-4 rounded-lg border border-rule space-y-4">
+                <label className="block text-xs font-bold text-muted">
                   4. Standard Leave Allocations &amp; Accrual Rates
                 </label>
 
                 {/* 12-Month Classified Settings */}
-                <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-                  <span className="text-xs font-semibold text-slate-800">
+                <div className="bg-white p-3 rounded-md border border-rule space-y-2">
+                  <span className="text-xs font-semibold text-ink">
                     12-Month Classified Staff (New Hire / Years 1–5)
                   </span>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Upfront Annual Days
                       </label>
                       <input
@@ -908,12 +908,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             classified12MoAnnualDaysUpfront: parseInt(e.target.value, 10) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">Frontloaded upfront</span>
+                      <span className="text-[10px] text-muted">Frontloaded upfront</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Sick Leave (Days/Mo)
                       </label>
                       <input
@@ -925,12 +925,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             classified12MoSickDaysPerMonth: parseFloat(e.target.value) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">1 day/mo = 12 days/yr</span>
+                      <span className="text-[10px] text-muted">1 day/mo = 12 days/yr</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Vacation Rate (Days/Mo)
                       </label>
                       <input
@@ -942,12 +942,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             classified12MoVacationMonthlyRate: parseFloat(e.target.value) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">0.84 days/mo (Years 1–5)</span>
+                      <span className="text-[10px] text-muted">0.84 days/mo (Years 1–5)</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Paid District Holidays
                       </label>
                       <input
@@ -958,21 +958,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             defaultHolidaysDays12Month: parseInt(e.target.value, 10) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">Paid holidays</span>
+                      <span className="text-[10px] text-muted">Paid holidays</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Certified / Licensed Settings */}
-                <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-                  <span className="text-xs font-semibold text-slate-800">
+                <div className="bg-white p-3 rounded-md border border-rule space-y-2">
+                  <span className="text-xs font-semibold text-ink">
                     Certified / Licensed School Year Staff (New Hire / Years 1–4)
                   </span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Personal Days (Upfront)
                       </label>
                       <input
@@ -983,12 +983,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             certifiedPersonalDaysUpfront: parseInt(e.target.value, 10) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">3 personal days upfront</span>
+                      <span className="text-[10px] text-muted">3 personal days upfront</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Sick Leave Days (Upfront)
                       </label>
                       <input
@@ -999,9 +999,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             certifiedSickDaysUpfront: parseInt(e.target.value, 10) || 0,
                           })
                         }
-                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                        className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                       />
-                      <span className="text-[10px] text-slate-400">8 sick days upfront (Total 11)</span>
+                      <span className="text-[10px] text-muted">8 sick days upfront (Total 11)</span>
                     </div>
                   </div>
                 </div>
@@ -1009,7 +1009,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {/* 9-Month Classified & Protected Note */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       9-Month Classified Leave Days
                     </label>
                     <input
@@ -1020,11 +1020,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           defaultLeaveDays9Month: parseInt(e.target.value, 10) || 0,
                         })
                       }
-                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm font-mono rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Protected Leaves Note
                     </label>
                     <input
@@ -1036,7 +1036,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         updateTotalCompDefaults({ defaultAdditionalLeavesText: e.target.value })
                       }
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-rule bg-white focus:border-accent outline-none"
                     />
                   </div>
                 </div>
@@ -1048,31 +1048,31 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="space-y-5">
               {backupStatus && (
                 <div
-                  className={`p-4 rounded-2xl border flex items-center gap-3 text-xs ${
+                  className={`p-4 rounded-lg border flex items-center gap-3 text-xs ${
                     backupStatus.type === 'success'
                       ? 'bg-emerald-50/80 border-emerald-200 text-emerald-800'
-                      : 'bg-rose-50/80 border-rose-200 text-rose-800'
+                      : 'bg-danger-soft border-danger/40 text-danger'
                   }`}
                 >
                   {backupStatus.type === 'success' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                   ) : (
-                    <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
+                    <AlertTriangle className="w-5 h-5 text-danger shrink-0" />
                   )}
                   <span className="font-medium">{backupStatus.message}</span>
                 </div>
               )}
 
               {/* Export Backup Card */}
-              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5">
+              <div className="bg-paper-dim border border-rule/80 rounded-lg p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+                    <div className="w-9 h-9 rounded-md bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
                       <Download className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">Export District Backup</h4>
-                      <p className="text-xs text-slate-500 mt-1 max-w-lg">
+                      <h4 className="text-sm font-semibold text-ink">Export District Backup</h4>
+                      <p className="text-xs text-muted mt-1 max-w-lg">
                         Downloads an offline JSON bundle containing all district letterhead settings, salary scale lanes, school facilities, saved draft letters, and bulk rosters.
                       </p>
                     </div>
@@ -1093,7 +1093,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         })
                       }
                     }}
-                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2 cursor-pointer shrink-0 transition"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-xs font-semibold flex items-center gap-2 cursor-pointer shrink-0 transition"
                   >
                     <Download className="w-4 h-4" /> Download Backup (.json)
                   </button>
@@ -1101,15 +1101,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Import & Restore Card */}
-              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5">
+              <div className="bg-paper-dim border border-rule/80 rounded-lg p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 shrink-0">
+                    <div className="w-9 h-9 rounded-md bg-accent-soft flex items-center justify-center text-accent-dark shrink-0">
                       <Upload className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">Restore from Backup File</h4>
-                      <p className="text-xs text-slate-500 mt-1 max-w-lg">
+                      <h4 className="text-sm font-semibold text-ink">Restore from Backup File</h4>
+                      <p className="text-xs text-muted mt-1 max-w-lg">
                         Import a previously exported JSON backup file to restore district configurations, letter drafts, and custom salary lanes.
                       </p>
                     </div>
@@ -1152,7 +1152,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <button
                       type="button"
                       onClick={() => backupFileInputRef.current?.click()}
-                      className="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2 cursor-pointer shrink-0 transition"
+                      className="px-4 py-2 bg-white border border-rule hover:bg-paper-dim text-ink-soft rounded-md text-xs font-semibold flex items-center gap-2 cursor-pointer shrink-0 transition"
                     >
                       <Upload className="w-4 h-4" /> Select Backup File
                     </button>
@@ -1161,14 +1161,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Shared HR Workstation Privacy Controls */}
-              <div className="bg-amber-50/50 border border-amber-200/80 rounded-2xl p-5 space-y-4">
+              <div className="bg-amber-50/50 border border-amber-200/80 rounded-lg p-5 space-y-4">
                 <div className="flex gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
+                  <div className="w-9 h-9 rounded-md bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-900">Workstation Privacy &amp; Data Cleanup</h4>
-                    <p className="text-xs text-slate-600 mt-1">
+                    <h4 className="text-sm font-semibold text-ink">Workstation Privacy &amp; Data Cleanup</h4>
+                    <p className="text-xs text-muted mt-1">
                       Saved letters contain employee names, home addresses, and compensation figures. If you are operating on a shared district workstation, use these controls to purge cached PII.
                     </p>
                   </div>
@@ -1191,7 +1191,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         })
                       }
                     }}
-                    className="px-3.5 py-2 bg-white border border-amber-300 hover:bg-amber-50 text-amber-900 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                    className="px-3.5 py-2 bg-white border border-amber-300 hover:bg-amber-50 text-amber-900 rounded-md text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
                   >
                     <Trash2 className="w-3.5 h-3.5 text-amber-600" /> Clear Drafts &amp; Rosters
                   </button>
@@ -1213,7 +1213,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         })
                       }
                     }}
-                    className="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                    className="px-3.5 py-2 bg-danger hover:bg-danger text-white rounded-md text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
                   >
                     <RotateCcw className="w-3.5 h-3.5" /> Factory Reset (Clear All)
                   </button>
@@ -1224,18 +1224,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
+        <div className="px-6 py-4 bg-paper-dim border-t border-rule flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition cursor-pointer"
+            className="px-4 py-2 bg-white border border-rule text-ink-soft rounded-md text-xs font-semibold hover:bg-paper-dim transition cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
+            className="px-5 py-2 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Save className="w-3.5 h-3.5" /> Save Configuration
           </button>

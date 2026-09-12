@@ -2,7 +2,8 @@ import { forwardRef } from 'react'
 import type { DistrictConfig, LetterData } from '../types/letter'
 import { DistrictHeader } from './DistrictHeader'
 import { Signature } from './Signature'
-import { computeTotalComp, formatCurrency } from '../utils/totalCompUtils'
+import { computeTotalComp } from '../utils/totalCompUtils'
+import { generateTotalCompDocument } from '../utils/totalCompContent'
 
 interface TotalCompPreviewProps {
   letter: LetterData
@@ -13,13 +14,8 @@ interface TotalCompPreviewProps {
 export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps>(
   ({ letter, config, scale = 1 }, ref) => {
     const comp = computeTotalComp(letter, config)
-
-    const recipientName =
-      `${letter.recipientFirstName || ''} ${letter.recipientLastName || ''}`.trim() ||
-      'Employee Name'
-
-    const classificationDisplay =
-      comp.fte !== 1.0 ? `${comp.classification} (${comp.fte} FTE)` : comp.classification
+    const doc = generateTotalCompDocument(letter, config)
+    const [cashSection, insuranceSection, statutorySection, ptoSection] = doc.sections
 
     return (
       <div
@@ -57,35 +53,26 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
         <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-1.5 text-[8.8pt] bg-white p-2 rounded border border-gray-300">
           <div>
             <span className="font-semibold text-gray-900">Date:</span>{' '}
-            <span>{letter.letterDate || 'August 24, 2026'}</span>
+            <span>{doc.date}</span>
           </div>
           <div>
             <span className="font-semibold text-gray-900">Position Title:</span>{' '}
-            <span className="font-medium text-gray-950">{letter.positionTitle || '[Position Title]'}</span>
+            <span className="font-medium text-gray-950">{doc.positionTitle}</span>
           </div>
           <div>
             <span className="font-semibold text-gray-900">Employee Name:</span>{' '}
-            <span className="font-bold text-gray-950">{recipientName}</span>
+            <span className="font-bold text-gray-950">{doc.employeeName}</span>
           </div>
           <div>
             <span className="font-semibold text-gray-900">Job Classification:</span>{' '}
-            <span className="font-medium text-gray-950">{classificationDisplay}</span>
+            <span className="font-medium text-gray-950">{doc.classificationText}</span>
           </div>
         </div>
 
         {/* Salutation & Welcome */}
         <div className="mb-1.5 text-[8.8pt] leading-snug">
-          <p className="font-medium mb-0.5">Dear {letter.recipientFirstName || recipientName},</p>
-          <p className="text-[8.6pt] text-gray-800 leading-snug">
-            Welcome to <span className="font-semibold">{config.districtName || 'Cañon City Schools'}</span>!
-            We are excited to offer you the position of{' '}
-            <span className="font-medium text-gray-950">
-              {letter.positionTitle || '[Position Title]'}
-            </span>
-            . Beyond your direct cash compensation, the district invests heavily in your retirement,
-            paid time off, and employee benefits. This statement highlights the total value of your complete
-            compensation package.
-          </p>
+          <p className="font-medium mb-0.5">{doc.salutation}</p>
+          <p className="text-[8.6pt] text-gray-800 leading-snug">{doc.welcomeParagraph}</p>
         </div>
 
         {/* Breakdown Sections */}
@@ -93,128 +80,67 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           {/* 1. DIRECT CASH COMPENSATION */}
           <div className="border border-gray-300 rounded p-1.5 bg-white">
             <div className="font-bold text-[9pt] text-gray-950 uppercase tracking-wide mb-0.5 flex items-center justify-between border-b border-gray-200 pb-0.5">
-              <span>1. Direct Cash Compensation</span>
+              <span>{cashSection.heading}</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">
-                  • {comp.isHourlyClassified ? 'Baseline Hourly Rate / Schedule' : 'Base Annual Salary'}:
-                </span>
-                <span className="font-mono font-medium text-gray-950">
-                  {comp.formattedBasePay}
-                </span>
-              </div>
-              {comp.stipend > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">
-                    • Stipends (Hard-to-Fill / Center-Based, if applicable):
-                  </span>
-                  <span className="font-mono font-medium text-gray-950">
-                    {comp.formattedStipend}
-                  </span>
+              {cashSection.items.map((item, idx) => (
+                <div key={idx} className="flex justify-between items-baseline">
+                  <span className="text-gray-700">• {item.label}:</span>
+                  <span className="font-mono font-medium text-gray-950">{item.value}</span>
                 </div>
-              )}
+              ))}
               <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
-                <span>TOTAL DIRECT CASH PAY:</span>
-                <span className="font-mono text-gray-950">{comp.formattedDirectPayTotal}</span>
+                <span>{cashSection.totalLabel}:</span>
+                <span className="font-mono text-gray-950">{cashSection.totalValue}</span>
               </div>
-              <div className="text-[7.2pt] italic text-gray-500 pt-0.5">
-                *Gross cash pay before employee PERA contributions, state and federal taxes, and Medicare withholdings.
-              </div>
+              {cashSection.footnote && (
+                <div className="text-[7.2pt] italic text-gray-500 pt-0.5">*{cashSection.footnote}</div>
+              )}
             </div>
           </div>
 
           {/* 2. DISTRICT-PAID INSURANCE BENEFITS */}
           <div className="border border-gray-300 rounded p-1.5 bg-white">
             <div className="font-bold text-[9pt] text-gray-950 uppercase tracking-wide mb-0.5 flex items-center justify-between border-b border-gray-200 pb-0.5">
-              <span>2. District-Paid Insurance Benefits</span>
+              <span>{insuranceSection.heading}</span>
               {comp.fte < 1.0 && (
                 <span className="text-[7.5pt] text-gray-600 font-normal italic">
-                  {comp.isBenefitEligible ? 'Full Package (≥ 0.5 FTE)' : 'Ineligible (< 0.5 FTE)'}
+                  {comp.benefitEligibilityNote}
                 </span>
               )}
             </div>
             <div className="space-y-0.5 pt-0.5">
-              {comp.isBenefitEligible ? (
-                <>
-                  {comp.healthAnnual > 0 && (
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-700">
-                        • Health Insurance Contribution ({formatCurrency(comp.healthMonthlyRate)}/month):
-                      </span>
-                      <span className="font-mono font-medium text-gray-950">
-                        {formatCurrency(comp.healthAnnual)}
-                      </span>
-                    </div>
-                  )}
-                  {comp.dentalAnnual > 0 && (
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-700">
-                        • Dental Insurance Contribution ({formatCurrency(comp.dentalMonthlyRate)}/month):
-                      </span>
-                      <span className="font-mono font-medium text-gray-950">
-                        {formatCurrency(comp.dentalAnnual)}
-                      </span>
-                    </div>
-                  )}
-                  {comp.lifePremiumAnnual > 0 && (
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-700">
-                        • Basic Life Insurance Premium ($20,000 Coverage Policy):
-                      </span>
-                      <span className="font-mono font-medium text-gray-950">
-                        {formatCurrency(comp.lifePremiumAnnual)}
-                      </span>
-                    </div>
-                  )}
-                  <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
-                    <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
-                    <span className="font-mono text-gray-950">{formatCurrency(comp.insuranceTotal)}</span>
-                  </div>
-                </>
-              ) : (
-                <div className="py-0.5">
-                  <div className="flex justify-between items-baseline text-gray-700">
-                    <span>• District Insurance Benefits Package:</span>
-                    <span className="font-mono font-medium text-gray-950">$0.00</span>
-                  </div>
-                  <div className="text-[7.4pt] italic text-gray-500 pt-0.5">
-                    *Positions scheduled under half-time (&lt; 0.5 FTE) are not eligible for district-paid insurance contributions per district policy.
-                  </div>
-                  <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
-                    <span>TOTAL INSURANCE CONTRIBUTIONS:</span>
-                    <span className="font-mono text-gray-950">$0.00</span>
-                  </div>
+              {insuranceSection.items.map((item, idx) => (
+                <div key={idx} className="flex justify-between items-baseline">
+                  <span className="text-gray-700">• {item.label}:</span>
+                  <span className="font-mono font-medium text-gray-950">{item.value}</span>
                 </div>
+              ))}
+              {insuranceSection.footnote && (
+                <div className="text-[7.4pt] italic text-gray-500 pt-0.5">*{insuranceSection.footnote}</div>
               )}
+              <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
+                <span>{insuranceSection.totalLabel}:</span>
+                <span className="font-mono text-gray-950">{insuranceSection.totalValue}</span>
+              </div>
             </div>
           </div>
 
           {/* 3. RETIREMENT & MANDATORY STATUTORY CONTRIBUTIONS */}
           <div className="border border-gray-300 rounded p-1.5 bg-white">
             <div className="font-bold text-[9pt] text-gray-950 uppercase tracking-wide mb-0.5 flex items-center justify-between border-b border-gray-200 pb-0.5">
-              <span>3. Retirement &amp; Mandatory Statutory Contributions</span>
+              <span>{statutorySection.heading}</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">
-                  • Employer PERA Retirement Contribution ({(comp.peraRate * 100).toFixed(2)}%):
-                </span>
-                <span className="font-mono font-medium text-gray-950">
-                  {formatCurrency(comp.peraContribution)}
-                </span>
-              </div>
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">
-                  • Employer Medicare Contribution ({(comp.medicareRate * 100).toFixed(2)}%):
-                </span>
-                <span className="font-mono font-medium text-gray-950">
-                  {formatCurrency(comp.medicareContribution)}
-                </span>
-              </div>
+              {statutorySection.items.map((item, idx) => (
+                <div key={idx} className="flex justify-between items-baseline">
+                  <span className="text-gray-700">• {item.label}:</span>
+                  <span className="font-mono font-medium text-gray-950">{item.value}</span>
+                </div>
+              ))}
               <div className="border-t border-dashed border-gray-300 pt-0.5 mt-0.5 flex justify-between font-bold text-gray-950 text-[8.8pt]">
-                <span>TOTAL RETIREMENT &amp; STATUTORY CONTRIBUTIONS:</span>
-                <span className="font-mono text-gray-950">{formatCurrency(comp.statutoryTotal)}</span>
+                <span>{statutorySection.totalLabel}:</span>
+                <span className="font-mono text-gray-950">{statutorySection.totalValue}</span>
               </div>
             </div>
           </div>
@@ -222,42 +148,17 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           {/* 4. PAID TIME OFF & HOLIDAYS ALLOCATION */}
           <div className="border border-gray-300 rounded p-1.5 bg-white">
             <div className="font-bold text-[9pt] text-gray-950 uppercase tracking-wide mb-0.5 flex items-center justify-between border-b border-gray-200 pb-0.5">
-              <span>4. Paid Time Off &amp; Holidays Allocation</span>
+              <span>{ptoSection.heading}</span>
             </div>
             <div className="space-y-0.5 pt-0.5">
-              {comp.leaveBreakdown && comp.leaveBreakdown.length > 0 ? (
-                comp.leaveBreakdown.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-baseline">
-                    <span className="text-gray-700">• {item.label}:</span>
-                    <span className="font-semibold text-gray-950">{item.value}</span>
-                  </div>
-                ))
-              ) : (
-                comp.leaveDays > 0 && (
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-gray-700">• Allocated Annual Paid Leave Days:</span>
-                    <span className="font-semibold text-gray-950">{comp.leaveDays} Days</span>
-                  </div>
-                )
-              )}
-              {comp.holidaysDays > 0 && (
-                <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">• Paid District Holidays:</span>
-                  <span className="font-semibold text-gray-950">
-                    {comp.holidaysDays} Days
-                  </span>
+              {ptoSection.items.map((item, idx) => (
+                <div key={idx} className="flex justify-between items-baseline">
+                  <span className="text-gray-700">• {item.label}:</span>
+                  <span className="font-semibold text-gray-950">{item.value}</span>
                 </div>
-              )}
-              {comp.additionalLeavesText && (
-                <div className="flex justify-between items-baseline text-[8.4pt] text-gray-600">
-                  <span>• Additional Protected Leaves:</span>
-                  <span>{comp.additionalLeavesText}</span>
-                </div>
-              )}
-              {comp.vacationScaleNote && (
-                <div className="text-[7.2pt] italic text-gray-500 pt-0.5">
-                  {comp.vacationScaleNote}
-                </div>
+              ))}
+              {ptoSection.footnote && (
+                <div className="text-[7.2pt] italic text-gray-500 pt-0.5">{ptoSection.footnote}</div>
               )}
             </div>
           </div>
@@ -266,44 +167,32 @@ export const TotalCompPreview = forwardRef<HTMLDivElement, TotalCompPreviewProps
           <div className="rounded border-2 border-gray-950 bg-white text-gray-950 px-2.5 py-1.5 flex justify-between items-center">
             <div>
               <div className="text-[9.5pt] font-bold tracking-wider uppercase text-gray-950">
-                Estimated Total Annual Investment
+                {doc.grandTotalLabel}
               </div>
-              <div className="text-[7.8pt] text-gray-600">
-                Direct Pay ({formatCurrency(comp.directPayTotal, { includeCents: false })}) + Benefits &amp; Statutory (
-                {formatCurrency(comp.benefitsAndStatutoryTotal, { includeCents: false })})
-              </div>
+              <div className="text-[7.8pt] text-gray-600">{doc.grandTotalSubtext}</div>
             </div>
-            <div className="text-[12.5pt] font-bold font-mono text-gray-950">
-              {formatCurrency(comp.grandTotal)}
-            </div>
+            <div className="text-[12.5pt] font-bold font-mono text-gray-950">{doc.grandTotalValue}</div>
           </div>
         </div>
 
         {/* Note */}
-        <p className="mt-1 text-[7.5pt] italic text-gray-600 leading-tight">
-          *Note: Overtime, elective extra-duty stipends (e.g., coaching), and variable sub coverage pay
-          are not included in initial hire statements but add further to earned annual pay.*
-        </p>
+        <p className="mt-1 text-[7.5pt] italic text-gray-600 leading-tight">*Note: {doc.disclaimerNote}*</p>
 
         {/* Sign-off Block */}
         <div className="mt-1 text-[8.8pt] leading-tight space-y-0 font-serif text-gray-950">
-          <div>Sincerely,</div>
+          <div>{doc.signOff}</div>
 
           <div className="py-0">
             <Signature
-              signerName={letter.signerName || config.defaultSignerName}
+              signerName={doc.signerName}
               signatureType={letter.signatureType || 'authentic'}
               customSignatureData={letter.customSignatureData}
               className="!h-8 !py-0"
             />
           </div>
 
-          <div className="font-semibold text-gray-950 text-[9pt] mt-0.5">
-            {letter.signerName || config.defaultSignerName}
-          </div>
-          <div className="text-gray-700 text-[8.5pt]">
-            {config.districtName || 'Cañon City Schools'} Human Resources
-          </div>
+          <div className="font-semibold text-gray-950 text-[9pt] mt-0.5">{doc.signerName}</div>
+          <div className="text-gray-700 text-[8.5pt]">{doc.signerOrg}</div>
         </div>
       </div>
     )
