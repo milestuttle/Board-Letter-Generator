@@ -272,8 +272,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Letter Date</label>
-            <input
+            <label htmlFor="letter-letter-date" className="block text-xs font-medium text-ink-soft mb-1">Letter Date</label>
+            <input id="letter-letter-date"
               type="text"
               value={letter.letterDate}
               onChange={(e) => updateField('letterDate', e.target.value)}
@@ -283,10 +283,10 @@ export const LetterForm: React.FC<LetterFormProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">
+            <label htmlFor="letter-board-meeting-date" className="block text-xs font-medium text-ink-soft mb-1">
               Board Meeting Date
             </label>
-            <input
+            <input id="letter-board-meeting-date"
               type="text"
               value={letter.boardMeetingDate}
               onChange={(e) => updateField('boardMeetingDate', e.target.value)}
@@ -296,8 +296,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">School Year</label>
-            <input
+            <label htmlFor="letter-school-year" className="block text-xs font-medium text-ink-soft mb-1">School Year</label>
+            <input id="letter-school-year"
               type="text"
               value={letter.schoolYear}
               onChange={(e) => updateField('schoolYear', e.target.value)}
@@ -317,8 +317,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">First Name *</label>
-            <input
+            <label htmlFor="letter-first-name" className="block text-xs font-medium text-ink-soft mb-1">First Name *</label>
+            <input id="letter-first-name"
               type="text"
               value={letter.recipientFirstName}
               onChange={(e) => updateField('recipientFirstName', e.target.value)}
@@ -327,8 +327,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Last Name *</label>
-            <input
+            <label htmlFor="letter-last-name" className="block text-xs font-medium text-ink-soft mb-1">Last Name *</label>
+            <input id="letter-last-name"
               type="text"
               value={letter.recipientLastName}
               onChange={(e) => updateField('recipientLastName', e.target.value)}
@@ -339,8 +339,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">Street Address</label>
-          <input
+          <label htmlFor="letter-street-address" className="block text-xs font-medium text-ink-soft mb-1">Street Address</label>
+          <input id="letter-street-address"
             type="text"
             value={letter.streetAddress}
             onChange={(e) => updateField('streetAddress', e.target.value)}
@@ -351,8 +351,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
 
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-1">
-            <label className="block text-xs font-medium text-ink-soft mb-1">City</label>
-            <input
+            <label htmlFor="letter-city" className="block text-xs font-medium text-ink-soft mb-1">City</label>
+            <input id="letter-city"
               type="text"
               value={letter.city}
               onChange={(e) => updateField('city', e.target.value)}
@@ -361,8 +361,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">State</label>
-            <input
+            <label htmlFor="letter-state" className="block text-xs font-medium text-ink-soft mb-1">State</label>
+            <input id="letter-state"
               type="text"
               value={letter.state}
               onChange={(e) => updateField('state', e.target.value)}
@@ -371,8 +371,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">ZIP</label>
-            <input
+            <label htmlFor="letter-zip" className="block text-xs font-medium text-ink-soft mb-1">ZIP</label>
+            <input id="letter-zip"
               type="text"
               value={letter.zip}
               onChange={(e) => updateField('zip', e.target.value)}
@@ -383,10 +383,10 @@ export const LetterForm: React.FC<LetterFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="letter-custom-salutation" className="block text-xs font-medium text-ink-soft mb-1">
             Custom Salutation (Optional)
           </label>
-          <input
+          <input id="letter-custom-salutation"
             type="text"
             value={letter.customSalutation || ''}
             onChange={(e) => updateField('customSalutation', e.target.value)}
@@ -454,8 +454,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Signer Name</label>
-            <input
+            <label htmlFor="letter-signer-name" className="block text-xs font-medium text-ink-soft mb-1">Signer Name</label>
+            <input id="letter-signer-name"
               type="text"
               value={letter.signerName || ''}
               onChange={(e) => updateField('signerName', e.target.value)}
@@ -464,8 +464,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Signer Title</label>
-            <input
+            <label htmlFor="letter-signer-title" className="block text-xs font-medium text-ink-soft mb-1">Signer Title</label>
+            <input id="letter-signer-title"
               type="text"
               value={letter.signerTitle || ''}
               onChange={(e) => updateField('signerTitle', e.target.value)}
@@ -477,8 +477,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Typist Initials</label>
-            <input
+            <label htmlFor="letter-typist-initials" className="block text-xs font-medium text-ink-soft mb-1">Typist Initials</label>
+            <input id="letter-typist-initials"
               type="text"
               value={letter.typistInitials || ''}
               onChange={(e) => updateField('typistInitials', e.target.value)}
@@ -487,8 +487,8 @@ export const LetterForm: React.FC<LetterFormProps> = ({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-ink-soft mb-1">Cc: Line</label>
-            <input
+            <label htmlFor="letter-cc-line" className="block text-xs font-medium text-ink-soft mb-1">Cc: Line</label>
+            <input id="letter-cc-line"
               type="text"
               value={letter.ccLine || ''}
               onChange={(e) => updateField('ccLine', e.target.value)}

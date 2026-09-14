@@ -16,10 +16,10 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="resignation-position-resigning-from" className="block text-xs font-medium text-ink-soft mb-1">
             Position Resigning From *
           </label>
-          <input
+          <input id="resignation-position-resigning-from"
             type="text"
             value={letter.resignation?.position || letter.positionTitle || ''}
             onChange={(e) => {
@@ -31,10 +31,10 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="resignation-school-department" className="block text-xs font-medium text-ink-soft mb-1">
             School / Department *
           </label>
-          <input
+          <input id="resignation-school-department"
             type="text"
             list="district-locations-list"
             value={letter.resignation?.location || letter.location || ''}
@@ -50,10 +50,10 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-amber-50/40 p-4 rounded-md border border-amber-100">
         <div>
-          <label className="block text-xs font-semibold text-amber-950 mb-1">
+          <label htmlFor="resignation-effective-date-of-resignation" className="block text-xs font-semibold text-amber-950 mb-1">
             Effective Date of Resignation
           </label>
-          <input
+          <input id="resignation-effective-date-of-resignation"
             type="text"
             value={letter.resignation?.effectiveDate || ''}
             onChange={(e) => updateResignation('effectiveDate', e.target.value)}
@@ -64,10 +64,10 @@ export const ResignationFieldsSection: React.FC<ResignationFieldsSectionProps> =
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-ink-soft mb-1">
+        <label htmlFor="resignation-custom-appreciation-message" className="block text-xs font-medium text-ink-soft mb-1">
           Custom Appreciation Message (Optional)
         </label>
-        <textarea
+        <textarea id="resignation-custom-appreciation-message"
           rows={2}
           value={
             letter.resignation?.customAppreciation ||

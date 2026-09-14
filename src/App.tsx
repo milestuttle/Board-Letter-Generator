@@ -99,12 +99,22 @@ export function App() {
 
   // Block an export/print action if required fields are still blank, so a
   // document can't leave the tool with placeholder text like "[Position]" in
-  // it. Returns true (and warns) when the action should be stopped.
+  // it. Returns true (and warns, and scrolls/focuses the first missing field)
+  // when the action should be stopped.
   const blockIfMissingFields = () => {
     const missing = getMissingRequiredFields(activeLetter, activeDocumentTab)
     if (missing.length === 0) return false
     const list = missing.map((m) => m.label).join(', ')
     showToast(`Add ${missing.length > 1 ? 'these fields' : 'this field'} before exporting: ${list}`, 5000)
+
+    const firstField = document.getElementById(missing[0].domId)
+    if (firstField) {
+      firstField.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
+      // Wait for the scroll to be underway before focusing, so the browser
+      // doesn't jump straight to the field and skip the smooth scroll.
+      window.setTimeout(() => firstField.focus(), 300)
+    }
+
     return true
   }
 

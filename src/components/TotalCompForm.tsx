@@ -231,8 +231,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         </label>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">First Name</label>
-            <input
+            <label htmlFor="tc-first-name" className="block text-xs font-medium text-muted mb-1">First Name</label>
+            <input id="tc-first-name"
               type="text"
               value={letter.recipientFirstName}
               onChange={(e) => onChange({ ...letter, recipientFirstName: e.target.value })}
@@ -241,8 +241,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Last Name</label>
-            <input
+            <label htmlFor="tc-last-name" className="block text-xs font-medium text-muted mb-1">Last Name</label>
+            <input id="tc-last-name"
               type="text"
               value={letter.recipientLastName}
               onChange={(e) => onChange({ ...letter, recipientLastName: e.target.value })}
@@ -254,8 +254,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Position Title</label>
-            <input
+            <label htmlFor="tc-position-title" className="block text-xs font-medium text-muted mb-1">Position Title</label>
+            <input id="tc-position-title"
               type="text"
               value={letter.positionTitle}
               onChange={(e) => onChange({ ...letter, positionTitle: e.target.value })}
@@ -264,8 +264,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Letter Date</label>
-            <input
+            <label htmlFor="tc-letter-date" className="block text-xs font-medium text-muted mb-1">Letter Date</label>
+            <input id="tc-letter-date"
               type="text"
               value={letter.letterDate}
               onChange={(e) => onChange({ ...letter, letterDate: e.target.value })}
@@ -331,8 +331,8 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <label className="text-[11px] text-muted">Custom FTE:</label>
-              <input
+              <label htmlFor="tc-custom-fte" className="text-[11px] text-muted">Custom FTE:</label>
+              <input id="tc-custom-fte"
                 type="number"
                 step="0.05"
                 min="0.1"
@@ -410,10 +410,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
             {tc.isHourly ?? true ? (
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <div>
-                  <label className="block text-[11px] font-medium text-muted mb-1">
+                  <label htmlFor="tc-hourly-wage" className="block text-[11px] font-medium text-muted mb-1">
                     Hourly Wage ($)
                   </label>
-                  <input
+                  <input id="tc-hourly-wage"
                     type="text"
                     value={
                       tc.hourlyRate !== undefined
@@ -426,10 +426,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-medium text-muted mb-1">
+                  <label htmlFor="tc-hours-day" className="block text-[11px] font-medium text-muted mb-1">
                     Hours / Day
                   </label>
-                  <input
+                  <input id="tc-hours-day"
                     type="number"
                     step="0.5"
                     value={tc.hoursPerDay ?? config?.totalCompDefaults?.defaultHoursPerDay ?? 8}
@@ -438,10 +438,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-medium text-muted mb-1">
+                  <label htmlFor="tc-annual-days" className="block text-[11px] font-medium text-muted mb-1">
                     Annual Days
                   </label>
-                  <input
+                  <input id="tc-annual-days"
                     type="number"
                     value={
                       tc.daysPerYear ??
@@ -456,10 +456,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
               </div>
             ) : (
               <div>
-                <label className="block text-[11px] font-medium text-muted mb-1">
+                <label htmlFor="tc-base-annual-salary" className="block text-[11px] font-medium text-muted mb-1">
                   Base Annual Salary
                 </label>
-                <input
+                <input id="tc-base-annual-salary"
                   type="text"
                   value={tc.baseAnnualSalary ?? comp.formattedBasePay}
                   onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
@@ -471,10 +471,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           </div>
         ) : (
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">
+            <label htmlFor="tc-base-annual-salary-2" className="block text-xs font-medium text-muted mb-1">
               Base Annual Salary
             </label>
-            <input
+            <input id="tc-base-annual-salary-2"
               type="text"
               value={tc.baseAnnualSalary ?? letter.certified?.baseSalary ?? '$52,400.00'}
               onChange={(e) => handleBaseAnnualSalaryChange(e.target.value)}
@@ -487,10 +487,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         {/* Stipends */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">
+            <label htmlFor="tc-stipend-amount" className="block text-xs font-medium text-muted mb-1">
               Stipend Amount ($)
             </label>
-            <input
+            <input id="tc-stipend-amount"
               type="text"
               value={tc.stipendAmount ?? (comp.stipend > 0 ? comp.formattedStipend : '')}
               onChange={(e) => handleStipendChange(e.target.value)}
@@ -499,10 +499,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">
+            <label htmlFor="tc-stipend-type-description" className="block text-xs font-medium text-muted mb-1">
               Stipend Type / Description
             </label>
-            <input
+            <input id="tc-stipend-type-description"
               type="text"
               value={tc.stipendDescription ?? 'Hard-to-Fill / Center-Based'}
               onChange={(e) => handleStipendChange(tc.stipendAmount || '', e.target.value)}
@@ -567,10 +567,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           <>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-annual-days-2" className="block text-xs font-medium text-muted mb-1">
                   Annual Days (Upfront)
                 </label>
-                <input
+                <input id="tc-annual-days-2"
                   type="number"
                   value={
                     tc.classified12MoAnnualDaysUpfront ??
@@ -588,10 +588,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 <span className="text-[10px] text-muted">Frontloaded upfront</span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-sick-leave" className="block text-xs font-medium text-muted mb-1">
                   Sick Leave (Days / Mo)
                 </label>
-                <input
+                <input id="tc-sick-leave"
                   type="number"
                   step="0.5"
                   value={
@@ -612,10 +612,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 </span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-vacation-rate" className="block text-xs font-medium text-muted mb-1">
                   Vacation Rate (Days / Mo)
                 </label>
-                <input
+                <input id="tc-vacation-rate"
                   type="number"
                   step="0.01"
                   value={
@@ -639,10 +639,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-paid-district-holidays" className="block text-xs font-medium text-muted mb-1">
                   Paid District Holidays
                 </label>
-                <input
+                <input id="tc-paid-district-holidays"
                   type="number"
                   value={comp.holidaysDays}
                   onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
@@ -650,10 +650,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-total-annual-paid-leave-days" className="block text-xs font-medium text-muted mb-1">
                   Total Annual Paid Leave Days
                 </label>
-                <input
+                <input id="tc-total-annual-paid-leave-days"
                   type="number"
                   step="0.01"
                   value={comp.leaveDays}
@@ -672,10 +672,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
           <>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-personal-days" className="block text-xs font-medium text-muted mb-1">
                   Personal Days (Upfront, Years 1–4)
                 </label>
-                <input
+                <input id="tc-personal-days"
                   type="number"
                   value={
                     tc.certifiedPersonalDaysUpfront ??
@@ -693,10 +693,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 <span className="text-[10px] text-muted">Frontloaded upfront</span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-sick-leave-days" className="block text-xs font-medium text-muted mb-1">
                   Sick Leave Days (Upfront, Years 1–4)
                 </label>
-                <input
+                <input id="tc-sick-leave-days"
                   type="number"
                   value={
                     tc.certifiedSickDaysUpfront ??
@@ -717,10 +717,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-total-upfront-paid-leave-days" className="block text-xs font-medium text-muted mb-1">
                   Total Upfront Paid Leave Days
                 </label>
-                <input
+                <input id="tc-total-upfront-paid-leave-days"
                   type="number"
                   value={comp.leaveDays}
                   onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
@@ -731,10 +731,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 </span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">
+                <label htmlFor="tc-paid-district-holidays-2" className="block text-xs font-medium text-muted mb-1">
                   Paid District Holidays
                 </label>
-                <input
+                <input id="tc-paid-district-holidays-2"
                   type="number"
                   value={comp.holidaysDays}
                   onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
@@ -746,10 +746,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         ) : (
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-muted mb-1">
+              <label htmlFor="tc-annual-leave-days" className="block text-xs font-medium text-muted mb-1">
                 Annual Leave Days
               </label>
-              <input
+              <input id="tc-annual-leave-days"
                 type="number"
                 value={comp.leaveDays}
                 onChange={(e) => updateTc({ paidLeaveDays: parseInt(e.target.value, 10) || 0 })}
@@ -757,10 +757,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted mb-1">
+              <label htmlFor="tc-paid-district-holidays-3" className="block text-xs font-medium text-muted mb-1">
                 Paid District Holidays
               </label>
-              <input
+              <input id="tc-paid-district-holidays-3"
                 type="number"
                 value={comp.holidaysDays}
                 onChange={(e) => updateTc({ paidHolidaysDays: parseInt(e.target.value, 10) || 0 })}
@@ -771,10 +771,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         )}
 
         <div>
-          <label className="block text-xs font-medium text-muted mb-1">
+          <label htmlFor="tc-additional-protected-leaves-note" className="block text-xs font-medium text-muted mb-1">
             Additional Protected Leaves Note
           </label>
-          <input
+          <input id="tc-additional-protected-leaves-note"
             type="text"
             value={comp.additionalLeavesText}
             onChange={(e) => updateTc({ additionalLeavesText: e.target.value })}
@@ -815,10 +815,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-medium text-muted mb-1">
+                <label htmlFor="tc-health-monthly-rate" className="block font-medium text-muted mb-1">
                   Health Monthly Rate ($/mo)
                 </label>
-                <input
+                <input id="tc-health-monthly-rate"
                   type="number"
                   step="0.1"
                   disabled={!comp.isBenefitEligible}
@@ -837,10 +837,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 </span>
               </div>
               <div>
-                <label className="block font-medium text-muted mb-1">
+                <label htmlFor="tc-dental-monthly-rate" className="block font-medium text-muted mb-1">
                   Dental Monthly Rate ($/mo)
                 </label>
-                <input
+                <input id="tc-dental-monthly-rate"
                   type="number"
                   step="0.1"
                   disabled={!comp.isBenefitEligible}
@@ -859,10 +859,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 </span>
               </div>
               <div>
-                <label className="block font-medium text-muted mb-1">
+                <label htmlFor="tc-life-premium-annual" className="block font-medium text-muted mb-1">
                   Life Premium Annual ($ - Optional)
                 </label>
-                <input
+                <input id="tc-life-premium-annual"
                   type="number"
                   step="0.1"
                   disabled={!comp.isBenefitEligible}
@@ -880,10 +880,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 <span className="text-[10px] text-muted">{comp.lifePremiumAnnual > 0 ? '$20,000 policy' : '$0 = Excluded from statement'}</span>
               </div>
               <div>
-                <label className="block font-medium text-muted mb-1">
+                <label htmlFor="tc-pera-retirement-rate" className="block font-medium text-muted mb-1">
                   PERA Retirement Rate (%)
                 </label>
-                <input
+                <input id="tc-pera-retirement-rate"
                   type="number"
                   step="0.01"
                   value={comp.peraRate * 100}
@@ -895,10 +895,10 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
                 <span className="text-[10px] text-muted">Cañon City PERA default: {(comp.peraRate * 100).toFixed(2)}%</span>
               </div>
               <div>
-                <label className="block font-medium text-muted mb-1">
+                <label htmlFor="tc-medicare-rate" className="block font-medium text-muted mb-1">
                   Medicare Rate (%)
                 </label>
-                <input
+                <input id="tc-medicare-rate"
                   type="number"
                   step="0.01"
                   value={comp.medicareRate * 100}

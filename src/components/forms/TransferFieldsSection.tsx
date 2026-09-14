@@ -15,10 +15,10 @@ export const TransferFieldsSection: React.FC<TransferFieldsSectionProps> = ({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-xs font-medium text-ink-soft mb-1">
+        <label htmlFor="transfer-transfer-full-description-wording" className="block text-xs font-medium text-ink-soft mb-1">
           Transfer Full Description Wording *
         </label>
-        <textarea
+        <textarea id="transfer-transfer-full-description-wording"
           rows={3}
           value={
             letter.transfer?.transferDescription ||
@@ -37,10 +37,10 @@ export const TransferFieldsSection: React.FC<TransferFieldsSectionProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-purple-50/40 p-4 rounded-md border border-purple-100">
         <div>
-          <label className="block text-xs font-semibold text-purple-950 mb-1">
+          <label htmlFor="transfer-effective-date" className="block text-xs font-semibold text-purple-950 mb-1">
             Effective Date
           </label>
-          <input
+          <input id="transfer-effective-date"
             type="text"
             value={letter.transfer?.effectiveDate || ''}
             onChange={(e) => updateTransfer('effectiveDate', e.target.value)}
@@ -50,10 +50,10 @@ export const TransferFieldsSection: React.FC<TransferFieldsSectionProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-purple-950 mb-1">
+          <label htmlFor="transfer-new-position-location-reference" className="block text-xs font-semibold text-purple-950 mb-1">
             New Position / Location Reference
           </label>
-          <input
+          <input id="transfer-new-position-location-reference"
             type="text"
             list="district-locations-list"
             value={letter.positionTitle || ''}

@@ -30,15 +30,27 @@ describe('getMissingRequiredFields', () => {
     )
   })
 
-  it('flags blank position title with a type-specific label', () => {
+  it('flags blank position title with a type-specific label and matching form field id', () => {
     const resignation = { ...baseLetter(), type: 'resignation' as const, positionTitle: '' }
     expect(getMissingRequiredFields(resignation, 'board_letter')).toEqual(
-      expect.arrayContaining([{ key: 'positionTitle', label: 'Position Resigning From' }])
+      expect.arrayContaining([
+        {
+          key: 'positionTitle',
+          label: 'Position Resigning From',
+          domId: 'resignation-position-resigning-from',
+        },
+      ])
     )
 
     const retirement = { ...baseLetter(), type: 'retirement' as const, positionTitle: '' }
     expect(getMissingRequiredFields(retirement, 'board_letter')).toEqual(
-      expect.arrayContaining([{ key: 'positionTitle', label: 'Retiring Position Title' }])
+      expect.arrayContaining([
+        {
+          key: 'positionTitle',
+          label: 'Retiring Position Title',
+          domId: 'retirement-retiring-position-title',
+        },
+      ])
     )
   })
 

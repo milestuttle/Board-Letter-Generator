@@ -19,10 +19,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="certified-position-role-title" className="block text-xs font-medium text-ink-soft mb-1">
             Position / Role Title *
           </label>
-          <input
+          <input id="certified-position-role-title"
             type="text"
             value={letter.positionTitle}
             onChange={(e) => updateField('positionTitle', e.target.value)}
@@ -31,10 +31,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="certified-location-department" className="block text-xs font-medium text-ink-soft mb-1">
             Location / Department *
           </label>
-          <input
+          <input id="certified-location-department"
             type="text"
             list="district-locations-list"
             value={letter.location}
@@ -48,10 +48,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
       <div className="bg-accent-soft p-4 rounded-md border border-accent space-y-3">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-accent-dark mb-1">
+            <label htmlFor="certified-salary-lane" className="block text-xs font-semibold text-accent-dark mb-1">
               Salary Lane
             </label>
-            <input
+            <input id="certified-salary-lane"
               type="text"
               list="certified-lanes-list"
               value={letter.certified?.lane || ''}
@@ -62,10 +62,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-accent-dark mb-1">
+            <label htmlFor="certified-salary-step" className="block text-xs font-semibold text-accent-dark mb-1">
               Salary Step
             </label>
-            <input
+            <input id="certified-salary-step"
               type="text"
               value={letter.certified?.step || ''}
               onChange={(e) => updateCertified('step', e.target.value)}
@@ -75,10 +75,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-accent-dark mb-1">
+            <label htmlFor="certified-base-salary" className="block text-xs font-semibold text-accent-dark mb-1">
               Base Salary ($)
             </label>
-            <input
+            <input id="certified-base-salary"
               type="text"
               value={letter.certified?.baseSalary || ''}
               onChange={(e) => {
@@ -103,10 +103,10 @@ export const CertifiedFieldsSection: React.FC<CertifiedFieldsSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-accent-dark mb-1">
+            <label htmlFor="certified-start-date" className="block text-xs font-semibold text-accent-dark mb-1">
               Start Date
             </label>
-            <input
+            <input id="certified-start-date"
               type="text"
               value={letter.certified?.startDate || ''}
               onChange={(e) => updateCertified('startDate', e.target.value)}

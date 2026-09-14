@@ -653,6 +653,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
               type="file"
               accept=".csv"
               onChange={handleFileUpload}
+              aria-label="CSV file"
               className="hidden"
             />
             <button

@@ -17,10 +17,10 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       {/* Position & Location */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="retirement-retiring-position-title" className="block text-xs font-medium text-ink-soft mb-1">
             Retiring Position Title *
           </label>
-          <input
+          <input id="retirement-retiring-position-title"
             type="text"
             value={letter.positionTitle || letter.retirement?.position || ''}
             onChange={(e) => {
@@ -32,10 +32,10 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="retirement-school-department" className="block text-xs font-medium text-ink-soft mb-1">
             School / Department *
           </label>
-          <input
+          <input id="retirement-school-department"
             type="text"
             list="district-locations-list"
             value={letter.location || letter.retirement?.location || ''}
@@ -52,10 +52,10 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       {/* Effective Date & Years of Service */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-teal-50/40 p-4 rounded-md border border-teal-100">
         <div>
-          <label className="block text-xs font-semibold text-teal-950 mb-1">
+          <label htmlFor="retirement-effective-date-of-retirement" className="block text-xs font-semibold text-teal-950 mb-1">
             Effective Date of Retirement *
           </label>
-          <input
+          <input id="retirement-effective-date-of-retirement"
             type="text"
             value={letter.retirement?.effectiveDate || ''}
             onChange={(e) => updateRetirement('effectiveDate', e.target.value)}
@@ -65,10 +65,10 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-teal-950 mb-1">
+          <label htmlFor="retirement-years-of-service-with-district" className="block text-xs font-semibold text-teal-950 mb-1">
             Years of Service with District
           </label>
-          <input
+          <input id="retirement-years-of-service-with-district"
             type="text"
             value={letter.retirement?.yearsOfService || ''}
             onChange={(e) => updateRetirement('yearsOfService', e.target.value)}
@@ -104,6 +104,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
                 `for the remainder of the ${letter.schoolYear} School Year.`
               }
               onChange={(e) => updateRetirement('remainderYearText', e.target.value)}
+              aria-label="Custom remainder-of-year clause text"
               placeholder="e.g. for the remainder of the 2025/2026 School Year."
               className="w-full px-3 py-1.5 text-xs rounded-lg bg-white border border-rule focus:border-teal-500 outline-none"
             />
@@ -114,7 +115,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
       {/* Retiree Celebration Details */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="block text-xs font-semibold text-ink">
+          <label htmlFor="retirement-celebration-text" className="block text-xs font-semibold text-ink">
             Retiree Celebration Details Paragraph
           </label>
           <div className="flex items-center gap-1">
@@ -145,6 +146,7 @@ export const RetirementFieldsSection: React.FC<RetirementFieldsSectionProps> = (
           </div>
         </div>
         <textarea
+          id="retirement-celebration-text"
           rows={2}
           value={
             letter.retirement?.celebrationText ||

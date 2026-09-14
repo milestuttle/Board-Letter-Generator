@@ -299,10 +299,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-district-name" className="block text-xs font-medium text-ink-soft mb-1">
                     District Name
                   </label>
-                  <input
+                  <input id="settings-district-name"
                     type="text"
                     value={formData.districtName}
                     onChange={(e) => setFormData({ ...formData, districtName: e.target.value })}
@@ -310,10 +310,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-district-subtitle-code" className="block text-xs font-medium text-ink-soft mb-1">
                     District Subtitle / Code
                   </label>
-                  <input
+                  <input id="settings-district-subtitle-code"
                     type="text"
                     value={formData.districtSubtitle}
                     onChange={(e) => setFormData({ ...formData, districtSubtitle: e.target.value })}
@@ -324,10 +324,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-address-line" className="block text-xs font-medium text-ink-soft mb-1">
                     Address Line
                   </label>
-                  <input
+                  <input id="settings-address-line"
                     type="text"
                     value={formData.addressLine1}
                     onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
@@ -335,10 +335,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-city-state-zip" className="block text-xs font-medium text-ink-soft mb-1">
                     City, State, ZIP
                   </label>
-                  <input
+                  <input id="settings-city-state-zip"
                     type="text"
                     value={formData.cityStateZip}
                     onChange={(e) => setFormData({ ...formData, cityStateZip: e.target.value })}
@@ -349,8 +349,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">Phone</label>
-                  <input
+                  <label htmlFor="settings-phone" className="block text-xs font-medium text-ink-soft mb-1">Phone</label>
+                  <input id="settings-phone"
                     type="text"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -358,8 +358,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">Fax</label>
-                  <input
+                  <label htmlFor="settings-fax" className="block text-xs font-medium text-ink-soft mb-1">Fax</label>
+                  <input id="settings-fax"
                     type="text"
                     value={formData.fax}
                     onChange={(e) => setFormData({ ...formData, fax: e.target.value })}
@@ -367,8 +367,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">HR Email</label>
-                  <input
+                  <label htmlFor="settings-hr-email" className="block text-xs font-medium text-ink-soft mb-1">HR Email</label>
+                  <input id="settings-hr-email"
                     type="text"
                     value={formData.hrEmail}
                     onChange={(e) => setFormData({ ...formData, hrEmail: e.target.value })}
@@ -376,8 +376,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">HR Phone</label>
-                  <input
+                  <label htmlFor="settings-hr-phone" className="block text-xs font-medium text-ink-soft mb-1">HR Phone</label>
+                  <input id="settings-hr-phone"
                     type="text"
                     value={formData.hrPhone}
                     onChange={(e) => setFormData({ ...formData, hrPhone: e.target.value })}
@@ -387,10 +387,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-ink-soft mb-1">
+                <label htmlFor="settings-district-mission-statement-quote" className="block text-xs font-medium text-ink-soft mb-1">
                   District Mission Statement Quote
                 </label>
-                <textarea
+                <textarea id="settings-district-mission-statement-quote"
                   rows={3}
                   value={formData.missionStatement}
                   onChange={(e) => setFormData({ ...formData, missionStatement: e.target.value })}
@@ -414,10 +414,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-ink-soft mb-1">
+                    <label htmlFor="settings-default-next-board-meeting-date" className="block text-xs font-semibold text-ink-soft mb-1">
                       Default / Next Board Meeting Date
                     </label>
-                    <input
+                    <input id="settings-default-next-board-meeting-date"
                       type="text"
                       value={formData.defaultBoardMeetingDate || ''}
                       onChange={(e) =>
@@ -432,10 +432,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-ink-soft mb-1">
+                    <label htmlFor="settings-default-school-year" className="block text-xs font-semibold text-ink-soft mb-1">
                       Default School Year
                     </label>
-                    <input
+                    <input id="settings-default-school-year"
                       type="text"
                       value={formData.defaultSchoolYear || ''}
                       onChange={(e) =>
@@ -452,10 +452,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-ink-soft mb-1">
+                <label htmlFor="settings-default-annual-retiree-celebration-announcement" className="block text-xs font-semibold text-ink-soft mb-1">
                   Default Annual Retiree Celebration Announcement
                 </label>
-                <textarea
+                <textarea id="settings-default-annual-retiree-celebration-announcement"
                   rows={3}
                   value={formData.defaultRetirementCelebrationText || ''}
                   onChange={(e) =>
@@ -493,6 +493,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     type="text"
                     value={newLocationInput}
                     onChange={(e) => setNewLocationInput(e.target.value)}
+                    aria-label="New school or building location"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault()
@@ -551,6 +552,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     type="text"
                     value={newLaneInput}
                     onChange={(e) => setNewLaneInput(e.target.value)}
+                    aria-label="New certified salary lane"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault()
@@ -619,6 +621,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         value={staff.name}
                         onChange={(e) => updateStaffMember(staff.id, 'name', e.target.value)}
                         placeholder="NAME (e.g. ADAM HARTMAN)"
+                        aria-label="Administrator name"
                         className="w-full px-2.5 py-1.5 text-xs font-bold rounded-lg border border-rule bg-white"
                       />
                     </div>
@@ -628,6 +631,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         value={staff.title}
                         onChange={(e) => updateStaffMember(staff.id, 'title', e.target.value)}
                         placeholder="Title (e.g. Superintendent of Schools)"
+                        aria-label="Administrator title"
                         className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-rule bg-white"
                       />
                     </div>
@@ -651,10 +655,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-default-signer-name" className="block text-xs font-medium text-ink-soft mb-1">
                     Default Signer Name
                   </label>
-                  <input
+                  <input id="settings-default-signer-name"
                     type="text"
                     value={formData.defaultSignerName}
                     onChange={(e) =>
@@ -664,10 +668,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-default-signer-title" className="block text-xs font-medium text-ink-soft mb-1">
                     Default Signer Title
                   </label>
-                  <input
+                  <input id="settings-default-signer-title"
                     type="text"
                     value={formData.defaultSignerTitle}
                     onChange={(e) =>
@@ -680,10 +684,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-default-typist-initials" className="block text-xs font-medium text-ink-soft mb-1">
                     Default Typist Initials
                   </label>
-                  <input
+                  <input id="settings-default-typist-initials"
                     type="text"
                     value={formData.defaultTypistInitials}
                     onChange={(e) =>
@@ -693,10 +697,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-ink-soft mb-1">
+                  <label htmlFor="settings-default-cc-line" className="block text-xs font-medium text-ink-soft mb-1">
                     Default Cc: Line
                   </label>
-                  <input
+                  <input id="settings-default-cc-line"
                     type="text"
                     value={formData.defaultCc}
                     onChange={(e) => setFormData({ ...formData, defaultCc: e.target.value })}
@@ -741,10 +745,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-health-monthly-contribution" className="block text-xs font-medium text-ink-soft mb-1">
                       Health Monthly Contribution ($/mo)
                     </label>
-                    <input
+                    <input id="settings-health-monthly-contribution"
                       type="number"
                       step="0.1"
                       value={formData.totalCompDefaults?.healthMonthlyRate ?? 651.2}
@@ -758,10 +762,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-dental-monthly-contribution" className="block text-xs font-medium text-ink-soft mb-1">
                       Dental Monthly Contribution ($/mo)
                     </label>
-                    <input
+                    <input id="settings-dental-monthly-contribution"
                       type="number"
                       step="0.1"
                       value={formData.totalCompDefaults?.dentalMonthlyRate ?? 5.0}
@@ -775,10 +779,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-life-insurance-annual-premium" className="block text-xs font-medium text-ink-soft mb-1">
                       Life Insurance Annual Premium ($)
                     </label>
-                    <input
+                    <input id="settings-life-insurance-annual-premium"
                       type="number"
                       step="0.1"
                       value={formData.totalCompDefaults?.lifeInsurancePremiumAnnual ?? 0}
@@ -803,10 +807,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-employer-pera-retirement-rate" className="block text-xs font-medium text-ink-soft mb-1">
                       Employer PERA Retirement Rate (%)
                     </label>
-                    <input
+                    <input id="settings-employer-pera-retirement-rate"
                       type="number"
                       step="0.01"
                       value={((formData.totalCompDefaults?.peraRate ?? 0.214) * 100).toFixed(2)}
@@ -818,10 +822,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span className="text-[10px] text-muted">Cañon City Standard: 21.40%</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-employer-medicare-rate" className="block text-xs font-medium text-ink-soft mb-1">
                       Employer Medicare Rate (%)
                     </label>
-                    <input
+                    <input id="settings-employer-medicare-rate"
                       type="number"
                       step="0.01"
                       value={((formData.totalCompDefaults?.medicareRate ?? 0.0145) * 100).toFixed(2)}
@@ -844,10 +848,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-standard-daily-hours" className="block text-xs font-medium text-ink-soft mb-1">
                       Standard Daily Hours
                     </label>
-                    <input
+                    <input id="settings-standard-daily-hours"
                       type="number"
                       step="0.5"
                       value={formData.totalCompDefaults?.defaultHoursPerDay ?? 8}
@@ -858,10 +862,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-9-month-classified-days-year" className="block text-xs font-medium text-ink-soft mb-1">
                       9-Month Classified Days / Year
                     </label>
-                    <input
+                    <input id="settings-9-month-classified-days-year"
                       type="number"
                       value={formData.totalCompDefaults?.defaultDays9Month ?? 176}
                       onChange={(e) =>
@@ -871,10 +875,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-12-month-classified-days-year" className="block text-xs font-medium text-ink-soft mb-1">
                       12-Month Classified Days / Year
                     </label>
-                    <input
+                    <input id="settings-12-month-classified-days-year"
                       type="number"
                       value={formData.totalCompDefaults?.defaultDays12Month ?? 260}
                       onChange={(e) =>
@@ -901,10 +905,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </span>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-upfront-annual-days" className="block text-xs font-medium text-ink-soft mb-1">
                         Upfront Annual Days
                       </label>
-                      <input
+                      <input id="settings-upfront-annual-days"
                         type="number"
                         value={formData.totalCompDefaults?.classified12MoAnnualDaysUpfront ?? 3}
                         onChange={(e) =>
@@ -917,10 +921,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <span className="text-[10px] text-muted">Frontloaded upfront</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-sick-leave" className="block text-xs font-medium text-ink-soft mb-1">
                         Sick Leave (Days/Mo)
                       </label>
-                      <input
+                      <input id="settings-sick-leave"
                         type="number"
                         step="0.5"
                         value={formData.totalCompDefaults?.classified12MoSickDaysPerMonth ?? 1.0}
@@ -934,10 +938,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <span className="text-[10px] text-muted">1 day/mo = 12 days/yr</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-vacation-rate" className="block text-xs font-medium text-ink-soft mb-1">
                         Vacation Rate (Days/Mo)
                       </label>
-                      <input
+                      <input id="settings-vacation-rate"
                         type="number"
                         step="0.01"
                         value={formData.totalCompDefaults?.classified12MoVacationMonthlyRate ?? 0.84}
@@ -951,10 +955,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <span className="text-[10px] text-muted">0.84 days/mo (Years 1–5)</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-paid-district-holidays" className="block text-xs font-medium text-ink-soft mb-1">
                         Paid District Holidays
                       </label>
-                      <input
+                      <input id="settings-paid-district-holidays"
                         type="number"
                         value={formData.totalCompDefaults?.defaultHolidaysDays12Month ?? 11}
                         onChange={(e) =>
@@ -976,10 +980,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-personal-days" className="block text-xs font-medium text-ink-soft mb-1">
                         Personal Days (Upfront)
                       </label>
-                      <input
+                      <input id="settings-personal-days"
                         type="number"
                         value={formData.totalCompDefaults?.certifiedPersonalDaysUpfront ?? 3}
                         onChange={(e) =>
@@ -992,10 +996,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <span className="text-[10px] text-muted">3 personal days upfront</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-ink-soft mb-1">
+                      <label htmlFor="settings-sick-leave-days" className="block text-xs font-medium text-ink-soft mb-1">
                         Sick Leave Days (Upfront)
                       </label>
-                      <input
+                      <input id="settings-sick-leave-days"
                         type="number"
                         value={formData.totalCompDefaults?.certifiedSickDaysUpfront ?? 8}
                         onChange={(e) =>
@@ -1013,10 +1017,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {/* 9-Month Classified & Protected Note */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-9-month-classified-leave-days" className="block text-xs font-medium text-ink-soft mb-1">
                       9-Month Classified Leave Days
                     </label>
-                    <input
+                    <input id="settings-9-month-classified-leave-days"
                       type="number"
                       value={formData.totalCompDefaults?.defaultLeaveDays9Month ?? 11}
                       onChange={(e) =>
@@ -1028,10 +1032,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-ink-soft mb-1">
+                    <label htmlFor="settings-protected-leaves-note" className="block text-xs font-medium text-ink-soft mb-1">
                       Protected Leaves Note
                     </label>
-                    <input
+                    <input id="settings-protected-leaves-note"
                       type="text"
                       value={
                         formData.totalCompDefaults?.defaultAdditionalLeavesText ??
@@ -1124,6 +1128,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       ref={backupFileInputRef}
                       type="file"
                       accept=".json,application/json"
+                      aria-label="Backup file"
                       className="hidden"
                       onChange={(e) => {
                         const file = e.target.files?.[0]

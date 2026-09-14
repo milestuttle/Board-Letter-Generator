@@ -17,10 +17,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="classified-position-role-title" className="block text-xs font-medium text-ink-soft mb-1">
             Position / Role Title *
           </label>
-          <input
+          <input id="classified-position-role-title"
             type="text"
             value={letter.positionTitle}
             onChange={(e) => updateField('positionTitle', e.target.value)}
@@ -29,10 +29,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-ink-soft mb-1">
+          <label htmlFor="classified-school-location" className="block text-xs font-medium text-ink-soft mb-1">
             School / Location *
           </label>
-          <input
+          <input id="classified-school-location"
             type="text"
             list="district-locations-list"
             value={letter.location}
@@ -45,10 +45,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-emerald-50/40 p-4 rounded-md border border-emerald-100">
         <div>
-          <label className="block text-xs font-semibold text-emerald-950 mb-1">
+          <label htmlFor="classified-classification" className="block text-xs font-semibold text-emerald-950 mb-1">
             Classification
           </label>
-          <input
+          <input id="classified-classification"
             type="text"
             value={letter.classified?.classification || ''}
             onChange={(e) => updateClassified('classification', e.target.value)}
@@ -58,8 +58,8 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-emerald-950 mb-1">Level</label>
-          <input
+          <label htmlFor="classified-level" className="block text-xs font-semibold text-emerald-950 mb-1">Level</label>
+          <input id="classified-level"
             type="text"
             value={letter.classified?.level || ''}
             onChange={(e) => updateClassified('level', e.target.value)}
@@ -69,10 +69,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-emerald-950 mb-1">
+          <label htmlFor="classified-base-wage" className="block text-xs font-semibold text-emerald-950 mb-1">
             Base Wage
           </label>
-          <input
+          <input id="classified-base-wage"
             type="text"
             value={letter.classified?.baseWage || ''}
             onChange={(e) => updateClassified('baseWage', e.target.value)}
@@ -90,10 +90,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-emerald-950 mb-1">
+          <label htmlFor="classified-start-date" className="block text-xs font-semibold text-emerald-950 mb-1">
             Start Date
           </label>
-          <input
+          <input id="classified-start-date"
             type="text"
             value={letter.classified?.startDate || ''}
             onChange={(e) => updateClassified('startDate', e.target.value)}
@@ -104,10 +104,10 @@ export const ClassifiedFieldsSection: React.FC<ClassifiedFieldsSectionProps> = (
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-ink-soft mb-1">
+        <label htmlFor="classified-stipend-text" className="block text-xs font-medium text-ink-soft mb-1">
           Stipend Text (Optional)
         </label>
-        <input
+        <input id="classified-stipend-text"
           type="text"
           value={letter.classified?.stipendText || ''}
           onChange={(e) => updateClassified('stipendText', e.target.value)}
