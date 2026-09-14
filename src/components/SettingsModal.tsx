@@ -1235,7 +1235,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <button
             type="button"
             onClick={handleSave}
-            className="px-5 py-2 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+            className="px-5 py-2 bg-accent hover:bg-accent-dark text-white rounded-full text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Save className="w-3.5 h-3.5" /> Save Configuration
           </button>

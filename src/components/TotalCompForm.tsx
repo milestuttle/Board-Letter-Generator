@@ -198,25 +198,25 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
   return (
     <div className="space-y-6">
       {/* Live Investment Summary Header */}
-      <div className="bg-ink text-paper rounded-lg p-4 border border-ink-soft">
+      <div className="bg-accent-soft rounded-lg p-4 border border-accent/15">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-paper/70 flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-accent-dark flex items-center gap-1.5">
             <Calculator className="w-4 h-4" /> Total compensation model
           </span>
-          <span className="text-xs px-2.5 py-0.5 rounded border border-white/20 text-paper/80 font-medium">
+          <span className="text-xs px-2.5 py-0.5 rounded-full bg-white text-accent-dark font-medium">
             +{comp.benefitsPercentage.toFixed(1)}% district benefit boost
           </span>
         </div>
         <div className="flex items-baseline justify-between">
           <div>
-            <div className="text-xs text-paper/60">Estimated total annual value</div>
-            <div className="text-2xl font-semibold font-serif text-paper">
+            <div className="text-xs text-muted">Estimated total annual value</div>
+            <div className="text-2xl font-medium text-ink">
               {formatCurrency(comp.grandTotal)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-paper/60">Direct cash pay</div>
-            <div className="text-sm font-semibold text-paper/90">
+            <div className="text-xs text-muted">Direct cash pay</div>
+            <div className="text-sm font-medium text-ink-soft">
               {comp.formattedDirectPayTotal}
             </div>
           </div>
@@ -513,36 +513,36 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         </div>
 
         {/* Live Direct Cash Total Breakdown Badge */}
-        <div className="bg-ink text-paper rounded-md p-3 border border-ink-soft">
-          <div className="flex items-center justify-between text-xs text-paper/60 mb-1 font-sans">
-            <span className="font-semibold text-paper/80">
+        <div className="bg-paper-dim rounded-md p-3 border border-rule">
+          <div className="flex items-center justify-between text-xs text-muted mb-1 font-sans">
+            <span className="font-semibold text-ink-soft">
               Live direct cash calculation
             </span>
-            <span className="font-mono font-semibold text-paper text-sm">
+            <span className="font-mono font-semibold text-ink text-sm">
               {comp.formattedDirectPayTotal} / yr
             </span>
           </div>
-          <div className="text-xs font-mono text-paper/70">
+          <div className="text-xs font-mono text-muted">
             {comp.classification !== 'Licensed' && (tc.isHourly ?? true) ? (
               <div>
                 {formatCurrency(comp.hourlyRate, { includeCents: true })}/hr × {comp.hoursPerDay} hrs/day × {comp.daysPerYear} days ={' '}
-                <span className="text-paper font-semibold">{formatCurrency(comp.basePay)}</span>
+                <span className="text-ink font-semibold">{formatCurrency(comp.basePay)}</span>
                 {comp.stipend > 0 && (
                   <span>
                     {' '}
-                    + <span className="text-accent">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
-                    <span className="text-paper font-semibold">{comp.formattedDirectPayTotal}</span>
+                    + <span className="text-accent-dark">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-ink font-semibold">{comp.formattedDirectPayTotal}</span>
                   </span>
                 )}
               </div>
             ) : (
               <div>
-                Base Salary: <span className="text-paper font-semibold">{formatCurrency(comp.basePay)}</span>
+                Base Salary: <span className="text-ink font-semibold">{formatCurrency(comp.basePay)}</span>
                 {comp.stipend > 0 && (
                   <span>
                     {' '}
-                    + <span className="text-accent">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
-                    <span className="text-paper font-semibold">{comp.formattedDirectPayTotal}</span>
+                    + <span className="text-accent-dark">{formatCurrency(comp.stipend)}</span> (stipend) ={' '}
+                    <span className="text-ink font-semibold">{comp.formattedDirectPayTotal}</span>
                   </span>
                 )}
               </div>

@@ -209,115 +209,114 @@ export function App() {
   return (
     <div className="min-h-screen bg-paper text-ink flex flex-col font-sans selection:bg-accent-soft selection:text-ink">
       {/* Top Application Header */}
-      <header className="bg-ink text-paper sticky top-0 z-40 border-b border-black/20 print:hidden">
+      <header className="bg-white text-ink sticky top-0 z-40 border-b border-rule print:hidden">
         <div className="max-w-[1720px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-md border border-white/25 flex items-center justify-center font-semibold text-paper text-xs tracking-wide">
+            <div className="w-9 h-9 rounded-lg bg-accent-soft flex items-center justify-center font-medium text-accent-dark text-xs">
               CCS
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-semibold font-serif text-paper m-0">
+                <h1 className="text-base font-medium text-ink m-0">
                   Board Letter Generator
                 </h1>
-                <span className="px-2 py-0.5 text-[10px] font-medium text-paper/70 border border-white/20 rounded">
+                <span className="px-2 py-0.5 text-[10px] font-medium text-muted border border-rule rounded">
                   {config.districtName}
                 </span>
               </div>
-              <p className="text-xs text-paper/60">
+              <p className="text-xs text-muted">
                 Official personnel letters for Human Resources
               </p>
             </div>
           </div>
 
           {/* Action Center */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => setShowBulkModal(true)}
-              className="px-3.5 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3.5 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Upload CSV or batch generate multiple letters"
             >
-              <Layers className="w-4 h-4" />
+              <Layers className="w-4 h-4 text-muted" />
               <span className="hidden sm:inline">Bulk Batch</span> Mode
             </button>
 
             <button
               type="button"
               onClick={handleSaveToHistory}
-              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Save draft"
             >
-              <Bookmark className="w-4 h-4" />
+              <Bookmark className="w-4 h-4 text-muted" />
               <span className="hidden md:inline">Save Draft</span>
             </button>
 
             <button
               type="button"
               onClick={() => setShowHistoryDrawer(!showHistoryDrawer)}
-              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer relative"
+              className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer relative"
               title="View saved drafts"
             >
-              <History className="w-4 h-4" />
+              <History className="w-4 h-4 text-muted" />
               {savedLetters.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 bg-accent text-ink rounded-full text-[9px] flex items-center justify-center font-semibold">
+                <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 bg-accent text-white rounded-full text-[9px] flex items-center justify-center font-semibold">
                   {savedLetters.length}
                 </span>
               )}
             </button>
 
-            <div className="h-6 w-px bg-white/20 mx-1 hidden sm:block" />
+            <div className="h-6 w-px bg-rule mx-1 hidden sm:block" />
 
             <button
               type="button"
               onClick={handleCopyText}
-              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer"
               title="Copy text to clipboard"
             >
-              <Copy className="w-4 h-4" />
-              <span className="hidden lg:inline">Copy Text</span>
+              <Copy className="w-4 h-4 text-muted" />
             </button>
 
             <button
               type="button"
               onClick={handleExportDocx}
               disabled={isExporting}
-              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Export as Word (.docx)"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-4 h-4 text-muted" />
               <span className="hidden lg:inline">Word</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="px-4 py-2 bg-accent hover:bg-accent-dark text-ink font-semibold rounded-md text-xs flex items-center gap-1.5 transition cursor-pointer"
-              title="Print letter or select 'Save as PDF' for a searchable vector PDF (Cmd+P)"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Print / Save Vector PDF</span>
             </button>
 
             <button
               type="button"
               onClick={handleExportPdf}
               disabled={isExporting}
-              className="px-3 py-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               title="Quick 1-click direct file download (.pdf)"
             >
-              <FileDown className="w-4 h-4" />
+              <FileDown className="w-4 h-4 text-muted" />
               <span className="hidden sm:inline">Direct PDF</span>
             </button>
 
             <button
               type="button"
+              onClick={handlePrint}
+              className="px-5 py-2 bg-accent hover:bg-accent-dark text-white font-medium rounded-full text-xs flex items-center gap-1.5 transition cursor-pointer ml-1"
+              title="Print letter or select 'Save as PDF' for a searchable vector PDF (Cmd+P)"
+            >
+              <Printer className="w-4 h-4" />
+              <span>Print</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setShowSettingsModal(true)}
-              className="p-2 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md transition cursor-pointer ml-1"
+              className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer"
               title="District stationery settings"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-4 h-4 text-muted" />
             </button>
           </div>
         </div>
@@ -335,7 +334,7 @@ export function App() {
                 onClick={() => setActiveDocumentTab('board_letter')}
                 className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'board_letter'
-                    ? 'bg-white text-ink ring-1 ring-rule'
+                    ? 'bg-white text-accent-dark shadow-sm'
                     : 'text-muted hover:text-ink'
                 }`}
               >
@@ -347,7 +346,7 @@ export function App() {
                 onClick={() => setActiveDocumentTab('total_comp')}
                 className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'total_comp'
-                    ? 'bg-white text-ink ring-1 ring-rule'
+                    ? 'bg-white text-accent-dark shadow-sm'
                     : 'text-muted hover:text-ink'
                 }`}
               >
@@ -394,7 +393,7 @@ export function App() {
                 onClick={() => setActiveDocumentTab('board_letter')}
                 className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'board_letter'
-                    ? 'bg-ink text-paper'
+                    ? 'bg-accent text-white'
                     : 'text-muted hover:text-ink'
                 }`}
               >
@@ -406,7 +405,7 @@ export function App() {
                 onClick={() => setActiveDocumentTab('total_comp')}
                 className={`px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
                   activeDocumentTab === 'total_comp'
-                    ? 'bg-ink text-paper'
+                    ? 'bg-accent text-white'
                     : 'text-muted hover:text-ink'
                 }`}
               >

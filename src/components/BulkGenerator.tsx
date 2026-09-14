@@ -530,7 +530,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                 <button
                   type="button"
                   onClick={handleBatchPrint}
-                  className="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
+                  className="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-full text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
                   title="Print or select 'Save as PDF' to generate a multi-page searchable vector PDF"
                 >
                   <Printer className="w-4 h-4" />
@@ -656,7 +656,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-3.5 py-1.5 bg-accent hover:bg-accent-dark text-white rounded-md text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 bg-accent hover:bg-accent-dark text-white rounded-full text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               Upload CSV
@@ -883,7 +883,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       onClick={() => setPreviewDoc('board_letter')}
                       className={`px-3 py-1 text-xs font-semibold rounded transition cursor-pointer flex items-center gap-1.5 ${
                         previewDoc === 'board_letter'
-                          ? 'bg-ink text-paper'
+                          ? 'bg-accent text-white'
                           : 'text-muted hover:text-ink'
                       }`}
                     >
@@ -895,7 +895,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       onClick={() => setPreviewDoc('total_comp')}
                       className={`px-3 py-1 text-xs font-semibold rounded transition cursor-pointer flex items-center gap-1.5 ${
                         previewDoc === 'total_comp'
-                          ? 'bg-ink text-paper'
+                          ? 'bg-accent text-white'
                           : 'text-muted hover:text-ink'
                       }`}
                     >
