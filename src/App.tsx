@@ -17,13 +17,6 @@ import { TotalCompForm } from './components/TotalCompForm'
 import { BulkGenerator } from './components/BulkGenerator'
 import { SettingsModal } from './components/SettingsModal'
 import {
-  exportToPdf,
-  exportToDocx,
-  copyLetterText,
-  exportTotalCompToDocx,
-  copyTotalCompText,
-} from './utils/exportUtils'
-import {
   Printer,
   FileDown,
   FileText,
@@ -188,6 +181,7 @@ export function App() {
       const targetId = activeDocumentTab === 'total_comp' ? 'total-comp-sheet' : 'letter-preview-sheet'
       const docType = activeDocumentTab === 'total_comp' ? 'Total_Comp_Statement' : `${activeLetter.type}_Letter`
       const filename = `${cleanLast}_${docType}.pdf`
+      const { exportToPdf } = await import('./utils/exportUtils')
       await exportToPdf(targetId, filename)
       showToast('PDF downloaded successfully!')
     } catch (err) {
@@ -203,6 +197,7 @@ export function App() {
     try {
       setIsExporting(true)
       const cleanLast = (activeLetter.recipientLastName || 'Employee').trim().replace(/\s+/g, '_')
+      const { exportTotalCompToDocx, exportToDocx } = await import('./utils/exportUtils')
       if (activeDocumentTab === 'total_comp') {
         const filename = `${cleanLast}_Total_Compensation_Statement.docx`
         await exportTotalCompToDocx(activeLetter, config, filename)
@@ -221,6 +216,7 @@ export function App() {
   }
 
   const handleCopyText = async () => {
+    const { copyTotalCompText, copyLetterText } = await import('./utils/exportUtils')
     if (activeDocumentTab === 'total_comp') {
       await copyTotalCompText(activeLetter, config)
       showToast('Total Compensation Statement text copied!')
