@@ -521,7 +521,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     }
                   }}
                   className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
-                  title="Save all batch letters to your Drafts list"
+                  aria-label="Save all to drafts"
+                        title="Save all batch letters to your Drafts list"
                 >
                   <Bookmark className="w-4 h-4 text-amber-600" />
                   Save All as Drafts ({batchLetters.length})
@@ -531,7 +532,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                   type="button"
                   onClick={handleBatchPrint}
                   className="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-full text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
-                  title="Print or select 'Save as PDF' to generate a multi-page searchable vector PDF"
+                  aria-label="Print batch"
+                        title="Print or select 'Save as PDF' to generate a multi-page searchable vector PDF"
                 >
                   <Printer className="w-4 h-4" />
                   {batchDocMode === 'board_letter' && `Print / Save ${batchLetters.length} Letters as Vector PDF`}
@@ -676,8 +678,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                 {batchLetters.length > 0 && (
                   <>
                     {isConfirmingClearBatch ? (
-                      <div className="flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded-lg border border-red-200">
-                        <span className="text-[10px] font-semibold text-red-700">Clear?</span>
+                      <div className="flex items-center gap-1 bg-danger-soft px-2 py-0.5 rounded-lg border border-danger/30">
+                        <span className="text-[10px] font-semibold text-danger">Clear?</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -685,7 +687,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                             setIsConfirmingClearBatch(false)
                             safeStorage.removeItem(STORAGE_KEYS.BATCH_LETTERS)
                           }}
-                          className="text-[10px] bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
+                          className="text-[10px] bg-danger hover:bg-danger/85 text-white px-1.5 py-0.5 rounded font-bold transition cursor-pointer"
                         >
                           Yes
                         </button>
@@ -701,7 +703,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsConfirmingClearBatch(true)}
-                        className="text-xs text-muted hover:text-red-600 font-medium cursor-pointer"
+                        className="text-xs text-muted hover:text-danger font-medium cursor-pointer"
                       >
                         Clear List
                       </button>
@@ -759,7 +761,8 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     setSelectedIndex(batchLetters.length)
                   }}
                   className="p-1 rounded-lg bg-accent-soft text-accent-dark hover:bg-accent-soft transition cursor-pointer"
-                  title="Add empty record"
+                  aria-label="Add empty record"
+                        title="Add empty record"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -822,6 +825,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                           onLoadSingle(item, batchLetters)
                           onClose()
                         }}
+                        aria-label="Edit as single letter"
                         title="Edit as single in main generator (saves all batch to drafts)"
                         className="text-muted hover:text-accent-dark p-1.5 rounded-lg hover:bg-accent-soft transition cursor-pointer"
                       >
@@ -837,8 +841,9 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                             setSelectedIndex(Math.max(0, updated.length - 1))
                           }
                         }}
+                        aria-label="Remove from batch"
                         title="Remove from batch"
-                        className="text-muted hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                        className="text-muted hover:text-danger p-1.5 rounded-lg hover:bg-danger-soft transition cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -860,6 +865,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     <button
                       disabled={selectedIndex <= 0}
                       onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
+                      aria-label="Previous recipient"
                       className="disabled:opacity-30 hover:text-accent-dark cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -870,6 +876,7 @@ export const BulkGenerator: React.FC<BulkGeneratorProps> = ({
                     <button
                       disabled={selectedIndex >= batchLetters.length - 1}
                       onClick={() => setSelectedIndex((prev) => Math.min(batchLetters.length - 1, prev + 1))}
+                      aria-label="Next recipient"
                       className="disabled:opacity-30 hover:text-accent-dark cursor-pointer"
                     >
                       <ChevronRight className="w-4 h-4" />

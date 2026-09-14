@@ -788,6 +788,7 @@ export const TotalCompForm: React.FC<TotalCompFormProps> = ({ letter, onChange, 
         <button
           type="button"
           onClick={() => setShowAdvancedBenefits(!showAdvancedBenefits)}
+          aria-expanded={showAdvancedBenefits}
           className="w-full px-4 py-3 bg-paper-dim flex items-center justify-between text-xs font-semibold text-ink-soft hover:bg-paper-dim transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-1.5">

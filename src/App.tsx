@@ -43,6 +43,7 @@ import {
   Calculator,
 } from 'lucide-react'
 import { safeStorage, STORAGE_KEYS, clearPersonnelData } from './utils/storageUtils'
+import { getMissingRequiredFields } from './utils/validation'
 
 export function App() {
   // District Config
@@ -89,11 +90,22 @@ export function App() {
   }, [savedLetters])
 
   // Show Toast
-  const showToast = (msg: string) => {
+  const showToast = (msg: string, durationMs = 3000) => {
     setToastMessage(msg)
     setTimeout(() => {
       setToastMessage(null)
-    }, 3000)
+    }, durationMs)
+  }
+
+  // Block an export/print action if required fields are still blank, so a
+  // document can't leave the tool with placeholder text like "[Position]" in
+  // it. Returns true (and warns) when the action should be stopped.
+  const blockIfMissingFields = () => {
+    const missing = getMissingRequiredFields(activeLetter, activeDocumentTab)
+    if (missing.length === 0) return false
+    const list = missing.map((m) => m.label).join(', ')
+    showToast(`Add ${missing.length > 1 ? 'these fields' : 'this field'} before exporting: ${list}`, 5000)
+    return true
   }
 
   // Preset Selection
@@ -153,11 +165,13 @@ export function App() {
 
   // Actions
   const handlePrint = () => {
+    if (blockIfMissingFields()) return
     showToast("Tip: In print dialog, choose 'Save as PDF' to save a searchable vector document.")
     window.print()
   }
 
   const handleExportPdf = async () => {
+    if (blockIfMissingFields()) return
     try {
       setIsExporting(true)
       const cleanLast = (activeLetter.recipientLastName || 'Employee').trim().replace(/\s+/g, '_')
@@ -175,6 +189,7 @@ export function App() {
   }
 
   const handleExportDocx = async () => {
+    if (blockIfMissingFields()) return
     try {
       setIsExporting(true)
       const cleanLast = (activeLetter.recipientLastName || 'Employee').trim().replace(/\s+/g, '_')
@@ -237,6 +252,7 @@ export function App() {
               type="button"
               onClick={() => setShowBulkModal(true)}
               className="px-3.5 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              aria-label="Bulk Batch Mode"
               title="Upload CSV or batch generate multiple letters"
             >
               <Layers className="w-4 h-4 text-muted" />
@@ -247,6 +263,7 @@ export function App() {
               type="button"
               onClick={handleSaveToHistory}
               className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              aria-label="Save draft"
               title="Save draft"
             >
               <Bookmark className="w-4 h-4 text-muted" />
@@ -257,6 +274,7 @@ export function App() {
               type="button"
               onClick={() => setShowHistoryDrawer(!showHistoryDrawer)}
               className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer relative"
+              aria-label="View saved drafts"
               title="View saved drafts"
             >
               <History className="w-4 h-4 text-muted" />
@@ -273,6 +291,7 @@ export function App() {
               type="button"
               onClick={handleCopyText}
               className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer"
+              aria-label="Copy text"
               title="Copy text to clipboard"
             >
               <Copy className="w-4 h-4 text-muted" />
@@ -283,6 +302,7 @@ export function App() {
               onClick={handleExportDocx}
               disabled={isExporting}
               className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              aria-label="Export as Word document"
               title="Export as Word (.docx)"
             >
               <FileText className="w-4 h-4 text-muted" />
@@ -294,6 +314,7 @@ export function App() {
               onClick={handleExportPdf}
               disabled={isExporting}
               className="px-3 py-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+              aria-label="Download PDF"
               title="Quick 1-click direct file download (.pdf)"
             >
               <FileDown className="w-4 h-4 text-muted" />
@@ -304,6 +325,7 @@ export function App() {
               type="button"
               onClick={handlePrint}
               className="px-5 py-2 bg-accent hover:bg-accent-dark text-white font-medium rounded-full text-xs flex items-center gap-1.5 transition cursor-pointer ml-1"
+              aria-label="Print"
               title="Print letter or select 'Save as PDF' for a searchable vector PDF (Cmd+P)"
             >
               <Printer className="w-4 h-4" />
@@ -314,6 +336,7 @@ export function App() {
               type="button"
               onClick={() => setShowSettingsModal(true)}
               className="p-2 bg-transparent hover:bg-paper-dim text-ink-soft rounded-full transition cursor-pointer"
+              aria-label="District settings"
               title="District stationery settings"
             >
               <Settings className="w-4 h-4 text-muted" />
@@ -420,7 +443,8 @@ export function App() {
                 type="button"
                 onClick={() => setZoomScale((z) => Math.max(0.6, Number((z - 0.05).toFixed(2))))}
                 className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
-                title="Zoom out"
+                aria-label="Zoom out"
+              title="Zoom out"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
@@ -431,7 +455,8 @@ export function App() {
                 type="button"
                 onClick={() => setZoomScale((z) => Math.min(1.3, Number((z + 0.05).toFixed(2))))}
                 className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
-                title="Zoom in"
+                aria-label="Zoom in"
+              title="Zoom in"
               >
                 <ZoomIn className="w-4 h-4" />
               </button>
@@ -439,7 +464,8 @@ export function App() {
                 type="button"
                 onClick={() => setZoomScale(0.92)}
                 className="p-1.5 rounded text-muted hover:bg-paper-dim transition cursor-pointer"
-                title="Reset zoom to 92%"
+                aria-label="Reset zoom"
+              title="Reset zoom to 92%"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -447,7 +473,8 @@ export function App() {
                 type="button"
                 onClick={() => setShowFullscreenModal(true)}
                 className="p-1.5 rounded text-ink bg-paper-dim hover:bg-rule/60 transition cursor-pointer ml-1"
-                title="Open full screen preview"
+                aria-label="Open full screen preview"
+              title="Open full screen preview"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
               </button>
@@ -516,7 +543,8 @@ export function App() {
                 type="button"
                 onClick={handlePrint}
                 className="px-3 py-1.5 bg-accent hover:bg-accent-dark text-ink rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-                title="Print or select 'Save as PDF' for a searchable vector document"
+                aria-label="Print"
+              title="Print or select 'Save as PDF' for a searchable vector document"
               >
                 <Printer className="w-3.5 h-3.5" /> Print / Vector PDF
               </button>
@@ -525,7 +553,8 @@ export function App() {
                 onClick={handleExportPdf}
                 disabled={isExporting}
                 className="px-3 py-1.5 bg-transparent hover:bg-white/10 text-paper/90 border border-white/20 rounded-md text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-                title="1-Click direct file download (.pdf)"
+                aria-label="Download PDF"
+              title="1-Click direct file download (.pdf)"
               >
                 <FileDown className="w-3.5 h-3.5" /> Direct PDF
               </button>
@@ -533,7 +562,8 @@ export function App() {
                 type="button"
                 onClick={() => setShowFullscreenModal(false)}
                 className="p-1.5 bg-transparent hover:bg-white/10 text-paper/60 hover:text-paper rounded-md transition cursor-pointer ml-2"
-                title="Close full-screen (ESC)"
+                aria-label="Close full screen preview"
+              title="Close full-screen (ESC)"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -653,7 +683,8 @@ export function App() {
                         setSavedLetters(savedLetters.filter((l) => l.id !== draft.id))
                       }}
                       className="hover:text-danger cursor-pointer"
-                      title="Delete draft"
+                      aria-label="Delete draft"
+              title="Delete draft"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

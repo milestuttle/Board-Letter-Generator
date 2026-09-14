@@ -166,6 +166,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           <button
             onClick={onClose}
+            aria-label="Close settings"
             className="w-8 h-8 rounded-full bg-paper-dim hover:bg-paper-dim flex items-center justify-center text-muted transition cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -520,7 +521,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => removeLocation(idx)}
-                        className="text-muted hover:text-red-600 transition cursor-pointer"
+                        className="text-muted hover:text-danger transition cursor-pointer"
+                        aria-label="Remove location"
                         title="Remove location"
                       >
                         <X className="w-3 h-3" />
@@ -577,7 +579,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => removeLane(idx)}
-                        className="text-muted hover:text-red-600 transition cursor-pointer"
+                        className="text-muted hover:text-danger transition cursor-pointer"
+                        aria-label="Remove lane"
                         title="Remove lane"
                       >
                         <X className="w-3 h-3" />
@@ -632,7 +635,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => removeStaffMember(staff.id)}
-                        className="text-muted hover:text-red-600 p-1 transition"
+                        aria-label={`Remove ${staff.name || 'staff member'}`}
+                        className="text-muted hover:text-danger p-1 transition"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
