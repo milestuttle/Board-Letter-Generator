@@ -22,7 +22,7 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({
   if (config.headerType !== 'vector') {
     return (
       <div
-        className={`district-letterhead ${compact ? 'mb-1.5' : 'mb-5'} select-none block ${className}`}
+        className={`district-letterhead ${compact ? 'mb-1.5' : 'mb-7'} select-none block ${className}`}
         style={
           bleedInches > 0
             ? { width: `calc(100% + ${bleedInches * 2}in)`, marginLeft: `-${bleedInches}in`, marginRight: `-${bleedInches}in` }
@@ -40,7 +40,7 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({
 
   // Fallback: Dynamic HTML/Vector Header
   return (
-    <header className={`w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 ${compact ? 'mb-2' : 'mb-5'} ${className}`}>
+    <header className={`w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 ${compact ? 'mb-2' : 'mb-7'} ${className}`}>
       <div className="grid grid-cols-[115px_1fr_195px] items-start gap-3">
         {/* Left: District Seal Logo */}
         <div className="flex justify-start items-center pt-1">

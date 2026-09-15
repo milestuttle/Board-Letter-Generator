@@ -40,19 +40,19 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         <DistrictHeader config={config} bleedInches={0.4} />
 
         {/* Letter Date */}
-        <div className="mb-5 text-[10pt] text-gray-900 font-medium">
+        <div className="mb-7 text-[10pt] text-gray-900 font-medium">
           {doc.letterDate}
         </div>
 
         {/* Recipient Address Block */}
-        <div className="mb-5 text-[10pt] text-gray-900 leading-tight space-y-0.5">
+        <div className="mb-7 text-[10pt] text-gray-900 leading-tight space-y-0.5">
           <div className="font-semibold text-gray-950">{doc.recipient.fullName}</div>
           {doc.recipient.streetAddress && <div>{doc.recipient.streetAddress}</div>}
           {doc.recipient.cityStateZip && <div>{doc.recipient.cityStateZip}</div>}
         </div>
 
         {/* Salutation */}
-        <div className="mb-2 text-[10pt] font-normal">{doc.salutation}</div>
+        <div className="mb-3 text-[10pt] font-normal">{doc.salutation}</div>
 
         {/* Dynamic Letter Body Blocks */}
         <div className="space-y-2 text-[9.8pt] text-gray-900 text-left leading-[1.34]">
