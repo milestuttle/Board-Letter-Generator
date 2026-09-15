@@ -37,15 +37,15 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         }}
       >
         {/* District Official Header */}
-        <DistrictHeader config={config} />
+        <DistrictHeader config={config} bleedInches={0.4} />
 
         {/* Letter Date */}
-        <div className="mb-2.5 text-[10pt] text-gray-900 font-medium">
+        <div className="mb-5 text-[10pt] text-gray-900 font-medium">
           {doc.letterDate}
         </div>
 
         {/* Recipient Address Block */}
-        <div className="mb-2.5 text-[10pt] text-gray-900 leading-tight space-y-0.5">
+        <div className="mb-5 text-[10pt] text-gray-900 leading-tight space-y-0.5">
           <div className="font-semibold text-gray-950">{doc.recipient.fullName}</div>
           {doc.recipient.streetAddress && <div>{doc.recipient.streetAddress}</div>}
           {doc.recipient.cityStateZip && <div>{doc.recipient.cityStateZip}</div>}
@@ -102,7 +102,7 @@ export const LetterPreview = forwardRef<HTMLDivElement, LetterPreviewProps>(
         </div>
 
         {/* Sign-off Block */}
-        <div className="mt-3 text-[10pt] leading-tight space-y-0.5 font-serif text-gray-950">
+        <div className="mt-3 text-[10pt] leading-tight space-y-0.5 text-gray-950">
           <div>{doc.closing.signOff}</div>
 
           <div className="py-0.5">

@@ -7,13 +7,28 @@ interface DistrictHeaderProps {
   config: DistrictConfig
   compact?: boolean
   className?: string
+  /** Horizontal padding (in inches) of the enclosing letter sheet, so the
+   * letterhead image can bleed past it and render larger than the body text. */
+  bleedInches?: number
 }
 
-export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config, compact = false, className = '' }) => {
+export const DistrictHeader: React.FC<DistrictHeaderProps> = ({
+  config,
+  compact = false,
+  className = '',
+  bleedInches = 0,
+}) => {
   // Use the official scanned/extracted letterhead image dropped by the user by default
   if (config.headerType !== 'vector') {
     return (
-      <div className={`district-letterhead w-full ${compact ? 'mb-1.5' : 'mb-2.5'} select-none block ${className}`}>
+      <div
+        className={`district-letterhead ${compact ? 'mb-1.5' : 'mb-5'} select-none block ${className}`}
+        style={
+          bleedInches > 0
+            ? { width: `calc(100% + ${bleedInches * 2}in)`, marginLeft: `-${bleedInches}in`, marginRight: `-${bleedInches}in` }
+            : { width: '100%' }
+        }
+      >
         <img
           src={letterheadImg}
           alt="Cañon City Schools Official Letterhead"
@@ -25,7 +40,7 @@ export const DistrictHeader: React.FC<DistrictHeaderProps> = ({ config, compact 
 
   // Fallback: Dynamic HTML/Vector Header
   return (
-    <header className={`w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 ${compact ? 'mb-2' : 'mb-3.5'} ${className}`}>
+    <header className={`w-full text-black font-sans pb-2 border-b-2 border-gray-800/80 ${compact ? 'mb-2' : 'mb-5'} ${className}`}>
       <div className="grid grid-cols-[115px_1fr_195px] items-start gap-3">
         {/* Left: District Seal Logo */}
         <div className="flex justify-start items-center pt-1">
